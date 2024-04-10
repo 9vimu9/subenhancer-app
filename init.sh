@@ -1,2 +1,4 @@
 #!/bin/bash
-cp -r git/hooks .git/hooks
+# copy pre-commit
+\cp -r git/hooks .git/
+chmod +x .git/hooks/pre-commit

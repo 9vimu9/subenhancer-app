@@ -1,5 +1,4 @@
 #!/bin/sh
 files=$(git diff --cached --name-only --diff-filter=ACM -- '*.php');
-./vendor/bin/sail pint $files -q
-
+./vendor/bin/sail pint $files
 git add $files
