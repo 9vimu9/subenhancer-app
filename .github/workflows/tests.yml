@@ -30,6 +30,7 @@ jobs:
       - name: Prepare Laravel Application
         run: |
           cp .env.testing .env
+          php artisan config:cache --env=testing
           php artisan key:generate
 
       - name: Create SQLite database
