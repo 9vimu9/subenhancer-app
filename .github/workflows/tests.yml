@@ -9,6 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -19,14 +27,35 @@ jobs:
       - name: Run composer install
         run: composer install -n --prefer-dist
 
-      - name: Create Sqlite file
-        run: touch database/database.sqlite
-
       - name: Prepare Laravel Application
         run: |
           cp .env.testing .env
-          php artisan config:cache --env=testing
-          php artisan migrate --force
+          php artisan key:generate
+
+      - name: Create SQLite database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Run migrations
+        run: php artisan migrate
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21.x'
+
+      - name: npm install
+        run: |
+          npm --version
+          npm install
+          npm run build
 
       - name: Run tests
-        run: ./vendor/bin/phpunit tests
+        run: php artisan test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: laravel-failure-artifact
+          path: storage/logs/laravel.log
