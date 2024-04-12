@@ -1,5 +1,5 @@
 <x-dashboard.layout>
-<x-dashboard.header>
+    <x-dashboard.header>
         <x-slot:title>Dashboard</x-slot:title>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia sunt, assumenda dignissimos doloremque
         reiciendis autem iusto saepe ut minima nesciunt?
