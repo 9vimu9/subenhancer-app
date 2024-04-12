@@ -1328,9 +1328,6 @@
         </aside>
 
         <main class="p-4 md:ml-64 h-auto pt-20">
-            <div class="block sm:absolute top-5 right-8 order-1">
-                <x-dashboard.dark-mode-toggle size="4" />
-            </div>
             {{ $slot }}
             <x-dashboard.footer />
         </main>
