@@ -6,14 +6,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Corpus extends Model
+class Definition extends Model
 {
     use HasFactory;
 
-    public function definitions(): HasMany
+    public function corpus(): BelongsTo
     {
-        return $this->hasMany(Definition::class);
+        return $this->belongsTo(Corpus::class);
     }
 }
