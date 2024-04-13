@@ -1,17 +1,24 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+<x-dashboard.layout>
+    <x-dashboard.header>
+        <x-slot:title>Dashboard</x-slot:title>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia sunt, assumenda dignissimos doloremque
+        reiciendis autem iusto saepe ut minima nesciunt?
+    </x-dashboard.header>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+    <section class="mt-8 flex flex-col md:flex-row gap-8">
+        <x-dashboard.card>
+            <x-slot:title>2021 Stats</x-slot:title>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eveniet, necessitatibus!
+        </x-dashboard.card>
+        <x-dashboard.card>
+            <x-slot:title>2022 Stats</x-slot:title>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad, fugit.
+        </x-dashboard.card>
+    </section>
+
+    <section class="mt-12">
+        <x-dashboard.table />
+    </section>
+
+
+</x-dashboard.layout>
