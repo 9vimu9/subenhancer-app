@@ -14,5 +14,6 @@ enum WordClassEnum: int
     case DETERMINER = 6;
     case PRONOUN = 7;
     case CONJUNCTION = 8;
+    case INTERJECTION = 9;
 
 }

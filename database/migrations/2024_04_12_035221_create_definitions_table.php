@@ -25,6 +25,7 @@ return new class extends Migration
                 WordClassEnum::DETERMINER->name,
                 WordClassEnum::PRONOUN->name,
                 WordClassEnum::CONJUNCTION->name,
+                WordClassEnum::INTERJECTION->name,
             ]);
             $table->timestamps();
         });
