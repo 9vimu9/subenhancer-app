@@ -22,6 +22,7 @@ services:
         networks:
             - sail
         depends_on:
+            - selenium
             - mysql
             - redis
     mysql:
@@ -63,6 +64,14 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+    selenium:
+        image: 'selenium/standalone-chrome'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        volumes:
+            - '/dev/shm:/dev/shm'
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
