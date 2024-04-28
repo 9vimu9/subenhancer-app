@@ -23,7 +23,7 @@ class SubmitEnhancementTest extends DuskTestCase
                 ->waitForText('New Enhancement')
                 ->type('video_url', $videoURL)
                 ->press('start_enhance_btn')
-                ->assertPathIs('dashboard');
+                ->assertRouteIs('dashboard');
         });
     }
 }
