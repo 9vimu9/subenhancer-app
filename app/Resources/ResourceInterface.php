@@ -6,4 +6,5 @@ namespace App\Resources;
 
 interface ResourceInterface
 {
+    public function isAlreadyExist(): bool;
 }
