@@ -27,13 +27,13 @@ class ResourceFactory
 
     private function generateVideoUrlResource(string $videoUrl): ResourceInterface
     {
-        return new YoutubeUrlResource();
+        return new YoutubeUrlResource($videoUrl);
 
     }
 
     private function generateSubtitleFileResource(UploadedFile $file): ResourceInterface
     {
-        return new SrtFileResource();
+        return new SrtFileResource($file);
 
     }
 }
