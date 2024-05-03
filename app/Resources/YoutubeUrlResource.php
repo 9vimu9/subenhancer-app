@@ -17,7 +17,7 @@ class YoutubeUrlResource implements ResourceInterface
 
     public function isAlreadyExist(): bool
     {
-        return Youtubevideo::query()->where('video_id', $this->getVideoId($this->videoUrl))->exists();
+        return Youtubevideo::query()->where('video_id', $this->getVideoId())->exists();
     }
 
     private function getVideoId(): string

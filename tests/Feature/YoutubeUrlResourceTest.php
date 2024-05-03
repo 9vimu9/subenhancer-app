@@ -55,9 +55,9 @@ class YoutubeUrlResourceTest extends TestCase
             'http://www.youtubepi.com/watch?v=0zM3nApSvMg',
         ];
 
+        $this->expectException(IncorrectYoutubeVideoLinkProvidedException::class);
         foreach ($urls as $url) {
-            $this->expectException(IncorrectYoutubeVideoLinkProvidedException::class);
-            $this->callMethod((new YoutubeUrlResource($url)), 'getVideoId', [$url]);
+            $this->callMethod((new YoutubeUrlResource($url)), 'getVideoId');
         }
     }
 }
