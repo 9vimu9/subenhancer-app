@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('source_id');
+            $table->unsignedBigInteger('source_id')->nullable();
             $table->foreign('source_id')->references('id')->on('sources')->onDelete('cascade');
             $table->enum('status', [EnhancementEnum::PROCESSING->name, EnhancementEnum::FINISHED->name, EnhancementEnum::ADDED->name])->default(EnhancementEnum::ADDED->name);
             $table->softDeletes();
