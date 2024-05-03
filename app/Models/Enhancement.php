@@ -13,6 +13,8 @@ class Enhancement extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['user_id', 'uuid'];
+
     public function vocabularies(): BelongsToMany
     {
         return $this->belongsToMany(Vocabulary::class);
