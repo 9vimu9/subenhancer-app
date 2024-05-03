@@ -11,8 +11,11 @@ class EnhanceSubmissionController extends Controller
 {
     public function submit(SubmitEnhanceRequest $request): RedirectResponse
     {
-        //        dd($request->file('subtitle_file')->getMimeType(),$request->file('subtitle_file')->getClientOriginalExtension() );
-        return redirect()->back();
+        if ($request->hasFile('subtitle_file')) {
+            return redirect()->back()->with(['toast' => ['type' => 'success', 'message' => 'File has been added successfully for the enhancement. You will receive a notification shortly']]);
+        }
+
+        return redirect()->back()->with(['toast' => ['type' => 'success', 'message' => 'YouTube video has been added successfully for the enhancement. You will receive a notification shortly']]);
 
     }
 }
