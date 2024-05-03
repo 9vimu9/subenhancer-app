@@ -20,10 +20,10 @@ class YoutubeUrlResource implements ResourceInterface
         return Youtubevideo::query()->where('video_id', $this->getVideoId($this->videoUrl))->exists();
     }
 
-    private function getVideoId(string $videoUrl): string
+    private function getVideoId(): string
     {
         $matches = [];
-        preg_match(self::REG_EX, $videoUrl, $matches);
+        preg_match(self::REG_EX, $this->videoUrl, $matches);
         if (count($matches) < 2) {
             throw new IncorrectYoutubeVideoLinkProvidedException();
         }
