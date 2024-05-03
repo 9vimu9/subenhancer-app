@@ -17,7 +17,7 @@ class EnhancementServiceTest extends TestCase
     {
         $this->seed();
 
-        $userId = User::query()->where('email', env('GENERIC_USER_EMAIL'))->first()->getAttribute('id');
+        $userId = User::query()->where('email', config('app.demo.generic_user_email'))->first()->getAttribute('id');
         $enhancementService = new EnhancementService();
 
         $enhancement = $enhancementService->create($userId);

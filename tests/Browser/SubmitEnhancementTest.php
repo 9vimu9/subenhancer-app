@@ -15,7 +15,7 @@ class SubmitEnhancementTest extends DuskTestCase
 
     public function testNewEnhancementSubmissionWithYouTubeURL(): void
     {
-        $user = User::query()->where('email', env('GENERIC_USER_EMAIL'))->first();
+        $user = User::query()->where('email', config('app.demo.generic_user_email'))->first();
         $videoURL = 'https://www.youtube.com/watch?v=lRVJuPI5IXI&ab_channel=FujiiKaze';
         $this->browse(function (Browser $browser) use ($user, $videoURL) {
             $browser->loginAs($user)->visitRoute('dashboard')
@@ -28,7 +28,7 @@ class SubmitEnhancementTest extends DuskTestCase
 
     public function testNewEnhancementSubmissionWithUnsupportedURL(): void
     {
-        $user = User::query()->where('email', env('GENERIC_USER_EMAIL'))->first();
+        $user = User::query()->where('email', config('app.demo.generic_user_email'))->first();
         $videoURL = 'unsupported-url';
         $this->browse(function (Browser $browser) use ($user, $videoURL) {
             $browser->loginAs($user)->visitRoute('dashboard')
@@ -41,7 +41,7 @@ class SubmitEnhancementTest extends DuskTestCase
 
     public function testNewEnhancementWithSrtFile(): void
     {
-        $user = User::query()->where('email', env('GENERIC_USER_EMAIL'))->first();
+        $user = User::query()->where('email', config('app.demo.generic_user_email'))->first();
         $filePath = __DIR__.'/Inputs/srt_file.srt';
         $this->browse(function (Browser $browser) use ($user, $filePath) {
             $browser->loginAs($user)->visitRoute('dashboard')
@@ -54,7 +54,7 @@ class SubmitEnhancementTest extends DuskTestCase
 
     public function testNewEnhancementWithUnsupportedFile(): void
     {
-        $user = User::query()->where('email', env('GENERIC_USER_EMAIL'))->first();
+        $user = User::query()->where('email', config('app.demo.generic_user_email'))->first();
         $filePath = __DIR__.'/Inputs/unsupported_file.xyz';
         $this->browse(function (Browser $browser) use ($user, $filePath) {
             $browser->loginAs($user)->visitRoute('dashboard')
@@ -67,7 +67,7 @@ class SubmitEnhancementTest extends DuskTestCase
 
     public function testWhenBothFieldsAreNotEmpty(): void
     {
-        $user = User::query()->where('email', env('GENERIC_USER_EMAIL'))->first();
+        $user = User::query()->where('email', config('app.demo.generic_user_email'))->first();
         $filePath = __DIR__.'/Inputs/srt_file.srt';
         $videoURL = 'https://www.youtube.com/watch?v=lRVJuPI5IXI&ab_channel=FujiiKaze';
         $this->browse(function (Browser $browser) use ($user, $filePath, $videoURL) {
