@@ -89,7 +89,7 @@ class YoutubeUrlResourceTest extends TestCase
 
         $videoUrl = 'http://youtu.be/0zM3nApSvMg';
         $videoResource = new YoutubeUrlResource($videoUrl);
-        $this->assertSame(json_encode($response, JSON_THROW_ON_ERROR), $videoResource->fetch());
+        $this->assertSame(json_encode($response['transcript'], JSON_THROW_ON_ERROR), $videoResource->fetch());
 
     }
 

@@ -43,6 +43,6 @@ class YoutubeUrlResource implements ResourceInterface
             throw new YoutubeVideoCaptionsFetchException();
         }
 
-        return $response->body();
+        return json_encode($response->json()['transcript'], JSON_THROW_ON_ERROR);
     }
 }
