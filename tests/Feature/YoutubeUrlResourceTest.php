@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Exceptions\IncorrectYoutubeVideoLinkProvidedException;
+use App\Exceptions\YoutubeVideoCaptionsFetchException;
 use App\Models\Youtubevideo;
 use App\Resources\YoutubeUrlResource;
 use App\Traits\Testing\PhpUnitUtils;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class YoutubeUrlResourceTest extends TestCase
@@ -59,5 +62,54 @@ class YoutubeUrlResourceTest extends TestCase
         foreach ($urls as $url) {
             $this->callMethod((new YoutubeUrlResource($url)), 'getVideoId');
         }
+    }
+
+    public function test_fetch_for_Youtube(): void
+    {
+        $response = [
+            'transcript' => [
+                [
+                    'text' => '[Applause]',
+                    'start' => 300,
+                    'end' => 2400,
+                ],
+                [
+                    'text' => 'thank you very much very kind you lovely',
+                    'start' => 800,
+                    'end' => 3900,
+                ],
+            ],
+        ];
+
+        $url = config('app.captions_endpoint').'?source=youtube&id=*';
+        Http::fake([
+            $url => Http::response($response, Response::HTTP_OK),
+
+        ]);
+
+        $videoUrl = 'http://youtu.be/0zM3nApSvMg';
+        $videoResource = new YoutubeUrlResource($videoUrl);
+        $this->assertSame(json_encode($response, JSON_THROW_ON_ERROR), $videoResource->fetch());
+
+    }
+
+    public function test_throw_exception_when_the_captions_cannot_be_found(): void
+    {
+        $url = config('app.captions_endpoint').'?source=youtube&id=*';
+        Http::fake([
+            $url => Http::sequence()->pushStatus(Response::HTTP_NOT_FOUND),
+        ]);
+        $this->expectException(YoutubeVideoCaptionsFetchException::class);
+        (new YoutubeUrlResource('http://youtu.be/0zM3nApSvMg'))->fetch();
+    }
+
+    public function test_throw_exception_when_the_captions_service_returns_internal_service_error(): void
+    {
+        $url = config('app.captions_endpoint').'?source=youtube&id=*';
+        Http::fake([
+            $url => Http::sequence()->pushStatus(Response::HTTP_INTERNAL_SERVER_ERROR),
+        ]);
+        $this->expectException(YoutubeVideoCaptionsFetchException::class);
+        (new YoutubeUrlResource('http://youtu.be/0zM3nApSvMg'))->fetch();
     }
 }

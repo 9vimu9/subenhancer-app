@@ -127,5 +127,7 @@ return [
         'generic_user_email' => env('GENERIC_USER_EMAIL'),
         'generic_user_password' => env('GENERIC_USER_PASSWORD'),
     ],
+    'nlp_endpoint' => env('NLP_ENDPOINT'),
+    'captions_endpoint' => env('CAPTIONS_ENDPOINT'),
 
 ];

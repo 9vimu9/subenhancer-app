@@ -28,4 +28,12 @@ class SrtFileResourceTest extends TestCase
         $srtFileResource = new SrtFileResource($file);
         $this->assertFalse($srtFileResource->isAlreadyExist());
     }
+
+    public function test_fetch_for_srt_file(): void
+    {
+        $fileContent = 'FILE_CONTENT';
+        $file = UploadedFile::fake()->create('new_file.srt', $fileContent);
+        $srtFileResource = new SrtFileResource($file);
+        $this->assertEquals($fileContent, $srtFileResource->fetch());
+    }
 }

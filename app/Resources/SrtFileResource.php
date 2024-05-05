@@ -17,4 +17,9 @@ class SrtFileResource implements ResourceInterface
     {
         return Srt::query()->where('md5_hash', md5_file($this->file->getRealPath()))->exists();
     }
+
+    public function fetch(): string
+    {
+        return $this->file->getContent();
+    }
 }

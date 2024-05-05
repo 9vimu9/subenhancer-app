@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Resources;
 
 use App\Exceptions\IncorrectYoutubeVideoLinkProvidedException;
+use App\Exceptions\YoutubeVideoCaptionsFetchException;
 use App\Models\Youtubevideo;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 
 class YoutubeUrlResource implements ResourceInterface
 {
@@ -30,5 +33,16 @@ class YoutubeUrlResource implements ResourceInterface
 
         return (string) $matches[1];
 
+    }
+
+    public function fetch(): string
+    {
+        $url = config('app.captions_endpoint').'?source=youtube&id='.$this->getVideoId();
+        $response = Http::get($url);
+        if ($response->status() !== Response::HTTP_OK) {
+            throw new YoutubeVideoCaptionsFetchException();
+        }
+
+        return $response->body();
     }
 }
