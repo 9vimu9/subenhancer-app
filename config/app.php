@@ -130,4 +130,7 @@ return [
     'nlp_endpoint' => env('NLP_ENDPOINT'),
     'captions_endpoint' => env('CAPTIONS_ENDPOINT'),
 
+    'definition_apis' => [
+        'free_dictionary_api' => env('FREE_DICTIONARY_API'),
+    ],
 ];
