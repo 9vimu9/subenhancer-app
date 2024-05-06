@@ -23,6 +23,9 @@ class SrtFileResource implements FileResourceInterface, ResourceInterface
 
     public function fetch(): string
     {
+        //        todo  : relocateFile method call must be removed somewhere else
+        $this->relocateFile();
+
         return $this->file->getContent();
     }
 
