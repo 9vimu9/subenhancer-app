@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Services\Subtitles\Caption;
-use App\Services\Subtitles\CaptionsCollection;
+use App\Services\Captions\Caption;
+use App\Services\Captions\CaptionsCollection;
 use PHPUnit\Framework\TestCase;
 
 class CaptionsCollectionTest extends TestCase

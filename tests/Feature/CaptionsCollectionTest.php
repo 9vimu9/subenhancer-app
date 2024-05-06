@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Exceptions\CaptionWordFilterException;
-use App\Services\Subtitles\CaptionsCollection;
+use App\Services\Captions\CaptionsCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;

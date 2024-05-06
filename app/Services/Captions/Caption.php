@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Subtitles;
+namespace App\Services\Captions;
 
 class Caption
 {

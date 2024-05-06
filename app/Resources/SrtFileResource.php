@@ -6,8 +6,8 @@ namespace App\Resources;
 
 use App\Models\Source;
 use App\Models\Srt;
-use App\Services\Subtitles\Caption;
-use App\Services\Subtitles\CaptionsCollection;
+use App\Services\Captions\Caption;
+use App\Services\Captions\CaptionsCollection;
 use Benlipp\SrtParser\Parser;
 use Illuminate\Http\UploadedFile;
 

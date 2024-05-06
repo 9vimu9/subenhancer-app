@@ -9,8 +9,8 @@ use App\Exceptions\InvalidYoutubeCaptionException;
 use App\Exceptions\YoutubeVideoCaptionsFetchException;
 use App\Models\Source;
 use App\Models\Youtubevideo;
-use App\Services\Subtitles\Caption;
-use App\Services\Subtitles\CaptionsCollection;
+use App\Services\Captions\Caption;
+use App\Services\Captions\CaptionsCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 

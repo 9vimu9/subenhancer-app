@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Resources;
 
 use App\Models\Source;
-use App\Services\Subtitles\CaptionsCollection;
+use App\Services\Captions\CaptionsCollection;
 
 interface ResourceInterface
 {
