@@ -6,7 +6,6 @@ namespace App\Exceptions;
 
 use Exception;
 
-class FreeDictionaryApiErrorException extends Exception
+class CantFindDefinitionException extends Exception
 {
-    //
 }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\DefinitionsAPI;
 
 use App\Enums\WordClassEnum;
-use App\Exceptions\FreeDictionaryApiCantFindDefinitionException;
-use App\Exceptions\FreeDictionaryApiErrorException;
+use App\Exceptions\CantFindDefinitionException;
+use App\Exceptions\DefinitionsApiErrorException;
 use App\Exceptions\InvalidWordClassFoundException;
 use App\Services\Definitions\Definition;
 use App\Services\Definitions\DefinitionCollection;
@@ -21,10 +21,10 @@ class FreeDictionaryApi implements DefinitionsApiInterface
         $url = config('app.definition_apis.free_dictionary_api').$word;
         $response = Http::get($url);
         if ($response->status() === Response::HTTP_NOT_FOUND) {
-            throw new FreeDictionaryApiCantFindDefinitionException();
+            throw new CantFindDefinitionException();
         }
         if ($response->status() !== Response::HTTP_OK) {
-            throw new FreeDictionaryApiErrorException();
+            throw new DefinitionsApiErrorException();
         }
         $definitionCollection = new DefinitionCollection();
         foreach ($response->json()[0]['meanings'] as $meaning) {
