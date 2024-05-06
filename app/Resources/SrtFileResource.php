@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
+use App\Models\Source;
 use App\Models\Srt;
 use App\Services\Subtitles\Caption;
 use App\Services\Subtitles\CaptionsCollection;
@@ -47,10 +48,11 @@ class SrtFileResource implements FileResourceInterface, ResourceInterface
         return $captionsCollection;
     }
 
-    public function storeResourceTable(): void
+    public function storeResourceTable(): Source
     {
         $srt = Srt::query()->create(['file_location' => $this->file->getRealPath(), 'md5_hash' => md5_file($this->file->getRealPath())]);
-        $srt->source()->create([]);
+
+        return $srt->source()->create([]);
     }
 
     public function getFile(): UploadedFile

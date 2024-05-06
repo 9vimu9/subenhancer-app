@@ -76,8 +76,9 @@ A DIRTY CARNIVAL';
         $file = UploadedFile::fake()->create('new_file.srt', 'OHhh CONTENT');
         $originalFileHash = md5_file($file->getRealPath());
         $resource = new SrtFileResource($file);
-        $resource->storeResourceTable();
+        $source = $resource->storeResourceTable();
         $this->assertDatabaseHas('srts', ['md5_hash' => $originalFileHash, 'file_location' => $file->getRealPath()]);
         $this->assertDatabaseHas('sources', ['sourceable_id' => 1, 'sourceable_type' => Srt::class]);
+        $this->assertEquals(Srt::class, $source->getAttribute('sourceable_type'));
     }
 }

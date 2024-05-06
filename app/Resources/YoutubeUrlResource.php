@@ -7,6 +7,7 @@ namespace App\Resources;
 use App\Exceptions\IncorrectYoutubeVideoLinkProvidedException;
 use App\Exceptions\InvalidYoutubeCaptionException;
 use App\Exceptions\YoutubeVideoCaptionsFetchException;
+use App\Models\Source;
 use App\Models\Youtubevideo;
 use App\Services\Subtitles\Caption;
 use App\Services\Subtitles\CaptionsCollection;
@@ -67,9 +68,10 @@ class YoutubeUrlResource implements ResourceInterface
         return $captionCollection;
     }
 
-    public function storeResourceTable(): void
+    public function storeResourceTable(): Source
     {
         $youtube = Youtubevideo::query()->create(['video_id' => $this->getVideoId()]);
-        $youtube->source()->create([]);
+
+        return $youtube->source()->create([]);
     }
 }

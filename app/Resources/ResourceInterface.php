@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
+use App\Models\Source;
 use App\Services\Subtitles\CaptionsCollection;
 
 interface ResourceInterface
@@ -14,5 +15,5 @@ interface ResourceInterface
 
     public function toCaptions(string $captionsString): CaptionsCollection;
 
-    public function storeResourceTable(): void;
+    public function storeResourceTable(): Source;
 }

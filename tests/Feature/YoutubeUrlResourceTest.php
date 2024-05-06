@@ -142,8 +142,9 @@ class YoutubeUrlResourceTest extends TestCase
     {
         $videoId = '0zM3nApSvMg';
         $resource = new YoutubeUrlResource('http://youtu.be/'.$videoId);
-        $resource->storeResourceTable();
+        $source = $resource->storeResourceTable();
         $this->assertDatabaseHas('youtubevideos', ['video_id' => $videoId]);
         $this->assertDatabaseHas('sources', ['sourceable_id' => 1, 'sourceable_type' => Youtubevideo::class]);
+        $this->assertEquals(Youtubevideo::class, $source->getAttribute('sourceable_type'));
     }
 }
