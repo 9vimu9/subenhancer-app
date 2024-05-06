@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Enums\WordClassEnum;
+use App\Exceptions\InvalidWordClassFoundException;
 use App\Services\Definitions\Definition;
 use App\Services\DefinitionsAPI\FreeDictionaryApi;
 use Illuminate\Http\Response;
@@ -155,5 +156,13 @@ class FreeDictionaryApiTest extends TestCase
             new Definition(WordClassEnum::INTERJECTION, 'An expression of puzzlement or discovery.', $word),
         ];
         $this->assertEqualsCanonicalizing($definitionsArray, $definitionCollection->toArray());
+    }
+
+    public function test_mapper_throws_exception_when_invalid_word_class_has_been_found(): void
+    {
+        $freeDictionaryApi = new FreeDictionaryApi();
+        $this->expectException(InvalidWordClassFoundException::class);
+        $freeDictionaryApi->wordClassMapper('SOMETHING_ELSE');
+
     }
 }
