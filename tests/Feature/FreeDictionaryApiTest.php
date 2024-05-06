@@ -143,15 +143,16 @@ class FreeDictionaryApiTest extends TestCase
 
         ]);
         $freeDictionaryApi = new FreeDictionaryApi();
-        $definitionCollection = $freeDictionaryApi->getDefinitions('hello');
+        $word = 'hello';
+        $definitionCollection = $freeDictionaryApi->getDefinitions($word);
         $definitionsArray = [
-            new Definition(WordClassEnum::NOUN, '"Hello!" or an equivalent greeting.'),
-            new Definition(WordClassEnum::VERB, 'To greet with "hello".'),
-            new Definition(WordClassEnum::INTERJECTION, 'A greeting (salutation) said when meeting someone or acknowledging someone’s arrival or presence.'),
-            new Definition(WordClassEnum::INTERJECTION, 'A greeting used when answering the telephone.'),
-            new Definition(WordClassEnum::INTERJECTION, 'A call for response if it is not clear if anyone is present or listening, or if a telephone conversation may have been disconnected.'),
-            new Definition(WordClassEnum::INTERJECTION, 'Used sarcastically to imply that the person addressed or referred to has done something the speaker or writer considers to be foolish.'),
-            new Definition(WordClassEnum::INTERJECTION, 'An expression of puzzlement or discovery.'),
+            new Definition(WordClassEnum::NOUN, '"Hello!" or an equivalent greeting.', $word),
+            new Definition(WordClassEnum::VERB, 'To greet with "hello".', $word),
+            new Definition(WordClassEnum::INTERJECTION, 'A greeting (salutation) said when meeting someone or acknowledging someone’s arrival or presence.', $word),
+            new Definition(WordClassEnum::INTERJECTION, 'A greeting used when answering the telephone.', $word),
+            new Definition(WordClassEnum::INTERJECTION, 'A call for response if it is not clear if anyone is present or listening, or if a telephone conversation may have been disconnected.', $word),
+            new Definition(WordClassEnum::INTERJECTION, 'Used sarcastically to imply that the person addressed or referred to has done something the speaker or writer considers to be foolish.', $word),
+            new Definition(WordClassEnum::INTERJECTION, 'An expression of puzzlement or discovery.', $word),
         ];
         $this->assertEqualsCanonicalizing($definitionsArray, $definitionCollection->toArray());
     }

@@ -30,7 +30,7 @@ class FreeDictionaryApi implements DefinitionsApiInterface
         foreach ($response->json()[0]['meanings'] as $meaning) {
             $wordClass = $this->wordClassMapper($meaning['partOfSpeech']);
             foreach ($meaning['definitions'] as $definition) {
-                $definitionCollection->addDefinition(new Definition($wordClass, $definition['definition']));
+                $definitionCollection->addDefinition(new Definition($wordClass, $definition['definition'], $word));
             }
 
         }
