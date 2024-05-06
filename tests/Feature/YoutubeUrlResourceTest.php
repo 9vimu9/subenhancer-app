@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Exceptions\IncorrectYoutubeVideoLinkProvidedException;
+use App\Exceptions\InvalidYoutubeCaptionException;
 use App\Exceptions\YoutubeVideoCaptionsFetchException;
 use App\Models\Youtubevideo;
 use App\Resources\YoutubeUrlResource;
@@ -111,5 +112,29 @@ class YoutubeUrlResourceTest extends TestCase
         ]);
         $this->expectException(YoutubeVideoCaptionsFetchException::class);
         (new YoutubeUrlResource('http://youtu.be/0zM3nApSvMg'))->fetch();
+    }
+
+    public function test_toCaptions_method(): void
+    {
+        $captionString = '[{"text":"[Applause]","start":300,"end":2400},{"text":"thank you very much very kind you lovely","start":800,"end":3900}]';
+
+        $captionsCollection = (new YoutubeUrlResource('http://youtu.be/0zM3nApSvMg'))->toCaptions($captionString);
+        $captions = $captionsCollection->captions();
+
+        $this->assertEquals('[Applause]', $captions[0]->getCaption());
+        $this->assertEquals(300, $captions[0]->getStartTime());
+        $this->assertEquals(2400, $captions[0]->getEndTime());
+
+        $this->assertEquals('thank you very much very kind you lovely', $captions[1]->getCaption());
+        $this->assertEquals(800, $captions[1]->getStartTime());
+        $this->assertEquals(3900, $captions[1]->getEndTime());
+    }
+
+    public function test_throws_exception_when_incorrect_youtube_captions_are_provided(): void
+    {
+        $captionString = '[{"text":"[Applause]","start":300,"ends":2400}]';
+        $this->expectException(InvalidYoutubeCaptionException::class);
+        $captionsCollection = (new YoutubeUrlResource('http://youtu.be/0zM3nApSvMg'))->toCaptions($captionString);
+        $captionsCollection->captions();
     }
 }

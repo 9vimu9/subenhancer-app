@@ -36,4 +36,29 @@ class SrtFileResourceTest extends TestCase
         $srtFileResource = new SrtFileResource($file);
         $this->assertEquals($fileContent, $srtFileResource->fetch());
     }
+
+    public function test_toCaptions_method(): void
+    {
+        $fileContent =
+'1
+00:01:03,063 --> 00:01:06,148
+A Film Poeta Production
+
+2
+00:01:08,443 --> 00:01:13,864
+A DIRTY CARNIVAL';
+
+        $file = UploadedFile::fake()->create('new_file.srt', $fileContent);
+
+        $captionsCollection = (new SrtFileResource($file))->toCaptions($fileContent);
+        $captions = $captionsCollection->captions();
+
+        $this->assertEquals('A Film Poeta Production', $captions[0]->getCaption());
+        $this->assertEquals(63063, $captions[0]->getStartTime());
+        $this->assertEquals(66148, $captions[0]->getEndTime());
+
+        $this->assertEquals('A DIRTY CARNIVAL', $captions[1]->getCaption());
+        $this->assertEquals(68443, $captions[1]->getStartTime());
+        $this->assertEquals(73864, $captions[1]->getEndTime());
+    }
 }
