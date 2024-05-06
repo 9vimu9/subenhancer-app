@@ -12,6 +12,8 @@ class Definition extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['corpus_id', 'definition', 'word_class'];
+
     public function corpus(): BelongsTo
     {
         return $this->belongsTo(Corpus::class);
