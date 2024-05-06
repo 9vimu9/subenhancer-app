@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Enums\WordClassEnum;
+use App\Exceptions\CantFindDefinitionException;
+use App\Exceptions\DefinitionsApiErrorException;
 use App\Exceptions\InvalidWordClassFoundException;
 use App\Services\Definitions\Definition;
 use App\Services\DefinitionsAPI\FreeDictionaryApi;
@@ -156,6 +158,30 @@ class FreeDictionaryApiTest extends TestCase
             new Definition(WordClassEnum::INTERJECTION, 'An expression of puzzlement or discovery.', $word),
         ];
         $this->assertEqualsCanonicalizing($definitionsArray, $definitionCollection->toArray());
+    }
+
+    public function test_throws_exception_when_meanings_cannot_be_found()
+    {
+        $url = config('app.definition_apis.free_dictionary_api').'*';
+        Http::fake([
+            $url => Http::response(null, Response::HTTP_NOT_FOUND),
+        ]);
+        $this->expectException(CantFindDefinitionException::class);
+        $freeDictionaryApi = new FreeDictionaryApi();
+        $freeDictionaryApi->getDefinitions('hello');
+
+    }
+
+    public function test_throws_exception_when_definition_api_not_functional()
+    {
+        $url = config('app.definition_apis.free_dictionary_api').'*';
+        Http::fake([
+            $url => Http::response(null, Response::HTTP_INTERNAL_SERVER_ERROR),
+        ]);
+        $this->expectException(DefinitionsApiErrorException::class);
+        $freeDictionaryApi = new FreeDictionaryApi();
+        $freeDictionaryApi->getDefinitions('hello');
+
     }
 
     public function test_mapper_throws_exception_when_invalid_word_class_has_been_found(): void
