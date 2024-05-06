@@ -69,6 +69,7 @@ class YoutubeUrlResource implements ResourceInterface
 
     public function storeResourceTable(): void
     {
-        Youtubevideo::query()->create(['video_id' => $this->getVideoId()]);
+        $youtube = Youtubevideo::query()->create(['video_id' => $this->getVideoId()]);
+        $youtube->source()->create([]);
     }
 }

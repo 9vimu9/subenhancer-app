@@ -46,7 +46,8 @@ class SrtFileResource implements FileResourceInterface, ResourceInterface
 
     public function storeResourceTable(): void
     {
-        Srt::query()->create(['file_location' => $this->file->getRealPath(), 'md5_hash' => md5_file($this->file->getRealPath())]);
+        $srt = Srt::query()->create(['file_location' => $this->file->getRealPath(), 'md5_hash' => md5_file($this->file->getRealPath())]);
+        $srt->source()->create([]);
     }
 
     public function getFile(): UploadedFile

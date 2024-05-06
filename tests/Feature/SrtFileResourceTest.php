@@ -78,5 +78,6 @@ A DIRTY CARNIVAL';
         $resource = new SrtFileResource($file);
         $resource->storeResourceTable();
         $this->assertDatabaseHas('srts', ['md5_hash' => $originalFileHash, 'file_location' => $file->getRealPath()]);
+        $this->assertDatabaseHas('sources', ['sourceable_id' => 1, 'sourceable_type' => Srt::class]);
     }
 }
