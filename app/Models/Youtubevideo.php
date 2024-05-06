@@ -12,6 +12,8 @@ class Youtubevideo extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['video_id'];
+
     public function source(): MorphOne
     {
         return $this->morphOne(Source::class, 'sourceable');

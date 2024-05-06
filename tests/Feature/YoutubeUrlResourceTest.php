@@ -137,4 +137,12 @@ class YoutubeUrlResourceTest extends TestCase
         $captionsCollection = (new YoutubeUrlResource('http://youtu.be/0zM3nApSvMg'))->toCaptions($captionString);
         $captionsCollection->captions();
     }
+
+    public function test_resource_can_be_recorded_to_youtubevideos_table(): void
+    {
+        $videoId = '0zM3nApSvMg';
+        $resource = new YoutubeUrlResource('http://youtu.be/'.$videoId);
+        $resource->storeResourceTable();
+        $this->assertDatabaseHas('youtubevideos', ['video_id' => $videoId]);
+    }
 }

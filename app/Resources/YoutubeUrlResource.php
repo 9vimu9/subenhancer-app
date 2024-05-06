@@ -66,4 +66,9 @@ class YoutubeUrlResource implements ResourceInterface
 
         return $captionCollection;
     }
+
+    public function storeResourceTable(): void
+    {
+        Youtubevideo::query()->create(['video_id' => $this->getVideoId()]);
+    }
 }
