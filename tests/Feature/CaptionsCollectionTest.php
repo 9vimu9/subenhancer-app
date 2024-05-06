@@ -6,6 +6,8 @@ namespace Tests\Feature;
 
 use App\Exceptions\CaptionWordFilterException;
 use App\Services\Captions\CaptionsCollection;
+use App\Services\FilteredWords\FilteredWord;
+use App\Services\FilteredWords\FilteredWordCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -21,7 +23,11 @@ class CaptionsCollectionTest extends TestCase
 
         ]);
         $captionsCollection = new CaptionsCollection();
-        $this->assertEquals($response['filtered_words'], $captionsCollection->getFilteredWords());
+        $filteredWordCollection = new FilteredWordCollection();
+        $filteredWordCollection->addFilteredWord(new FilteredWord('aa'));
+        $filteredWordCollection->addFilteredWord(new FilteredWord('bb'));
+        $filteredWordCollection->addFilteredWord(new FilteredWord('cc'));
+        $this->assertEquals($filteredWordCollection, $captionsCollection->getFilteredWords());
 
     }
 

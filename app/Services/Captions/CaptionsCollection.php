@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Captions;
 
 use App\Exceptions\CaptionWordFilterException;
+use App\Services\FilteredWords\FilteredWord;
+use App\Services\FilteredWords\FilteredWordCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -24,15 +26,20 @@ class CaptionsCollection
 
     //list of unique words that is included in captions.
     // This list should not be included duplicate words, stop words, nouns like place names
-    public function getFilteredWords()
+    public function getFilteredWords(): FilteredWordCollection
     {
         $url = config('app.nlp_endpoint').'filter';
         $response = Http::post($url, ['caption_string' => $this->toString()]);
         if ($response->status() !== Response::HTTP_OK) {
             throw new CaptionWordFilterException();
         }
+        $filteredWords = $response->json()['filtered_words'];
+        $filteredWordsCollection = new FilteredWordCollection();
+        foreach ($filteredWords as $filteredWord) {
+            $filteredWordsCollection->addFilteredWord(new FilteredWord($filteredWord));
+        }
 
-        return $response->json()['filtered_words'];
+        return $filteredWordsCollection;
     }
 
     public function toString(): string
