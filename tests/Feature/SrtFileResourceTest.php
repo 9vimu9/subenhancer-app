@@ -61,4 +61,22 @@ A DIRTY CARNIVAL';
         $this->assertEquals(68443, $captions[1]->getStartTime());
         $this->assertEquals(73864, $captions[1]->getEndTime());
     }
+
+    public function test_relocateFile(): void
+    {
+        $file = UploadedFile::fake()->create('new_file.srt', 'OHhh CONTENT');
+        $originalFileHash = md5_file($file->getRealPath());
+        $resource = new SrtFileResource($file);
+        $resource->relocateFile();
+        $this->assertEquals($originalFileHash, md5_file($resource->getFile()->getRealPath()));
+    }
+
+    public function test_srt_resource_can_be_recorded_to_srts_table(): void
+    {
+        $file = UploadedFile::fake()->create('new_file.srt', 'OHhh CONTENT');
+        $originalFileHash = md5_file($file->getRealPath());
+        $resource = new SrtFileResource($file);
+        $resource->storeResourceTable();
+        $this->assertDatabaseHas('srts', ['md5_hash' => $originalFileHash, 'file_location' => $file->getRealPath()]);
+    }
 }

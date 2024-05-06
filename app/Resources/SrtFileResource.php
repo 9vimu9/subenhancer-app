@@ -10,7 +10,7 @@ use App\Services\Subtitles\CaptionsCollection;
 use Benlipp\SrtParser\Parser;
 use Illuminate\Http\UploadedFile;
 
-class SrtFileResource implements ResourceInterface
+class SrtFileResource implements FileResourceInterface, ResourceInterface
 {
     public function __construct(private UploadedFile $file)
     {
@@ -42,5 +42,22 @@ class SrtFileResource implements ResourceInterface
         }
 
         return $captionsCollection;
+    }
+
+    public function storeResourceTable(): void
+    {
+        Srt::query()->create(['file_location' => $this->file->getRealPath(), 'md5_hash' => md5_file($this->file->getRealPath())]);
+    }
+
+    public function getFile(): UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function relocateFile(): void
+    {
+        $hashedFileName = $this->file->hashName();
+        $movedFile = $this->file->move(storage_path('app'), $hashedFileName);
+        $this->file = new UploadedFile($movedFile->getRealPath(), $hashedFileName);
     }
 }

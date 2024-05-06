@@ -12,6 +12,8 @@ class Srt extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['file_location', 'md5_hash'];
+
     public function source(): MorphOne
     {
         return $this->morphOne(Source::class, 'sourceable');

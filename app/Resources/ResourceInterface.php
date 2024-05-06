@@ -13,4 +13,6 @@ interface ResourceInterface
     public function fetch(): string;
 
     public function toCaptions(string $captionsString): CaptionsCollection;
+
+    public function storeResourceTable(): void;
 }
