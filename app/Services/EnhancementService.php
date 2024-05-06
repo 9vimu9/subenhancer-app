@@ -25,11 +25,12 @@ class EnhancementService
 
     public function submitEnhancement(?UploadedFile $file, ?string $videoUrl): void
     {
-        $this->create(auth()->id());
+        $enhancement = $this->create(auth()->id());
         $resource = (new ResourceFactory())->generate($file, $videoUrl);
         if ($resource->isAlreadyExist()) {
         }
         $captionsCollection = $resource->toCaptions($resource->fetch());
-        $resource->storeResourceTable();
+        $source = $resource->storeResourceTable();
+        $this->updateSourceId($enhancement->getAttribute('id'), $source->getAttribute('id'));
     }
 }
