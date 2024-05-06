@@ -13,7 +13,7 @@ class Enhancement extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'uuid'];
+    protected $fillable = ['user_id', 'uuid', 'source_id'];
 
     public function vocabularies(): BelongsToMany
     {

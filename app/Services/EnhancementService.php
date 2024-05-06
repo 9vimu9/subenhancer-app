@@ -14,4 +14,10 @@ class EnhancementService
     {
         return Enhancement::query()->create(['user_id' => $userId, 'uuid' => Str::uuid()]);
     }
+
+    public function updateSourceId(int $enhancementId, int $sourceId): void
+    {
+        $enhancement = Enhancement::query()->findOrFail($enhancementId);
+        $enhancement->update(['source_id' => $sourceId]);
+    }
 }
