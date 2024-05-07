@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Http;
 
 class CaptionsCollection
 {
+    /**
+     * @template T of Caption
+     *
+     * @var array<int, T>
+     */
     private array $captions = [];
 
     public function addCaption(Caption $caption): void
@@ -19,6 +24,11 @@ class CaptionsCollection
         $this->captions[] = $caption;
     }
 
+    /**
+     * @template T of Caption
+     *
+     * @return array<int, T>
+     */
     public function captions(): array
     {
         return $this->captions;

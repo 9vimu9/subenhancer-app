@@ -6,6 +6,11 @@ namespace App\Services\Definitions;
 
 class DefinitionCollection
 {
+    /**
+     * @template T of Definition
+     *
+     * @var array<int, T>
+     */
     private array $definitions = [];
 
     public function addDefinition(Definition $definition): void
@@ -13,6 +18,11 @@ class DefinitionCollection
         $this->definitions[] = $definition;
     }
 
+    /**
+     * @template T of Definition
+     *
+     * @return array<int, T>
+     */
     public function toArray(): array
     {
         return $this->definitions;
