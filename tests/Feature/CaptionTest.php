@@ -7,6 +7,8 @@ namespace Tests\Feature;
 use App\Exceptions\DurationHasnotBeenSavedBeforeSaveCaptionInSentencesException;
 use App\Models\Source;
 use App\Services\Captions\Caption;
+use App\Services\Sentences\Sentence;
+use App\Services\Sentences\SentenceCollection;
 use App\Services\SentencesApi\SentencesApiInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -33,10 +35,10 @@ class CaptionTest extends TestCase
     {
         $caption = new Caption();
         $this->expectException(DurationHasnotBeenSavedBeforeSaveCaptionInSentencesException::class);
-        $caption->saveCaptionInSentences(new MockSentenceApi());
+        $caption->saveSentencesInTheCaption(new MockSentenceApi());
     }
 
-    public function test_saveCaptionInSentences(): void
+    public function test_saveSentencesInTheCaption(): void
     {
         $source = Source::factory()->create();
         $caption = new Caption();
@@ -44,12 +46,12 @@ class CaptionTest extends TestCase
         $caption->setStartTime(1);
         $caption->setEndTime(2);
         $caption->saveDuration($source->getAttribute('id'));
-        $sentences = $caption->saveCaptionInSentences(new MockSentenceApi());
-        $this->assertEquals('sentence_1', $sentences[0]->getAttribute('sentence'));
-        $this->assertEquals('sentence_2', $sentences[1]->getAttribute('sentence'));
+        $sentences = $caption->saveSentencesInTheCaption(new MockSentenceApi());
+        $this->assertDatabaseHas('sentences', ['sentence' => 'sentence_1']);
+        $this->assertDatabaseHas('sentences', ['sentence' => 'sentence_2']);
     }
 
-    public function test_hasFilteredWordInCaption()
+    public function test_hasFilteredWordInCaption(): void
     {
         $filteredWords = ['random'];
         $caption = new Caption();
@@ -66,8 +68,20 @@ class CaptionTest extends TestCase
 
 class MockSentenceApi implements SentencesApiInterface
 {
-    public function getSentences(string $caption): array
+    public function getSentences(string $caption): SentenceCollection
     {
-        return ['sentence_1', 'sentence_2'];
+        $collection = new SentenceCollection();
+        $sentenceOne = new Sentence();
+        $sentenceOne->setSentence('sentence_1');
+        $sentenceOne->setOrder(0);
+
+        $sentenceTwo = new Sentence();
+        $sentenceTwo->setSentence('sentence_2');
+        $sentenceTwo->setOrder(1);
+
+        $collection->addSentence($sentenceOne);
+        $collection->addSentence($sentenceTwo);
+
+        return $collection;
     }
 }

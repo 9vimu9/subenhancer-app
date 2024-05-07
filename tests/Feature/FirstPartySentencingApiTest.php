@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Services\Sentences\Sentence;
+use App\Services\Sentences\SentenceCollection;
 use App\Services\SentencesApi\FirstPartySentencingApi;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
@@ -20,6 +22,19 @@ class FirstPartySentencingApiTest extends TestCase
 
         ]);
         $sentences = (new FirstPartySentencingApi())->getSentences('RANDOMS');
-        $this->assertEquals($response['sentences'], $sentences);
+        $collection = new SentenceCollection();
+
+        $sentenceOne = new Sentence();
+        $sentenceOne->setSentence('sentence_1');
+        $sentenceOne->setOrder(0);
+
+        $sentenceTwo = new Sentence();
+        $sentenceTwo->setSentence('sentence_2');
+        $sentenceTwo->setOrder(1);
+
+        $collection->addSentence($sentenceOne);
+        $collection->addSentence($sentenceTwo);
+
+        $this->assertEqualsCanonicalizing($collection->toArray(), $sentences->toArray());
     }
 }

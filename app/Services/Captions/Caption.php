@@ -7,8 +7,8 @@ namespace App\Services\Captions;
 use App\Exceptions\DurationHasnotBeenSavedBeforeSaveCaptionInSentencesException;
 use App\Models\Duration;
 use App\Models\Sentence;
+use App\Services\Sentences\SentenceCollection;
 use App\Services\SentencesApi\SentencesApiInterface;
-use Illuminate\Database\Eloquent\Model;
 
 class Caption
 {
@@ -72,27 +72,24 @@ class Caption
         return $this->duration;
     }
 
-    /**
-     * @template T of Model
-     *
-     * @return array<int, T>
-     */
-    public function saveCaptionInSentences(SentencesApiInterface $sentencesApi): array
+    public function saveSentencesInTheCaption(SentencesApiInterface $sentencesApi): SentenceCollection
     {
         if (! isset($this->duration)) {
             throw new DurationHasnotBeenSavedBeforeSaveCaptionInSentencesException();
         }
-        $sentences = [];
-        foreach ($sentencesApi->getSentences($this->getCaption()) as $index => $sentence) {
-            $sentences[] = Sentence::query()->create([
-                'order' => $index,
-                'sentence' => $sentence,
+        $collection = new SentenceCollection();
+        foreach ($sentencesApi->getSentences($this->getCaption())->toArray() as $sentence) {
+            $sentenceModel = Sentence::query()->create([
+                'order' => $sentence->getOrder(),
+                'sentence' => $sentence->getSentence(),
                 'duration_id' => $this->duration->getAttribute('id'),
             ]);
+            $sentence->setSentenceModel($sentenceModel);
+            $collection->addSentence($sentence);
 
         }
 
-        return $sentences;
+        return $collection;
 
     }
 }
