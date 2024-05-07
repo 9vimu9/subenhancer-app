@@ -14,6 +14,8 @@ class Corpus extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['word'];
+
     public function definitions(): HasMany
     {
         return $this->hasMany(Definition::class);
