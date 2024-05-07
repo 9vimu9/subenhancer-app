@@ -48,4 +48,14 @@ class FilteredWordCollection
         }
 
     }
+
+    public function toArrayOfWords(): array
+    {
+        $words = [];
+        foreach ($this->filteredWords as $filteredWord) {
+            $words[] = $filteredWord->getWord();
+        }
+
+        return $words;
+    }
 }
