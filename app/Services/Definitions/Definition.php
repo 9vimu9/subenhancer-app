@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services\Definitions;
 
 use App\Enums\WordClassEnum;
-use App\Models\Corpus;
 use Illuminate\Database\Eloquent\Model;
 
 class Definition
@@ -32,12 +31,10 @@ class Definition
         return $this->definition;
     }
 
-    public function store(): Model
+    public function store(int $corpusId): Model
     {
-        $corpus = Corpus::query()->findByWord($this->word);
-
         return \App\Models\Definition::query()->create([
-            'corpus_id' => $corpus->id,
+            'corpus_id' => $corpusId,
             'definition' => $this->definition,
             'word_class' => $this->wordClass->value,
         ]);
