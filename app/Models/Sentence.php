@@ -9,5 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sentence extends Model
 {
+    protected $fillable = ['order', 'sentence', 'duration_id'];
+
     use HasFactory;
 }
