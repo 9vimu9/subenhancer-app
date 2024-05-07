@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('sentence_id')->references('id')->on('sentences')->onDelete('cascade');
             $table->unsignedBigInteger('corpus_id');
             $table->foreign('corpus_id')->references('id')->on('corpuses')->onDelete('cascade');
-            $table->unsignedBigInteger('definition_id');
+            $table->unsignedBigInteger('definition_id')->nullable();
             $table->foreign('definition_id')->references('id')->on('definitions')->onDelete('cascade');
             $table->timestamps();
         });
