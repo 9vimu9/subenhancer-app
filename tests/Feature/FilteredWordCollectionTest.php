@@ -27,7 +27,7 @@ class FilteredWordCollectionTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $filteredWordCollection->toArray());
     }
 
-    public function test_storeNewFilteredWordsDefinitions()
+    public function test_storeNewFilteredWordsDefinitions(): void
     {
         $word = 'Hello';
         $filteredWord = new FilteredWord($word);
@@ -42,7 +42,7 @@ class FilteredWordCollectionTest extends TestCase
 
     }
 
-    public function test_ignore_storing_definitions_for_exiting_words()
+    public function test_ignore_storing_definitions_for_exiting_words(): void
     {
         $word = 'Hello';
         Corpus::factory()->create(['word' => $word]);
@@ -51,6 +51,18 @@ class FilteredWordCollectionTest extends TestCase
         $collection->addFilteredWord($filteredWord);
         $collection->storeNewFilteredWordsDefinitions(new MockDefinitionsApi());
         $this->assertDatabaseEmpty('definitions');
+
+    }
+
+    public function test_remove_filtered_word_that_no_definition_available()
+    {
+        $filteredWordOne = new FilteredWord('Hello');
+        $filteredWordTwo = new FilteredWord('NO_DEFINITION_AVAILABLE');
+        $collection = new FilteredWordCollection();
+        $collection->addFilteredWord($filteredWordOne);
+        $collection->addFilteredWord($filteredWordTwo);
+        $collection->storeNewFilteredWordsDefinitions(new MockDefinitionsApi());
+        $this->assertEqualsCanonicalizing([$filteredWordOne], $collection->toArray());
 
     }
 }

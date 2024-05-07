@@ -34,12 +34,16 @@ class FilteredWordCollection
 
     public function storeNewFilteredWordsDefinitions(DefinitionsApiInterface $definitionsApi): void
     {
-        foreach ($this->filteredWords as $filteredWord) {
+        foreach ($this->filteredWords as $index => $filteredWord) {
             try {
                 $filteredWord->storeDefinitions($definitionsApi);
-            } catch (DefinitionAlreadyExistException|CantFindDefinitionException $exception) {
+            } catch (DefinitionAlreadyExistException $exception) {
                 continue;
 
+            } catch (CantFindDefinitionException $exception) {
+                unset($this->filteredWords[$index]);
+
+                continue;
             }
         }
 
