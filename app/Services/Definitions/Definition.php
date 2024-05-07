@@ -36,7 +36,7 @@ class Definition
         return \App\Models\Definition::query()->create([
             'corpus_id' => $corpusId,
             'definition' => $this->definition,
-            'word_class' => $this->wordClass->value,
+            'word_class' => $this->wordClass->name,
         ]);
     }
 }
