@@ -38,4 +38,9 @@ class FilteredWord
         }
 
     }
+
+    public function getWord(): string
+    {
+        return $this->word;
+    }
 }
