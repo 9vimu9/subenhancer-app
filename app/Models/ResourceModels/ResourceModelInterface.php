@@ -11,7 +11,7 @@ interface ResourceModelInterface
 {
     public function resourceExists(): bool;
 
-    public function saveToSource(Model $resourceModel): Source;
+    public function saveToSource(?Model $resourceModel = null): Source;
 
     public function save(): Model;
 }

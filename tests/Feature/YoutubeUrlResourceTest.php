@@ -53,7 +53,7 @@ class MockResourceModel implements ResourceModelInterface
         return true;
     }
 
-    public function saveToSource(Model $resourceModel): Source
+    public function saveToSource(?Model $resourceModel = null): Source
     {
         return new class extends Source
         {
