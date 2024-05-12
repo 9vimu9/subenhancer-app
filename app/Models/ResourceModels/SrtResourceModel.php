@@ -27,4 +27,11 @@ class SrtResourceModel extends AbstractResourceModel
                 'file_location' => $this->fileRealPath,
                 'md5_hash' => md5_file($this->fileRealPath)]);
     }
+
+    public function getSource(): Model
+    {
+        return Srt::query()
+            ->where('md5_hash', md5_file($this->fileRealPath))
+            ->firstOrFail();
+    }
 }

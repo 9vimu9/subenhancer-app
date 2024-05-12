@@ -29,4 +29,9 @@ class YoutubeResourceModel extends AbstractResourceModel
         return Youtubevideo::query()
             ->create(['video_id' => $this->videoId]);
     }
+
+    public function getSource(): Model
+    {
+        return Youtubevideo::query()->where('video_id', $this->videoId)->firstOrFail();
+    }
 }

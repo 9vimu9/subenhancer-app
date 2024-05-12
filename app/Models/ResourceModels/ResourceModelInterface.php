@@ -14,4 +14,6 @@ interface ResourceModelInterface
     public function saveToSource(?Model $resourceModel = null): Source;
 
     public function save(): Model;
+
+    public function getSource(): Model;
 }
