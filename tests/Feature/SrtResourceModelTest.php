@@ -38,11 +38,10 @@ class SrtResourceModelTest extends TestCase
     }
 
     #[DataProvider('provideFakeFile')]
-    public function test_insert_a_record_to_sources_table_when_a_record_is_saved_to_srt_table(UploadedFile $fakeFile): void
+    public function test_save_to_srt_table(UploadedFile $fakeFile): void
     {
 
-        (new SrtResourceModel($fakeFile->getRealPath()))->saveToSource();
+        (new SrtResourceModel($fakeFile->getRealPath()))->save();
         $this->assertDatabaseHas('srts', ['file_location' => $fakeFile->getRealPath()]);
-        $this->assertDatabaseHas('sources', ['sourceable_type' => Srt::class, 'sourceable_id' => 1]);
     }
 }

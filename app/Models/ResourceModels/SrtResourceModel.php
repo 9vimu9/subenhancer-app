@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models\ResourceModels;
 
-use App\Models\Source;
 use App\Models\Srt;
+use Illuminate\Database\Eloquent\Model;
 
-readonly class SrtResourceModel implements ResourceModelInterface
+class SrtResourceModel extends AbstractResourceModel
 {
-    public function __construct(private string $fileRealPath)
+    public function __construct(private readonly string $fileRealPath)
     {
     }
 
@@ -20,13 +20,11 @@ readonly class SrtResourceModel implements ResourceModelInterface
             ->exists();
     }
 
-    public function saveToSource(): Source
+    public function save(): Model
     {
         return Srt::query()
             ->create([
                 'file_location' => $this->fileRealPath,
-                'md5_hash' => md5_file($this->fileRealPath), ])
-            ->source()
-            ->create([]);
+                'md5_hash' => md5_file($this->fileRealPath)]);
     }
 }

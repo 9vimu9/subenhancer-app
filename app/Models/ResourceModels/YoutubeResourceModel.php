@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models\ResourceModels;
 
-use App\Models\Source;
 use App\Models\Youtubevideo;
 use App\Traits\YoutubeTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class YoutubeResourceModel implements ResourceModelInterface
+class YoutubeResourceModel extends AbstractResourceModel
 {
     use YoutubeTrait;
 
@@ -24,11 +24,9 @@ class YoutubeResourceModel implements ResourceModelInterface
         return Youtubevideo::query()->where('video_id', $this->videoId)->exists();
     }
 
-    public function saveToSource(): Source
+    public function save(): Model
     {
         return Youtubevideo::query()
-            ->create(['video_id' => $this->videoId])
-            ->source()
-            ->create([]);
+            ->create(['video_id' => $this->videoId]);
     }
 }

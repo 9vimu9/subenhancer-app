@@ -30,12 +30,11 @@ class YoutubeResourceModelTest extends TestCase
             )->resourceExists());
     }
 
-    public function test_insert_a_record_to_sources_table_when_a_record_is_saved_to_youtubevideo_table(): void
+    public function test_save_to_youtubevideo_table(): void
     {
         $videoId = 'my_video_id';
-        (new YoutubeResourceModel(self::YOUTUBE_URL.$videoId))->saveToSource();
+        (new YoutubeResourceModel(self::YOUTUBE_URL.$videoId))->save();
         $this->assertDatabaseHas('youtubevideos', ['video_id' => $videoId]);
-        $this->assertDatabaseHas('sources', ['sourceable_type' => Youtubevideo::class, 'sourceable_id' => 1]);
 
     }
 }
