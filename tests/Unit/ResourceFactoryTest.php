@@ -21,13 +21,13 @@ class ResourceFactoryTest extends TestCase
 
     public function test_youtube_video_resource_can_be_created(): void
     {
-        $resource = (new ResourceFactory())->generate(null, 'random_link');
+        $resource = (new ResourceFactory())->generate(null, 'https://www.youtube.com/watch?v=afsgs');
         $this->assertInstanceOf(YoutubeUrlResource::class, $resource);
     }
 
     public function test_srt_file_resource_can_be_created(): void
     {
-        $file = UploadedFile::fake()->create('srt_file.srt');
+        $file = UploadedFile::fake()->create('srt_file.srt', 'TEST CONTENT');
         $resource = (new ResourceFactory())->generate($file, null);
         $this->assertInstanceOf(SrtFileResource::class, $resource);
     }
