@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Exceptions\InvalidYoutubeCaptionException;
-use App\Models\ResourceModels\ResourceModelInterface;
-use App\Models\Source;
 use App\Resources\YoutubeUrlResource;
 use App\Services\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Mocks\MockResourceModel;
 use Tests\TestCase;
 
 class YoutubeUrlResourceTest extends TestCase
@@ -43,28 +41,6 @@ class YoutubeUrlResourceTest extends TestCase
             new MockResourceModel(),
             new MockInvalidYoutubeCaptionsGrabberApi())
         )->toCaptions();
-    }
-}
-
-class MockResourceModel implements ResourceModelInterface
-{
-    public function resourceExists(): bool
-    {
-        return true;
-    }
-
-    public function saveToSource(?Model $resourceModel = null): Source
-    {
-        return new class extends Source
-        {
-        };
-    }
-
-    public function save(): Model
-    {
-        return new class extends Model
-        {
-        };
     }
 }
 
