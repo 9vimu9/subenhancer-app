@@ -10,9 +10,8 @@ use App\Models\ResourceModels\YoutubeResourceModel;
 use App\Resources\ResourceInterface;
 use App\Resources\SrtFileResource;
 use App\Resources\YoutubeUrlResource;
-use App\Services\Captions\CaptionsCollection;
-use App\Services\SrtParser\BenlippStrParser;
-use App\Services\YoutubeCaptionsGrabberApi\FirstPartyYoutubeCaptionsGrabberApi;
+use App\Services\SrtParser\SrtParserInterface;
+use App\Services\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use App\Traits\FileResourceTrait;
 use Illuminate\Http\UploadedFile;
 
@@ -20,10 +19,10 @@ class ResourceFactory
 {
     use FileResourceTrait;
 
-    public function generate(?UploadedFile $file, ?string $videoUrl): ResourceInterface
+    public function generate(?UploadedFile $file, ?string $videoUrl, SrtParserInterface $srtParser, YoutubeCaptionsGrabberApiInterface $youtubeCaptionsGrabberApi): ResourceInterface
     {
         if (! is_null($videoUrl)) {
-            return new YoutubeUrlResource($videoUrl, new YoutubeResourceModel($videoUrl), new FirstPartyYoutubeCaptionsGrabberApi());
+            return new YoutubeUrlResource($videoUrl, new YoutubeResourceModel($videoUrl), $youtubeCaptionsGrabberApi);
         }
         if (is_null($file)) {
             throw new ResourceGenerationInputsAreNullException();
@@ -32,7 +31,7 @@ class ResourceFactory
         return new SrtFileResource(
             $file,
             new SrtResourceModel($file->getRealPath()),
-            new BenlippStrParser(new CaptionsCollection())
-        );
+            $srtParser);
+
     }
 }
