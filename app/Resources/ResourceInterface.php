@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
-use App\Models\Source;
+use App\Models\ResourceModels\ResourceModelInterface;
 use App\Services\Captions\CaptionsCollection;
 
 interface ResourceInterface
 {
-    public function isAlreadyExist(): bool;
+    public function toCaptions(): CaptionsCollection;
 
-    public function fetch(): string;
-
-    public function toCaptions(string $captionsString): CaptionsCollection;
-
-    public function storeResourceTable(): Source;
+    public function resourceModel(): ResourceModelInterface;
 }
