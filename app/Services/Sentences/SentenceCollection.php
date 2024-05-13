@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace App\Services\Sentences;
 
-class SentenceCollection
+use ArrayIterator;
+use IteratorAggregate;
+use Traversable;
+
+/**
+ * @implements IteratorAggregate<int, Sentence>
+ */
+class SentenceCollection implements IteratorAggregate
 {
-    /**
-     * @template T of Sentence
-     *
-     * @var array<int, T>
-     */
+    /** @var Sentence[] */
     private array $sentences;
 
-    public function addSentence(Sentence $sentence): void
+    public function add(Sentence $sentence): void
     {
         $this->sentences[] = $sentence;
     }
 
-    /**
-     * @template T of Sentence
-     *
-     * @return array<int, T>
-     */
-    public function toArray(): array
+    public function getIterator(): Traversable
     {
-        return $this->sentences;
+        return new ArrayIterator($this->sentences);
     }
 }

@@ -78,14 +78,14 @@ class Caption
             throw new DurationHasnotBeenSavedBeforeSaveCaptionInSentencesException();
         }
         $collection = new SentenceCollection();
-        foreach ($sentencesApi->getSentences($this->getCaption())->toArray() as $sentence) {
+        foreach ($sentencesApi->getSentences($this->getCaption()) as $sentence) {
             $sentenceModel = Sentence::query()->create([
                 'order' => $sentence->getOrder(),
                 'sentence' => $sentence->getSentence(),
                 'duration_id' => $this->duration->getAttribute('id'),
             ]);
             $sentence->setSentenceModel($sentenceModel);
-            $collection->addSentence($sentence);
+            $collection->add($sentence);
 
         }
 

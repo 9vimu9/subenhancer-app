@@ -79,8 +79,8 @@ class MockSentenceApi implements SentencesApiInterface
         $sentenceTwo->setSentence('sentence_2');
         $sentenceTwo->setOrder(1);
 
-        $collection->addSentence($sentenceOne);
-        $collection->addSentence($sentenceTwo);
+        $collection->add($sentenceOne);
+        $collection->add($sentenceTwo);
 
         return $collection;
     }

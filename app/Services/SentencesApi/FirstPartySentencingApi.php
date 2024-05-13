@@ -25,7 +25,7 @@ class FirstPartySentencingApi implements SentencesApiInterface
             $sentence = new Sentence();
             $sentence->setSentence($sentenceString);
             $sentence->setOrder($index);
-            $collection->addSentence($sentence);
+            $collection->add($sentence);
         }
 
         return $collection;

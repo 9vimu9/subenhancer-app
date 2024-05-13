@@ -32,9 +32,9 @@ class FirstPartySentencingApiTest extends TestCase
         $sentenceTwo->setSentence('sentence_2');
         $sentenceTwo->setOrder(1);
 
-        $collection->addSentence($sentenceOne);
-        $collection->addSentence($sentenceTwo);
+        $collection->add($sentenceOne);
+        $collection->add($sentenceTwo);
 
-        $this->assertEqualsCanonicalizing($collection->toArray(), $sentences->toArray());
+        $this->assertEqualsCanonicalizing(iterator_to_array($collection->getIterator()), iterator_to_array($sentences->getIterator()));
     }
 }
