@@ -54,7 +54,7 @@ readonly class DefinitionsService
             throw new DefinitionAlreadyExistException();
         }
 
-        foreach ($filteredWord->getDefinitions()->toArray() as $definition) {
+        foreach ($filteredWord->getDefinitions() as $definition) {
             Definition::query()->createByDefinition($word->id, $definition);
 
         }

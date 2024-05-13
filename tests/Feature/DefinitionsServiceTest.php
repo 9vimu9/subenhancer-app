@@ -80,7 +80,7 @@ class DefinitionsServiceTest extends TestCase
             $word
         );
         $definitionCollection = new DefinitionCollection();
-        $definitionCollection->addDefinition($definition);
+        $definitionCollection->add($definition);
 
         $filteredWord = new FilteredWord($word);
         $filteredWord->setDefinitions($definitionCollection);

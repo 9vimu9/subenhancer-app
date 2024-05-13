@@ -22,7 +22,7 @@ class MockDefinitionsApi implements DefinitionsApiInterface
             throw new CantFindDefinitionException();
         }
         $collection = new DefinitionCollection();
-        $collection->addDefinition(new Definition(WordClassEnum::NOUN, '"Hello!" or an equivalent greeting.', $word));
+        $collection->add(new Definition(WordClassEnum::NOUN, '"Hello!" or an equivalent greeting.', $word));
 
         return $collection;
     }

@@ -157,10 +157,10 @@ class FreeDictionaryApiTest extends TestCase
             new Definition(WordClassEnum::INTERJECTION, 'Used sarcastically to imply that the person addressed or referred to has done something the speaker or writer considers to be foolish.', $word),
             new Definition(WordClassEnum::INTERJECTION, 'An expression of puzzlement or discovery.', $word),
         ];
-        $this->assertEqualsCanonicalizing($definitionsArray, $definitionCollection->toArray());
+        $this->assertEqualsCanonicalizing($definitionsArray, iterator_to_array($definitionCollection->getIterator()));
     }
 
-    public function test_throws_exception_when_meanings_cannot_be_found()
+    public function test_throws_exception_when_meanings_cannot_be_found(): void
     {
         $url = config('app.definition_apis.free_dictionary_api').'*';
         Http::fake([
@@ -172,7 +172,7 @@ class FreeDictionaryApiTest extends TestCase
 
     }
 
-    public function test_throws_exception_when_definition_api_not_functional()
+    public function test_throws_exception_when_definition_api_not_functional(): void
     {
         $url = config('app.definition_apis.free_dictionary_api').'*';
         Http::fake([

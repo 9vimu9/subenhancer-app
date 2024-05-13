@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace App\Services\Definitions;
 
-class DefinitionCollection
+use ArrayIterator;
+use IteratorAggregate;
+use Traversable;
+
+/**
+ * @implements IteratorAggregate<int, Definition>
+ */
+class DefinitionCollection implements IteratorAggregate
 {
-    /**
-     * @template T of Definition
-     *
-     * @var array<int, T>
-     */
+    /** @var Definition[] */
     private array $definitions = [];
 
-    public function addDefinition(Definition $definition): void
+    public function add(Definition $definition): void
     {
         $this->definitions[] = $definition;
     }
 
-    /**
-     * @template T of Definition
-     *
-     * @return array<int, T>
-     */
-    public function toArray(): array
+    public function getIterator(): Traversable
     {
-        return $this->definitions;
+        return new ArrayIterator($this->definitions);
     }
 }
