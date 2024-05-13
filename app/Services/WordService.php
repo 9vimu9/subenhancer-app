@@ -4,21 +4,31 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\WordInCorpusException;
 use App\Models\Corpus;
+use App\Services\Captions\CaptionsCollection;
 use App\Services\FilteredWords\FilteredWordCollection;
-use Illuminate\Database\Eloquent\Model;
+use App\Services\WordsFilterApi\WordFilterApiInterface;
 
 class WordService
 {
-    public function storeWord(string $word): Model
+    public function __construct(private WordFilterApiInterface $wordFilterApi)
     {
-        return Corpus::query()->saveWord($word);
     }
 
     public function storeWordsByCollection(FilteredWordCollection $filteredWordCollection): void
     {
         foreach ($filteredWordCollection->toArray() as $filteredWord) {
-            $this->storeWord($filteredWord->getWord());
+            try {
+                Corpus::query()->saveWord($filteredWord->getWord());
+            } catch (WordInCorpusException $exception) {
+                continue;
+            }
         }
+    }
+
+    public function filterWordsByCollection(CaptionsCollection $captionsCollection): FilteredWordCollection
+    {
+        return $this->wordFilterApi->filter($captionsCollection->toString());
     }
 }
