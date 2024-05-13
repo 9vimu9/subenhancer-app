@@ -52,7 +52,7 @@ readonly class DefinitionsService
             throw new DefinitionAlreadyExistException();
         }
 
-        $word = Corpus::query()->findByWord($filteredWord->getWord());
+        $word = Corpus::query()->findByWordOrFail($filteredWord->getWord());
         foreach ($filteredWord->getDefinitions()->toArray() as $definition) {
             Definition::query()->createByDefinition($word->id, $definition);
 
