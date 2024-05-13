@@ -12,6 +12,10 @@ use App\Services\DefinitionsAPI\DefinitionsApiInterface;
 
 class MockDefinitionsApi implements DefinitionsApiInterface
 {
+    public const string DEFINITION = '"Hello!" or an equivalent greeting.';
+
+    public const WordClassEnum WORD_CLASS = WordClassEnum::NOUN;
+
     public function getDefinitions(string $word): DefinitionCollection
     {
         if ($word === 'NO_DEFINITION_AVAILABLE') {
