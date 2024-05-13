@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Core;
+
+use ArrayIterator;
+use IteratorAggregate;
+use Traversable;
+
+abstract class AbstractCollection implements IteratorAggregate
+{
+    protected array $items = [];
+
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->items);
+    }
+}

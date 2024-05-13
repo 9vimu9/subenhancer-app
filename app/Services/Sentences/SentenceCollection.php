@@ -4,25 +4,16 @@ declare(strict_types=1);
 
 namespace App\Services\Sentences;
 
-use ArrayIterator;
+use App\Core\AbstractCollection;
 use IteratorAggregate;
-use Traversable;
 
 /**
  * @implements IteratorAggregate<int, Sentence>
  */
-class SentenceCollection implements IteratorAggregate
+class SentenceCollection extends AbstractCollection
 {
-    /** @var Sentence[] */
-    private array $sentences;
-
     public function add(Sentence $sentence): void
     {
-        $this->sentences[] = $sentence;
-    }
-
-    public function getIterator(): Traversable
-    {
-        return new ArrayIterator($this->sentences);
+        $this->items[] = $sentence;
     }
 }
