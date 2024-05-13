@@ -16,6 +16,6 @@ class FileResourceTraitTest extends TestCase
     {
         $uploadedFile = UploadedFile::fake()->create('fake_file.srt', 'FAKE FILE CONTENT');
         $movedFile = $this->relocateFile($uploadedFile);
-        $this->assertEquals('/var/www/html/storage/app', $movedFile->getPath());
+        $this->assertEquals(base_path().'/storage/app', $movedFile->getPath());
     }
 }
