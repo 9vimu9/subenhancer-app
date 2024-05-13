@@ -30,11 +30,11 @@ class CaptionsCollection
 
     public function toString(): string
     {
-        $captionsStrings = '';
+        $captionsStrings = [];
         foreach ($this->captions as $caption) {
-            $captionsStrings .= $caption->getCaption();
+            $captionsStrings[] = $caption->getCaption();
         }
 
-        return $captionsStrings;
+        return trim(implode(' ', $captionsStrings));
     }
 }

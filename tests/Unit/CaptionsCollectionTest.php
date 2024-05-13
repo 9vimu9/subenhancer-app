@@ -15,7 +15,7 @@ class CaptionsCollectionTest extends TestCase
         $captionsCollection = new CaptionsCollection();
         $capOneCaption = 'Caption 1';
         $capTwoCaption = 'Caption 2';
-        $captionString = $capOneCaption.$capTwoCaption;
+        $captionString = $capOneCaption.' '.$capTwoCaption;
         $capOne = new Caption();
         $capOne->setCaption($capOneCaption);
         $capTwo = new Caption();
