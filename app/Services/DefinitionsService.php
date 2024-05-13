@@ -48,11 +48,12 @@ readonly class DefinitionsService
 
     public function storeDefinitions(FilteredWord $filteredWord): void
     {
+        $word = Corpus::query()->findByWordOrFail($filteredWord->getWord());
+
         if (Definition::query()->findDefinitionsByWord($filteredWord->getWord())->count()) {
             throw new DefinitionAlreadyExistException();
         }
 
-        $word = Corpus::query()->findByWordOrFail($filteredWord->getWord());
         foreach ($filteredWord->getDefinitions()->toArray() as $definition) {
             Definition::query()->createByDefinition($word->id, $definition);
 
