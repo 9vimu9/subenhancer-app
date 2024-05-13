@@ -20,7 +20,7 @@ class FilteredWordCollectionTest extends TestCase
         FilteredWord $filteredWordOne,
         FilteredWord $filteredWordTwo,
     ): void {
-        $this->assertEqualsCanonicalizing([$filteredWordOne, $filteredWordTwo], $filteredWordCollection->toArray());
+        $this->assertEqualsCanonicalizing([$filteredWordOne, $filteredWordTwo], iterator_to_array($filteredWordCollection->getIterator()));
     }
 
     #[DataProvider('provideInputs')]
@@ -41,8 +41,8 @@ class FilteredWordCollectionTest extends TestCase
         $filteredWordOne = new FilteredWord('filtered word 1');
         $filteredWordTwo = new FilteredWord('filtered word 2');
         $filteredWordCollection = new FilteredWordCollection();
-        $filteredWordCollection->addFilteredWord($filteredWordOne);
-        $filteredWordCollection->addFilteredWord($filteredWordTwo);
+        $filteredWordCollection->add($filteredWordOne);
+        $filteredWordCollection->add($filteredWordTwo);
 
         return [[$filteredWordCollection, $filteredWordOne, $filteredWordTwo]];
     }

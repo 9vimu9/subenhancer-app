@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Feature;
@@ -15,23 +16,23 @@ class FirstPartyWordFilterApiTest extends TestCase
 {
     public function test_filter_method(): void
     {
-        $url = config('app.nlp_endpoint') . 'filter';
+        $url = config('app.nlp_endpoint').'filter';
         $response = ['filtered_words' => ['aa', 'bb', 'cc']];
         Http::fake([
             $url => Http::response($response, Response::HTTP_OK),
 
         ]);
         $filteredWordCollection = new FilteredWordCollection();
-        $filteredWordCollection->addFilteredWord(new FilteredWord('aa'));
-        $filteredWordCollection->addFilteredWord(new FilteredWord('bb'));
-        $filteredWordCollection->addFilteredWord(new FilteredWord('cc'));
+        $filteredWordCollection->add(new FilteredWord('aa'));
+        $filteredWordCollection->add(new FilteredWord('bb'));
+        $filteredWordCollection->add(new FilteredWord('cc'));
         $this->assertEquals($filteredWordCollection, (new FirstPartyWordFilterApi())->filter('RANDOM_TEXT'));
 
     }
 
     public function test_exception_must_be_thrown_when_the_filter_service_is_not_functional(): void
     {
-        $url = config('app.nlp_endpoint') . 'filter';
+        $url = config('app.nlp_endpoint').'filter';
         Http::fake([
             $url => Http::sequence()->pushStatus(Response::HTTP_INTERNAL_SERVER_ERROR),
         ]);

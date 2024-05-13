@@ -23,7 +23,7 @@ readonly class DefinitionsService
         $updatedCollection = new FilteredWordCollection();
         foreach ($collection->toArray() as $word) {
             try {
-                $updatedCollection->addFilteredWord($this->setDefinitions($word));
+                $updatedCollection->add($this->setDefinitions($word));
             } catch (CantFindDefinitionException $exception) {
                 continue;
             }

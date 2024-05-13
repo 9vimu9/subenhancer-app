@@ -18,7 +18,7 @@ class WordServiceTest extends TestCase
     use RefreshDatabase;
 
     #[DataProvider('provideInputs')]
-    public function test_store_words_by_collection($service, $collection): void
+    public function test_store_words_by_collection(WordService $service, FilteredWordCollection $collection): void
     {
         $service->storeWordsByCollection($collection);
         $this->assertDatabaseHas('corpuses', ['word' => 'word 1']);
@@ -26,7 +26,7 @@ class WordServiceTest extends TestCase
     }
 
     #[DataProvider('provideInputs')]
-    public function test_ignore_existing_words($service, $collection): void
+    public function test_ignore_existing_words(WordService $service, FilteredWordCollection $collection): void
     {
         Corpus::factory()->create(['word' => 'word 1']);
         $service->storeWordsByCollection($collection);
@@ -40,8 +40,8 @@ class WordServiceTest extends TestCase
         $collection = new FilteredWordCollection();
         $wordOne = new FilteredWord('word 1');
         $wordTwo = new FilteredWord('word 2');
-        $collection->addFilteredWord($wordOne);
-        $collection->addFilteredWord($wordTwo);
+        $collection->add($wordOne);
+        $collection->add($wordTwo);
 
         return [[$service, $collection]];
     }

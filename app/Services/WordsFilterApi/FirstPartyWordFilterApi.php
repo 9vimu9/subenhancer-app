@@ -22,7 +22,7 @@ class FirstPartyWordFilterApi implements WordFilterApiInterface
         $filteredWords = $response->json()['filtered_words'];
         $filteredWordsCollection = new FilteredWordCollection();
         foreach ($filteredWords as $filteredWord) {
-            $filteredWordsCollection->addFilteredWord(new FilteredWord($filteredWord));
+            $filteredWordsCollection->add(new FilteredWord($filteredWord));
         }
 
         return $filteredWordsCollection;

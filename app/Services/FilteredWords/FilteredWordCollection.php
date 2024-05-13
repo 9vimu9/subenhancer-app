@@ -4,28 +4,26 @@ declare(strict_types=1);
 
 namespace App\Services\FilteredWords;
 
-class FilteredWordCollection
+use ArrayIterator;
+use IteratorAggregate;
+use Traversable;
+
+/**
+ * @implements IteratorAggregate<int, FilteredWord>
+ */
+class FilteredWordCollection implements IteratorAggregate
 {
-    /**
-     * @template T of FilteredWord
-     *
-     * @var array<int, T>
-     */
+    /** @var FilteredWord[] */
     private array $filteredWords = [];
 
-    public function addFilteredWord(FilteredWord $filteredWord): void
+    public function add(FilteredWord $filteredWord): void
     {
         $this->filteredWords[] = $filteredWord;
     }
 
-    /**
-     * @template T of FilteredWord
-     *
-     * @return array<int, T>
-     */
-    public function toArray(): array
+    public function getIterator(): Traversable
     {
-        return $this->filteredWords;
+        return new ArrayIterator($this->filteredWords);
     }
 
     public function toArrayOfWords(): array

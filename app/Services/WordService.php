@@ -18,7 +18,7 @@ class WordService
 
     public function storeWordsByCollection(FilteredWordCollection $filteredWordCollection): void
     {
-        foreach ($filteredWordCollection->toArray() as $filteredWord) {
+        foreach ($filteredWordCollection as $filteredWord) {
             try {
                 Corpus::query()->saveWord($filteredWord->getWord());
             } catch (WordInCorpusException $exception) {
