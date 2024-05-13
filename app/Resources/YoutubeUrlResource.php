@@ -34,7 +34,7 @@ class YoutubeUrlResource extends AbstractUrlResource
             $caption->setCaption($cap['text']);
             $caption->setEndTime($cap['end']);
             $caption->setStartTime($cap['start']);
-            $captionCollection->addCaption($caption);
+            $captionCollection->add($caption);
         }
 
         return $captionCollection;

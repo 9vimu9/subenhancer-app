@@ -25,7 +25,7 @@ class BenlippStrParser implements SrtParserInterface
             $endTime = (int) round($srt->endTime * 1000);
             $caption->setStartTime($startTime);
             $caption->setEndTime($endTime);
-            $this->captionsCollection->addCaption($caption);
+            $this->captionsCollection->add($caption);
         }
 
         return $this->captionsCollection;

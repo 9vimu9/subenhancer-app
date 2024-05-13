@@ -22,7 +22,7 @@ A Film Poeta Production
 A DIRTY CARNIVAL';
 
         $parser = new BenlippStrParser(new CaptionsCollection());
-        $captions = $parser->parse($fileContent)->captions();
+        $captions = iterator_to_array($parser->parse($fileContent));
         $this->assertEquals('A Film Poeta Production', $captions[0]->getCaption());
         $this->assertEquals(63063, $captions[0]->getStartTime());
         $this->assertEquals(66148, $captions[0]->getEndTime());

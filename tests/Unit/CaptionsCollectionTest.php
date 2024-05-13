@@ -20,8 +20,8 @@ class CaptionsCollectionTest extends TestCase
         $capOne->setCaption($capOneCaption);
         $capTwo = new Caption();
         $capTwo->setCaption($capTwoCaption);
-        $captionsCollection->addCaption($capOne);
-        $captionsCollection->addCaption($capTwo);
+        $captionsCollection->add($capOne);
+        $captionsCollection->add($capTwo);
         $this->assertEquals($captionString, $captionsCollection->tostring());
 
     }

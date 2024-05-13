@@ -4,34 +4,23 @@ declare(strict_types=1);
 
 namespace App\Services\Captions;
 
-class CaptionsCollection
+use App\Core\AbstractCollection;
+use IteratorAggregate;
+
+/**
+ * @implements IteratorAggregate<int, Caption>
+ */
+class CaptionsCollection extends AbstractCollection
 {
-    /**
-     * @template T of Caption
-     *
-     * @var array<int, T>
-     */
-    private array $captions = [];
-
-    public function addCaption(Caption $caption): void
+    public function add(Caption $caption): void
     {
-        $this->captions[] = $caption;
-    }
-
-    /**
-     * @template T of Caption
-     *
-     * @return array<int, T>
-     */
-    public function captions(): array
-    {
-        return $this->captions;
+        $this->items[] = $caption;
     }
 
     public function toString(): string
     {
         $captionsStrings = [];
-        foreach ($this->captions as $caption) {
+        foreach ($this->items as $caption) {
             $captionsStrings[] = $caption->getCaption();
         }
 

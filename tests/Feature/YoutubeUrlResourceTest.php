@@ -22,7 +22,7 @@ class YoutubeUrlResourceTest extends TestCase
             new MockResourceModel(),
             new MockValidYoutubeCaptionsGrabberApi())
         )->toCaptions();
-        $captions = $captionsCollection->captions();
+        $captions = iterator_to_array($captionsCollection);
 
         $this->assertEquals('[Applause]', $captions[0]->getCaption());
         $this->assertEquals(300, $captions[0]->getStartTime());
