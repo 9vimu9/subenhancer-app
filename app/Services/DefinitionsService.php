@@ -41,7 +41,7 @@ readonly class DefinitionsService
 
     public function storeDefinitionsByCollection(FilteredWordCollection $collection): void
     {
-        foreach ($collection->toArray() as $word) {
+        foreach ($collection as $word) {
             $this->storeDefinitions($word);
         }
     }
