@@ -21,7 +21,7 @@ readonly class DefinitionsService
     public function setDefinitionsToCollection(FilteredWordCollection $collection): FilteredWordCollection
     {
         $updatedCollection = new FilteredWordCollection();
-        foreach ($collection->toArray() as $word) {
+        foreach ($collection as $word) {
             try {
                 $updatedCollection->add($this->setDefinitions($word));
             } catch (CantFindDefinitionException $exception) {
