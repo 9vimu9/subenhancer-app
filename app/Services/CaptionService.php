@@ -11,7 +11,7 @@ use App\Services\Captions\CaptionsCollection;
 use App\Traits\StringArrayOperationsTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class CaptionService implements CaptionSetviceInterface
+class CaptionService implements CaptionServiceInterface
 {
     use StringArrayOperationsTrait;
 
