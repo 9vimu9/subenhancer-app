@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
@@ -18,6 +20,8 @@ class EnhancementQueryBuilderTest extends TestCase
 {
     use RefreshDatabase;
 
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function test_create_by_user_id_method(): void
     {
         $user = User::factory()->create();
