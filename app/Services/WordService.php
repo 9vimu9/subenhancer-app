@@ -10,7 +10,7 @@ use App\Services\Captions\CaptionsCollection;
 use App\Services\FilteredWords\FilteredWordCollection;
 use App\Services\WordsFilterApi\WordFilterApiInterface;
 
-class WordService
+class WordService implements WordServiceInterface
 {
     public function __construct(private WordFilterApiInterface $wordFilterApi)
     {

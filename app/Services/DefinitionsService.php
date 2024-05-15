@@ -12,7 +12,7 @@ use App\Services\DefinitionsAPI\DefinitionsApiInterface;
 use App\Services\FilteredWords\FilteredWord;
 use App\Services\FilteredWords\FilteredWordCollection;
 
-readonly class DefinitionsService
+readonly class DefinitionsService implements DefinitionsServiceInterface
 {
     public function __construct(private DefinitionsApiInterface $definitionsApi)
     {
