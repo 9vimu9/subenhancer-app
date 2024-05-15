@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Builders\EnhancementBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,5 +20,10 @@ class Enhancement extends Model
     public function vocabularies(): BelongsToMany
     {
         return $this->belongsToMany(Vocabulary::class);
+    }
+
+    public function newEloquentBuilder($query): Builder
+    {
+        return new EnhancementBuilder($query);
     }
 }
