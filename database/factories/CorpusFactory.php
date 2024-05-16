@@ -17,7 +17,7 @@ class CorpusFactory extends Factory
     public function definition(): array
     {
         return [
-            'word' => $this->faker->word(),
+            'word' => strtolower($this->faker->word()),
         ];
     }
 }

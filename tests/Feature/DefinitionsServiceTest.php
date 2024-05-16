@@ -73,7 +73,7 @@ class DefinitionsServiceTest extends TestCase
     public static function provideInputs(): array
     {
         $service = new DefinitionsService(new MockDefinitionsApi());
-        $word = 'RANDOM_WORD';
+        $word = 'random_word';
         $definition = new Definition(
             MockDefinitionsApi::WORD_CLASS,
             MockDefinitionsApi::DEFINITION,

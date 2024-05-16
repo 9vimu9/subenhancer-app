@@ -18,11 +18,11 @@ class CorpusBuilder extends Builder
 
     public function findByWord(string $word): ?Model
     {
-        return $this->where('word', $word)->first();
+        return $this->where('word', strtolower($word))->first();
     }
 
     public function saveWord(string $word): Model
     {
-        return $this->findByWord($word) ? throw new WordInCorpusException() : $this->create(['word' => $word]);
+        return $this->findByWord($word) ? throw new WordInCorpusException() : $this->create(['word' => strtolower($word)]);
     }
 }
