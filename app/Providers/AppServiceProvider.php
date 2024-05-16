@@ -1,25 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
+use App\Events\DurationSaved;
+use App\Events\SentenceSaved;
+use App\Listeners\SaveFilteredWords;
+use App\Listeners\SaveSentences;
+use App\Services\CaptionService;
+use App\Services\CaptionServiceInterface;
+use App\Services\DefinitionsAPI\DefinitionsApiInterface;
+use App\Services\DefinitionsAPI\FreeDictionaryApi;
+use App\Services\DefinitionsService;
+use App\Services\DefinitionsServiceInterface;
+use App\Services\EnhancementService;
+use App\Services\EnhancementServiceInterface;
+use App\Services\FilteredWordService;
+use App\Services\FilteredWordServiceInterface;
+use App\Services\SentencesApi\FirstPartySentencingApi;
+use App\Services\SentencesApi\SentencesApiInterface;
+use App\Services\SentenceService;
+use App\Services\SentenceServiceInterface;
+use App\Services\SrtParser\BenlippStrParser;
+use App\Services\SrtParser\SrtParserInterface;
+use App\Services\WordService;
+use App\Services\WordServiceInterface;
+use App\Services\WordsFilterApi\FirstPartyWordFilterApi;
+use App\Services\WordsFilterApi\WordFilterApiInterface;
+use App\Services\YoutubeCaptionsGrabberApi\FirstPartyYoutubeCaptionsGrabberApi;
+use App\Services\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+        $this->app->bind(CaptionServiceInterface::class, CaptionService::class);
+        $this->app->bind(DefinitionsServiceInterface::class, DefinitionsService::class);
+        $this->app->bind(EnhancementServiceInterface::class, EnhancementService::class);
+        $this->app->bind(FilteredWordServiceInterface::class, FilteredWordService::class);
+        $this->app->bind(SentenceServiceInterface::class, SentenceService::class);
+        $this->app->bind(WordServiceInterface::class, WordService::class);
+        $this->app->bind(DefinitionsApiInterface::class, FreeDictionaryApi::class);
+        $this->app->bind(SentencesApiInterface::class, FirstPartySentencingApi::class);
+        $this->app->bind(SrtParserInterface::class, BenlippStrParser::class);
+        $this->app->bind(WordFilterApiInterface::class, FirstPartyWordFilterApi::class);
+        $this->app->bind(YoutubeCaptionsGrabberApiInterface::class, FirstPartyYoutubeCaptionsGrabberApi::class);
+
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
+        Event::listen(DurationSaved::class, SaveSentences::class);
+        Event::listen(SentenceSaved::class, SaveFilteredWords::class);
         Model::shouldBeStrict();
     }
 }
