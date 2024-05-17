@@ -22,10 +22,7 @@ class FirstPartySentencingApi implements SentencesApiInterface
 
         $collection = new SentenceCollection();
         foreach ($response->json()['sentences'] as $index => $sentenceString) {
-            $sentence = new Sentence();
-            $sentence->setSentence($sentenceString);
-            $sentence->setOrder($index);
-            $collection->add($sentence);
+            $collection->add(new Sentence($sentenceString, $index));
         }
 
         return $collection;

@@ -16,11 +16,9 @@ class MockSentenceApi implements SentencesApiInterface
 
     public function getSentences(string $caption): SentenceCollection
     {
-        $sentenceOne = new Sentence();
-        $sentenceOne->setSentence(self::CAPTION_ONE);
-        $sentenceTwo = new Sentence();
-        $sentenceTwo->setSentence(self::CAPTION_TWO);
-
-        return new SentenceCollection($sentenceOne, $sentenceTwo);
+        return new SentenceCollection(
+            new Sentence(self::CAPTION_ONE),
+            new Sentence(self::CAPTION_TWO),
+        );
     }
 }

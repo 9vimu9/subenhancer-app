@@ -14,11 +14,9 @@ class SaveFilteredWordsTest extends TestCase
 {
     public function test_listener_save_filtered_words(): void
     {
-        $sentence = new \App\DataObjects\Sentences\Sentence();
-        $sentence->setSentence('sample sentence');
         $event = new SentenceSaved(
             ['sample'],
-            $sentence,
+            new \App\DataObjects\Sentences\Sentence('sample sentence'),
             Sentence::factory()->create()->id
         );
         $expected = (new SaveFilteredWords(new MockFilteredWordService()))->handle($event);

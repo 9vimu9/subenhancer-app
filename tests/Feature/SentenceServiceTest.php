@@ -16,10 +16,12 @@ class SentenceServiceTest extends TestCase
 {
     public function test_caption_to_sentences(): void
     {
-        $sentenceOne = new Sentence();
-        $sentenceOne->setSentence(MockSentenceApi::CAPTION_ONE);
-        $sentenceTwo = new Sentence();
-        $sentenceTwo->setSentence(MockSentenceApi::CAPTION_TWO);
+        $sentenceOne = new Sentence(
+            sentence: MockSentenceApi::CAPTION_ONE
+        );
+        $sentenceTwo = new Sentence(
+            sentence: MockSentenceApi::CAPTION_TWO
+        );
         $expected = new SentenceCollection($sentenceOne, $sentenceTwo);
 
         $service = new SentenceService(new MockSentenceApi());
@@ -32,9 +34,9 @@ class SentenceServiceTest extends TestCase
     public function test_store_sentence(): void
     {
         $duration = Duration::factory()->create();
-        $sentence = new Sentence();
-        $sentence->setSentence(MockSentenceApi::CAPTION_ONE);
-        $sentence->setOrder(1);
+        $sentence = new Sentence(
+            sentence: MockSentenceApi::CAPTION_ONE, order: 1
+        );
 
         $service = new SentenceService(new MockSentenceApi());
         $service->storeSentence($duration->id, $sentence);

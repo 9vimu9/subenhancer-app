@@ -16,11 +16,11 @@ class SentenceBuilderTest extends TestCase
     public function test_create_by_sentence_method(): void
     {
         $duration = Duration::factory()->create();
-        $sentence = new \App\DataObjects\Sentences\Sentence();
         $order = 1;
-        $sentence->setOrder($order);
         $sampleSentence = 'sample sentence';
-        $sentence->setSentence($sampleSentence);
+        $sentence = new \App\DataObjects\Sentences\Sentence(
+            $sampleSentence, $order
+        );
         Sentence::query()->createBySentence($duration->id, $sentence);
         $this->assertDatabaseHas('sentences', ['sentence' => $sampleSentence, 'order' => $order]);
 

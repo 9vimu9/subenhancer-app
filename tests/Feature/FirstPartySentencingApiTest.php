@@ -24,14 +24,10 @@ class FirstPartySentencingApiTest extends TestCase
         ]);
         $sentences = (new FirstPartySentencingApi())->getSentences('RANDOMS');
 
-        $sentenceOne = new Sentence();
-        $sentenceOne->setSentence('sentence_1');
-        $sentenceOne->setOrder(0);
-        $sentenceTwo = new Sentence();
-        $sentenceTwo->setSentence('sentence_2');
-        $sentenceTwo->setOrder(1);
-
-        $collection = new SentenceCollection($sentenceOne, $sentenceTwo);
+        $collection = new SentenceCollection(
+            new Sentence(sentence: 'sentence_1', order: 0),
+            new Sentence(sentence: 'sentence_2', order: 1)
+        );
 
         $this->assertEqualsCanonicalizing(iterator_to_array($collection->getIterator()), iterator_to_array($sentences->getIterator()));
     }

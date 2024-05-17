@@ -6,23 +6,20 @@ namespace App\DataObjects\Sentences;
 
 class Sentence
 {
-    private string $sentence;
+    public function __construct(
+        private string $sentence,
+        private int $order = 0
+    ) {
+    }
 
     public function getSentence(): string
     {
         return $this->sentence;
     }
 
-    private int $order;
-
     public function getOrder(): int
     {
         return $this->order;
-    }
-
-    public function setSentence(string $sentence): void
-    {
-        $this->sentence = $sentence;
     }
 
     public function setOrder(int $order): void
