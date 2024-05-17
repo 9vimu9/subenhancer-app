@@ -39,3 +39,9 @@ docker run --rm \
 ```
 
 ![img.png](test_coverage.png)
+
+## Other Resources
+### ER Diagram
+
+![img.png](e_r_diagram.png)
+Click [here](https://dbdiagram.io/d/sub-enhancer_v_1-65d78b9a5cd04127749817b7) to see the latest version
