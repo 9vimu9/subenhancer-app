@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Builders;
+namespace App\Models\Builders;
 
 use App\DataObjects\Definitions\Definition;
 use App\Models\Corpus;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Builders;
+namespace App\Models\Builders;
 
 use App\Exceptions\WordInCorpusException;
 use App\Exceptions\WordNotInCorpusException;
