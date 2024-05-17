@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Apis\SrtParser\SrtParserInterface;
-use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Apis\SrtParserInterface;
+use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\Factories\ResourceFactory;
 use App\Http\Requests\SubmitEnhanceRequest;
 use App\Services\CaptionServiceInterface;

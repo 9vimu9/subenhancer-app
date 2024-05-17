@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\Exceptions\InvalidYoutubeCaptionException;
 use App\Resources\YoutubeUrlResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;

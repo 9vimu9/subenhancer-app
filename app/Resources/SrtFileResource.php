@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
-use App\Apis\SrtParser\SrtParserInterface;
+use App\Core\Contracts\Apis\SrtParserInterface;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\Models\ResourceModels\ResourceModelInterface;
 use Illuminate\Http\UploadedFile;

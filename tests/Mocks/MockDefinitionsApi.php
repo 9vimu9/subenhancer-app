@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Mocks;
 
-use App\Apis\DefinitionsAPI\DefinitionsApiInterface;
+use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\DataObjects\Definitions\Definition;
 use App\DataObjects\Definitions\DefinitionCollection;
 use App\Enums\WordClassEnum;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Apis\SentencesApi;
 
+use App\Core\Contracts\Apis\SentencesApiInterface;
 use App\DataObjects\Sentences\Sentence;
 use App\DataObjects\Sentences\SentenceCollection;
 use App\Exceptions\SentencingApiErrorException;

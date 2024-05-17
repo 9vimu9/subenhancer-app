@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
-use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\Exceptions\InvalidYoutubeCaptionException;

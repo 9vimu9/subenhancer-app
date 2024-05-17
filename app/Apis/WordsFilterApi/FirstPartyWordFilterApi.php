@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Apis\WordsFilterApi;
 
+use App\Core\Contracts\Apis\WordFilterApiInterface;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CaptionWordFilterException;

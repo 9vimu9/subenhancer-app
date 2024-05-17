@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Apis\DefinitionsAPI\DefinitionsApiInterface;
 use App\Apis\DefinitionsAPI\FreeDictionaryApi;
 use App\Apis\SentencesApi\FirstPartySentencingApi;
-use App\Apis\SentencesApi\SentencesApiInterface;
 use App\Apis\SrtParser\BenlippStrParser;
-use App\Apis\SrtParser\SrtParserInterface;
 use App\Apis\WordsFilterApi\FirstPartyWordFilterApi;
-use App\Apis\WordsFilterApi\WordFilterApiInterface;
 use App\Apis\YoutubeCaptionsGrabberApi\FirstPartyYoutubeCaptionsGrabberApi;
-use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Apis\DefinitionsApiInterface;
+use App\Core\Contracts\Apis\SentencesApiInterface;
+use App\Core\Contracts\Apis\SrtParserInterface;
+use App\Core\Contracts\Apis\WordFilterApiInterface;
+use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\Events\DurationSaved;
 use App\Events\SentenceSaved;
 use App\Listeners\SaveFilteredWords;

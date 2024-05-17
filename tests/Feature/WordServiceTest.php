@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Apis\WordsFilterApi\WordFilterApiInterface;
+use App\Core\Contracts\Apis\WordFilterApiInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\DataObjects\FilteredWords\FilteredWord;

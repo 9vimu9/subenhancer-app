@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Mocks;
 
-use App\Apis\SentencesApi\SentencesApiInterface;
+use App\Core\Contracts\Apis\SentencesApiInterface;
 use App\DataObjects\Sentences\Sentence;
 use App\DataObjects\Sentences\SentenceCollection;
 

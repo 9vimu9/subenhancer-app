@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Apis\SentencesApi\SentencesApiInterface;
+use App\Core\Contracts\Apis\SentencesApiInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Sentences\SentenceCollection;
 use App\Models\Sentence;

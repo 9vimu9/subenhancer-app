@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
-use App\Apis\SrtParser\SrtParserInterface;
-use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Apis\SrtParserInterface;
+use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\Exceptions\ResourceGenerationInputsAreNullException;
 use App\Models\ResourceModels\SrtResourceModel;
 use App\Models\ResourceModels\YoutubeResourceModel;

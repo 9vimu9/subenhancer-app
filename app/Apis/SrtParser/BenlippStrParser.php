@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Apis\SrtParser;
 
+use App\Core\Contracts\Apis\SrtParserInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use Benlipp\SrtParser\Parser;

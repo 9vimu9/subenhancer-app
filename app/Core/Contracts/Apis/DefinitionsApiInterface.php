@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Apis\DefinitionsAPI;
+namespace App\Core\Contracts\Apis;
 
 use App\DataObjects\Definitions\DefinitionCollection;
 use App\Enums\WordClassEnum;

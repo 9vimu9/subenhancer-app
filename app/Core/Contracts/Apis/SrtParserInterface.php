@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Apis\SrtParser;
+namespace App\Core\Contracts\Apis;
 
 use App\DataObjects\Captions\CaptionsCollection;
 
