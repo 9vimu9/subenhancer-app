@@ -4,50 +4,42 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Factories\ResourceFactory;
 use App\Models\Enhancement;
-use App\Services\DefinitionsAPI\DefinitionsApiInterface;
-use App\Services\SentencesApi\SentencesApiInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
+use App\Resources\ResourceInterface;
 
-class EnhancementService
+class EnhancementService implements EnhancementServiceInterface
 {
-    public function create(int $userId): Model
-    {
-        return Enhancement::query()->create(['user_id' => $userId, 'uuid' => Str::uuid()]);
+    public function submitEnhancement(
+        ResourceInterface $resource,
+        DefinitionsServiceInterface $definitionsService,
+        WordServiceInterface $wordService,
+        CaptionServiceInterface $captionService,
+
+    ): void {
+        $enhancement = Enhancement::query()->createByUserId(auth()->id());
+        if (! $resource->resourceModel()->resourceExists()) {
+            $source = $this->createSource($resource, $wordService, $definitionsService, $captionService);
+        }
+        $source = $source ?? $resource->resourceModel()->getSource();
+        Enhancement::query()->updateSourceId(
+            $enhancement->getAttribute('id'),
+            $source->getAttribute('id'));
     }
 
-    public function updateSourceId(int $enhancementId, int $sourceId): void
+    public function createSource(ResourceInterface $resource, WordServiceInterface $wordService, DefinitionsServiceInterface $definitionsService, CaptionServiceInterface $captionService): \App\Models\Source
     {
-        $enhancement = Enhancement::query()->findOrFail($enhancementId);
-        $enhancement->update(['source_id' => $sourceId]);
-    }
+        $source = $resource->resourceModel()->saveToSource();
+        $captionsCollection = $resource->toCaptions();
+        $filteredWordCollection = $wordService->filterWordsByCollection($captionsCollection);
+        $wordService->storeWordsByCollection($filteredWordCollection);
+        $filteredWordCollection = $definitionsService->setDefinitionsToCollection($filteredWordCollection);
+        $definitionsService->storeDefinitionsByCollection($filteredWordCollection);
+        $captionService->saveDurationsByCollection(
+            $captionsCollection,
+            $source->getAttribute('id'),
+            $filteredWordCollection->toArrayOfWords(),
+        );
 
-    public function submitEnhancement(?UploadedFile $file, ?string $videoUrl, DefinitionsApiInterface $definitionsApi, SentencesApiInterface $sentenceApi): void
-    {
-        $enhancement = $this->create(auth()->id());
-        $resource = (new ResourceFactory())->generate($file, $videoUrl);
-        if ($resource->isAlreadyExist()) {
-        }
-        $captionsCollection = $resource->toCaptions($resource->fetch());
-        $source = $resource->storeResourceTable();
-        $this->updateSourceId($enhancement->getAttribute('id'), $source->getAttribute('id'));
-        $filteredWordCollection = $captionsCollection->getFilteredWords();
-        $filteredWordCollection->storeNewFilteredWordsDefinitions($definitionsApi);
-
-        $filteredWords = $filteredWordCollection->toArrayOfWords();
-        foreach ($captionsCollection->captions() as $caption) {
-            if (! $caption->hasFilteredWordInCaption($filteredWords)) {
-                continue;
-            }
-            $caption->saveDuration($source->getAttribute('id'));
-            $sentences = $caption->saveSentencesInTheCaption($sentenceApi);
-            foreach ($sentences->toArray() as $sentence) {
-                $sentence->saveFilteredWordsWhichFoundInSentenceToCaptionword($filteredWords);
-            }
-        }
-
+        return $source;
     }
 }
