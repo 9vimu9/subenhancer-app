@@ -6,6 +6,7 @@ namespace App\Core\Contracts\DataObjects;
 
 use ArrayIterator;
 use IteratorAggregate;
+use OutOfBoundsException;
 use Traversable;
 
 abstract class AbstractCollection implements IteratorAggregate
@@ -20,5 +21,40 @@ abstract class AbstractCollection implements IteratorAggregate
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
+    }
+
+    public function remove(int $index): void
+    {
+        if ($this->count() - 1 < $index || $index < 0) {
+            throw new OutOfBoundsException();
+        }
+        unset($this->items[$index]);
+    }
+
+    public function update(int $index, mixed $item): void
+    {
+        if ($this->count() - 1 < $index || $index < 0) {
+            throw new OutOfBoundsException();
+        }
+        $this->items[$index] = $item;
+    }
+
+    public function count(): int
+    {
+        return count($this->items);
+    }
+
+    public function get(int $index): mixed
+    {
+        if ($this->count() - 1 < $index || $index < 0) {
+            throw new OutOfBoundsException();
+        }
+
+        return $this->items[$index];
+    }
+
+    public function add(mixed $item): void
+    {
+        $this->items[] = $item;
     }
 }
