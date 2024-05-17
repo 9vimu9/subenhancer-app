@@ -22,10 +22,11 @@ class FirstPartyWordFilterApiTest extends TestCase
             $url => Http::response($response, Response::HTTP_OK),
 
         ]);
-        $filteredWordCollection = new FilteredWordCollection();
-        $filteredWordCollection->add(new FilteredWord('aa'));
-        $filteredWordCollection->add(new FilteredWord('bb'));
-        $filteredWordCollection->add(new FilteredWord('cc'));
+        $filteredWordCollection = new FilteredWordCollection(
+            new FilteredWord('aa'),
+            new FilteredWord('bb'),
+            new FilteredWord('cc'),
+        );
         $this->assertEquals($filteredWordCollection, (new FirstPartyWordFilterApi())->filter('RANDOM_TEXT'));
 
     }

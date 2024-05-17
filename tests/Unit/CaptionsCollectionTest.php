@@ -12,7 +12,6 @@ class CaptionsCollectionTest extends TestCase
 {
     public function test_tostring_method(): void
     {
-        $captionsCollection = new CaptionsCollection();
         $capOneCaption = 'Caption 1';
         $capTwoCaption = 'Caption 2';
         $captionString = $capOneCaption.' '.$capTwoCaption;
@@ -20,8 +19,7 @@ class CaptionsCollectionTest extends TestCase
         $capOne->setCaption($capOneCaption);
         $capTwo = new Caption();
         $capTwo->setCaption($capTwoCaption);
-        $captionsCollection->add($capOne);
-        $captionsCollection->add($capTwo);
+        $captionsCollection = new CaptionsCollection($capOne, $capTwo);
         $this->assertEquals($captionString, $captionsCollection->tostring());
 
     }

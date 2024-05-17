@@ -29,18 +29,17 @@ class CaptionServiceTest extends TestCase
 
     public static function dataProvider(): array
     {
-        $collection = new CaptionsCollection();
         $captionOne = new Caption();
         $captionOne->setStartTime(self::CAPTION_ONE_START_TIME);
         $captionOne->setEndTime(self::CAPTION_ONE_END_TIME);
         $captionOne->setCaption('sdsdsd');
-        $collection->add($captionOne);
 
         $captionTwo = new Caption();
         $captionTwo->setStartTime(self::CAPTION_TWO_START_TIME);
         $captionTwo->setEndTime(self::CAPTION_TWO_END_TIME);
         $captionTwo->setCaption('sdsdsd');
-        $collection->add($captionTwo);
+
+        $collection = new CaptionsCollection($captionOne, $captionTwo);
 
         return [[$collection]];
     }

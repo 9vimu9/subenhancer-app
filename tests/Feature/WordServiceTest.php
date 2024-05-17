@@ -39,11 +39,10 @@ class WordServiceTest extends TestCase
     public static function provideInputs(): array
     {
         $service = new WordService(new MockWordFilterApi());
-        $collection = new FilteredWordCollection();
-        $wordOne = new FilteredWord('word 1');
-        $wordTwo = new FilteredWord('word 2');
-        $collection->add($wordOne);
-        $collection->add($wordTwo);
+        $collection = new FilteredWordCollection(
+            new FilteredWord('word 1'),
+            new FilteredWord('word 2'),
+        );
 
         return [[$service, $collection]];
     }
@@ -51,10 +50,9 @@ class WordServiceTest extends TestCase
     #[DataProvider('provideInputs')]
     public function test_filter_words_by_collection(WordService $service, FilteredWordCollection $expectedFilteredWordCollection): void
     {
-        $captionsCollection = new CaptionsCollection();
         $capOne = new Caption();
         $capOne->setCaption('random_string');
-        $captionsCollection->add($capOne);
+        $captionsCollection = new CaptionsCollection($capOne);
         $actualfilteredWordCollection = $service->filterWordsByCollection($captionsCollection);
         $this->assertEqualsCanonicalizing($actualfilteredWordCollection, $expectedFilteredWordCollection);
 
@@ -65,12 +63,9 @@ class MockWordFilterApi implements WordFilterApiInterface
 {
     public function filter(string $words): FilteredWordCollection
     {
-        $collection = new FilteredWordCollection();
-        $wordOne = new FilteredWord('word 1');
-        $wordTwo = new FilteredWord('word 2');
-        $collection->add($wordOne);
-        $collection->add($wordTwo);
-
-        return $collection;
+        return new FilteredWordCollection(
+            new FilteredWord('word 1'),
+            new FilteredWord('word 2'),
+        );
     }
 }

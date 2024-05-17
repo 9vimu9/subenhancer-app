@@ -16,13 +16,11 @@ class SentenceServiceTest extends TestCase
 {
     public function test_caption_to_sentences(): void
     {
-        $expected = new SentenceCollection();
         $sentenceOne = new Sentence();
         $sentenceOne->setSentence(MockSentenceApi::CAPTION_ONE);
         $sentenceTwo = new Sentence();
         $sentenceTwo->setSentence(MockSentenceApi::CAPTION_TWO);
-        $expected->add($sentenceOne);
-        $expected->add($sentenceTwo);
+        $expected = new SentenceCollection($sentenceOne, $sentenceTwo);
 
         $service = new SentenceService(new MockSentenceApi());
         $caption = new Caption();

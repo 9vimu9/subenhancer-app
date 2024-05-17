@@ -25,9 +25,7 @@ class SaveSentencesTest extends TestCase
         $sentence = new Sentence();
         $sentence->setSentence('RANDOM SENTENCE');
 
-        $sentenceCollection = new SentenceCollection();
-        $sentenceCollection->add($sentence);
-        $sentenceCollection->add($sentence);
+        $sentenceCollection = new SentenceCollection($sentence, $sentence);
 
         $sentenceModel = \App\Models\Sentence::factory()->create();
         $service = $this->partialMock(SentenceService::class, function (MockInterface $mock) use ($sentenceCollection, $sentenceModel) {

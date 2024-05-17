@@ -40,9 +40,7 @@ class FilteredWordCollectionTest extends TestCase
     {
         $filteredWordOne = new FilteredWord('filtered word 1');
         $filteredWordTwo = new FilteredWord('filtered word 2');
-        $filteredWordCollection = new FilteredWordCollection();
-        $filteredWordCollection->add($filteredWordOne);
-        $filteredWordCollection->add($filteredWordTwo);
+        $filteredWordCollection = new FilteredWordCollection($filteredWordOne, $filteredWordTwo);
 
         return [[$filteredWordCollection, $filteredWordOne, $filteredWordTwo]];
     }
