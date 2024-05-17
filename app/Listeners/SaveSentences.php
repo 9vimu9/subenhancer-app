@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
+use App\Core\Contracts\Services\SentenceServiceInterface;
 use App\Events\DurationSaved;
 use App\Events\SentenceSaved;
-use App\Services\SentenceServiceInterface;
 
 class SaveSentences
 {

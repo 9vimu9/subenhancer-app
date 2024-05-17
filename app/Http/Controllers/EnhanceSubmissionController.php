@@ -6,12 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Core\Contracts\Apis\SrtParserInterface;
 use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Services\CaptionServiceInterface;
+use App\Core\Contracts\Services\DefinitionsServiceInterface;
+use App\Core\Contracts\Services\EnhancementServiceInterface;
+use App\Core\Contracts\Services\WordServiceInterface;
 use App\Factories\ResourceFactory;
 use App\Http\Requests\SubmitEnhanceRequest;
-use App\Services\CaptionServiceInterface;
-use App\Services\DefinitionsServiceInterface;
-use App\Services\EnhancementServiceInterface;
-use App\Services\WordServiceInterface;
 use Illuminate\Http\RedirectResponse;
 
 class EnhanceSubmissionController extends Controller

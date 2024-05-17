@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Core\Contracts\Services;
 
 use App\Core\Contracts\Resource\ResourceInterface;
+use App\Services\CaptionService;
+use App\Services\DefinitionsService;
+use App\Services\WordService;
 
 interface EnhancementServiceInterface
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
+use App\Core\Contracts\Services\FilteredWordServiceInterface;
 use App\Events\SentenceSaved;
-use App\Services\FilteredWordServiceInterface;
 
 class SaveFilteredWords
 {

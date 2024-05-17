@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Core\Contracts\Services\FilteredWordServiceInterface;
 use App\Events\SentenceSaved;
 use App\Listeners\SaveFilteredWords;
 use App\Models\Sentence;
-use App\Services\FilteredWordServiceInterface;
 use Tests\TestCase;
 
 class SaveFilteredWordsTest extends TestCase

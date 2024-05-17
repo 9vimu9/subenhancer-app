@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Core\Contracts\Resource\ResourceInterface;
+use App\Core\Contracts\Services\CaptionServiceInterface;
+use App\Core\Contracts\Services\DefinitionsServiceInterface;
+use App\Core\Contracts\Services\EnhancementServiceInterface;
+use App\Core\Contracts\Services\WordServiceInterface;
 use App\Models\Enhancement;
 
 class EnhancementService implements EnhancementServiceInterface

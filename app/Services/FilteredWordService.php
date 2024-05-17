@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Core\Contracts\Services\FilteredWordServiceInterface;
 use App\DataObjects\Sentences\Sentence;
 use App\Exceptions\WordNotInCorpusException;
 use App\Models\Captionword;

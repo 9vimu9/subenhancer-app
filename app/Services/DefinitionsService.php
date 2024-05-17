@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Core\Contracts\Apis\DefinitionsApiInterface;
+use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CantFindDefinitionException;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Core\Contracts\Apis\SentencesApiInterface;
+use App\Core\Contracts\Services\SentenceServiceInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Sentences\SentenceCollection;
 use App\Models\Sentence;
