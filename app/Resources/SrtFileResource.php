@@ -9,7 +9,7 @@ use App\DataObjects\Captions\CaptionsCollection;
 use App\Models\ResourceModels\ResourceModelInterface;
 use Illuminate\Http\UploadedFile;
 
-class SrtFileResource extends AbstractFileResource
+class SrtFileResource extends AbstractResource
 {
     public function __construct(
         protected UploadedFile $file,
