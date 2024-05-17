@@ -11,6 +11,7 @@ use App\Services\Definitions\Definition;
 use App\Services\Definitions\DefinitionCollection;
 use App\Services\DefinitionsService;
 use App\Services\FilteredWords\FilteredWord;
+use App\Services\FilteredWords\FilteredWordCollection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Mocks\MockDefinitionsApi;
@@ -28,6 +29,19 @@ class DefinitionsServiceTest extends TestCase
     ): void {
         $word = $service->setDefinitions(new FilteredWord($wordToDefine));
         $this->assertEquals($definitionCollection, $word->getDefinitions());
+    }
+
+    #[DataProvider('provideInputs')]
+    public function test_set_definitions_to_collection(
+        DefinitionsService $service,
+        string $word,
+        DefinitionCollection $definitionCollection,
+    ): void {
+        $filteredWordCollection = new FilteredWordCollection();
+        $filteredWordCollection->add(new FilteredWord($word));
+        $filteredWordCollection = $service->setDefinitionsToCollection($filteredWordCollection);
+        $this->assertEqualsCanonicalizing($definitionCollection, $filteredWordCollection->getIterator()->current()->getDefinitions());
+
     }
 
     #[DataProvider('provideInputs')]

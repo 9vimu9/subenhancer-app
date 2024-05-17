@@ -21,10 +21,14 @@ class FilteredWordService implements FilteredWordServiceInterface
     {
         $cleansedWordArray = $this->stringToCleansedWordArray($sentence->getSentence());
         $filteredWordsInSentence = $this->getIntersectionOfWordArrays($cleansedWordArray, $filteredWordArray);
-        if (! count($filteredWordsInSentence)) {
-            return;
+        if (count($filteredWordsInSentence)) {
+            $this->saveCaptionWords($filteredWordsInSentence, $sentenceId);
         }
 
+    }
+
+    public function saveCaptionWords(array $filteredWordsInSentence, int $sentenceId): void
+    {
         foreach ($filteredWordsInSentence as $order => $word) {
             try {
                 Captionword::query()->create([
@@ -36,6 +40,5 @@ class FilteredWordService implements FilteredWordServiceInterface
                 continue;
             }
         }
-
     }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Corpus;
+use App\Services\Captions\Caption;
+use App\Services\Captions\CaptionsCollection;
 use App\Services\FilteredWords\FilteredWord;
 use App\Services\FilteredWords\FilteredWordCollection;
 use App\Services\WordService;
@@ -45,12 +47,30 @@ class WordServiceTest extends TestCase
 
         return [[$service, $collection]];
     }
+
+    #[DataProvider('provideInputs')]
+    public function test_filter_words_by_collection(WordService $service, FilteredWordCollection $expectedFilteredWordCollection): void
+    {
+        $captionsCollection = new CaptionsCollection();
+        $capOne = new Caption();
+        $capOne->setCaption('random_string');
+        $captionsCollection->add($capOne);
+        $actualfilteredWordCollection = $service->filterWordsByCollection($captionsCollection);
+        $this->assertEqualsCanonicalizing($actualfilteredWordCollection, $expectedFilteredWordCollection);
+
+    }
 }
 
 class MockWordFilterApi implements WordFilterApiInterface
 {
     public function filter(string $words): FilteredWordCollection
     {
-        return new FilteredWordCollection();
+        $collection = new FilteredWordCollection();
+        $wordOne = new FilteredWord('word 1');
+        $wordTwo = new FilteredWord('word 2');
+        $collection->add($wordOne);
+        $collection->add($wordTwo);
+
+        return $collection;
     }
 }

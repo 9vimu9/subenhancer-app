@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Exceptions\SentencingApiErrorException;
 use App\Services\Sentences\Sentence;
 use App\Services\Sentences\SentenceCollection;
 use App\Services\SentencesApi\FirstPartySentencingApi;
@@ -36,5 +37,15 @@ class FirstPartySentencingApiTest extends TestCase
         $collection->add($sentenceTwo);
 
         $this->assertEqualsCanonicalizing(iterator_to_array($collection->getIterator()), iterator_to_array($sentences->getIterator()));
+    }
+
+    public function test_exception_must_be_thrown_when_api_is_not_OK(): void
+    {
+        $url = config('app.sentencing_endpoint');
+        Http::fake([
+            $url => Http::response([], Response::HTTP_INTERNAL_SERVER_ERROR),
+        ]);
+        $this->expectException(SentencingApiErrorException::class);
+        (new FirstPartySentencingApi())->getSentences('RANDOMS');
     }
 }
