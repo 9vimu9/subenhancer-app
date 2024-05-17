@@ -23,8 +23,7 @@ class SentenceServiceTest extends TestCase
         $expected = new SentenceCollection($sentenceOne, $sentenceTwo);
 
         $service = new SentenceService(new MockSentenceApi());
-        $caption = new Caption();
-        $caption->setCaption('RANDOM CAPTION');
+        $caption = new Caption(captionString: 'RANDOM CAPTION', startTime: 0, endTime: 0);
         $actual = $service->captionToSentences($caption);
         $this->assertEquals($expected, $actual);
 

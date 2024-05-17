@@ -19,13 +19,12 @@ class BenlippStrParser implements SrtParserInterface
         $parser = new Parser();
         $parser->loadString($fileContent);
         foreach ($parser->parse() as $srt) {
-            $caption = new Caption();
-            $caption->setCaption($srt->text);
-            $startTime = (int) round($srt->startTime * 1000);
-            $endTime = (int) round($srt->endTime * 1000);
-            $caption->setStartTime($startTime);
-            $caption->setEndTime($endTime);
-            $this->captionsCollection->add($caption);
+            $this->captionsCollection->add(new Caption(
+                captionString: $srt->text,
+                startTime: (int) round($srt->startTime * 1000),
+                endTime: (int) round($srt->endTime * 1000),
+            )
+            );
         }
 
         return $this->captionsCollection;

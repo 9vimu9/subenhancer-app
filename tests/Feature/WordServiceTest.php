@@ -50,8 +50,7 @@ class WordServiceTest extends TestCase
     #[DataProvider('provideInputs')]
     public function test_filter_words_by_collection(WordService $service, FilteredWordCollection $expectedFilteredWordCollection): void
     {
-        $capOne = new Caption();
-        $capOne->setCaption('random_string');
+        $capOne = new Caption(captionString: 'random_string', startTime: 1, endTime: 2);
         $captionsCollection = new CaptionsCollection($capOne);
         $actualfilteredWordCollection = $service->filterWordsByCollection($captionsCollection);
         $this->assertEqualsCanonicalizing($actualfilteredWordCollection, $expectedFilteredWordCollection);

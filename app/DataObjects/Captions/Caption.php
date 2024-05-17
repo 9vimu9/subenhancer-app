@@ -6,11 +6,9 @@ namespace App\DataObjects\Captions;
 
 class Caption
 {
-    private string $captionString;
-
-    private int $startTime;
-
-    private int $endTime;
+    public function __construct(private string $captionString, private int $startTime, private int $endTime)
+    {
+    }
 
     public function setCaption(string $captionString): void
     {

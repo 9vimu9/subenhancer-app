@@ -35,7 +35,7 @@ class SaveSentencesTest extends TestCase
 
         Event::fake();
         $listener = new SaveSentences($service);
-        $listener->handle(new DurationSaved([], 1, new Caption()));
+        $listener->handle(new DurationSaved([], 1, new Caption('random', 1, 1)));
         Event::assertDispatchedTimes(SentenceSaved::class, iterator_count($sentenceCollection->getIterator()));
     }
 }

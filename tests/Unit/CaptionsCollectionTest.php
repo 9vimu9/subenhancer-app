@@ -15,10 +15,8 @@ class CaptionsCollectionTest extends TestCase
         $capOneCaption = 'Caption 1';
         $capTwoCaption = 'Caption 2';
         $captionString = $capOneCaption.' '.$capTwoCaption;
-        $capOne = new Caption();
-        $capOne->setCaption($capOneCaption);
-        $capTwo = new Caption();
-        $capTwo->setCaption($capTwoCaption);
+        $capOne = new Caption($capOneCaption, 0, 1);
+        $capTwo = new Caption($capTwoCaption, 0, 1);
         $captionsCollection = new CaptionsCollection($capOne, $capTwo);
         $this->assertEquals($captionString, $captionsCollection->tostring());
 
