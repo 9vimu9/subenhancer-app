@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\DataObjects;
+namespace App\Core\Contracts\DataObjects;
 
 use ArrayIterator;
 use IteratorAggregate;

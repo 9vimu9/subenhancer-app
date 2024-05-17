@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DataObjects\FilteredWords;
 
-use App\DataObjects\AbstractCollection;
+use App\Core\Contracts\DataObjects\AbstractCollection;
 use IteratorAggregate;
 
 /**
