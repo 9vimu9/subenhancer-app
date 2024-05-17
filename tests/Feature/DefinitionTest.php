@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Definitions\Definition;
 use App\Enums\WordClassEnum;
 use App\Models\Corpus;
-use App\Services\Definitions\Definition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

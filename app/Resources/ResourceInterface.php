@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
+use App\DataObjects\Captions\CaptionsCollection;
 use App\Models\ResourceModels\ResourceModelInterface;
-use App\Services\Captions\CaptionsCollection;
 
 interface ResourceInterface
 {

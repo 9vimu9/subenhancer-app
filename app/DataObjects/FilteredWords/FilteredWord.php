@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Services\FilteredWords;
+namespace App\DataObjects\FilteredWords;
 
+use App\DataObjects\Definitions\DefinitionCollection;
 use App\Exceptions\DefinitionsHasNotBeenDefinedException;
-use App\Services\Definitions\DefinitionCollection;
 
 class FilteredWord
 {

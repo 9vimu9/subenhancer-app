@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Services\Sentences\Sentence;
+use App\DataObjects\Sentences\Sentence;
 
 interface FilteredWordServiceInterface
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Services\Captions\CaptionsCollection;
-use App\Services\FilteredWords\FilteredWordCollection;
+use App\DataObjects\Captions\CaptionsCollection;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
 
 interface WordServiceInterface
 {

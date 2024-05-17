@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DataObjects\Captions\CaptionsCollection;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\WordInCorpusException;
 use App\Models\Corpus;
-use App\Services\Captions\CaptionsCollection;
-use App\Services\FilteredWords\FilteredWordCollection;
 use App\Services\WordsFilterApi\WordFilterApiInterface;
 
 class WordService implements WordServiceInterface

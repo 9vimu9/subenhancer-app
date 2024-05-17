@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Captions;
+namespace App\DataObjects\Captions;
 
-use App\Core\AbstractCollection;
+use App\DataObjects\AbstractCollection;
 use IteratorAggregate;
 
 /**

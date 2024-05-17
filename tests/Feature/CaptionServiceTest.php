@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Captions\Caption;
+use App\DataObjects\Captions\CaptionsCollection;
 use App\Events\DurationSaved;
 use App\Models\Source;
-use App\Services\Captions\Caption;
-use App\Services\Captions\CaptionsCollection;
 use App\Services\CaptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;

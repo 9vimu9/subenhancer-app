@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\DefinitionsAPI;
 
+use App\DataObjects\Definitions\Definition;
+use App\DataObjects\Definitions\DefinitionCollection;
 use App\Enums\WordClassEnum;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\DefinitionsApiErrorException;
 use App\Exceptions\InvalidWordClassFoundException;
-use App\Services\Definitions\Definition;
-use App\Services\Definitions\DefinitionCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;

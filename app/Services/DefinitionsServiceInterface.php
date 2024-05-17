@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Services\FilteredWords\FilteredWord;
-use App\Services\FilteredWords\FilteredWordCollection;
+use App\DataObjects\FilteredWords\FilteredWord;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
 
 interface DefinitionsServiceInterface
 {

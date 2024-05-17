@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\SentencesApi;
 
+use App\DataObjects\Sentences\Sentence;
+use App\DataObjects\Sentences\SentenceCollection;
 use App\Exceptions\SentencingApiErrorException;
-use App\Services\Sentences\Sentence;
-use App\Services\Sentences\SentenceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 

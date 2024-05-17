@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Definitions;
+namespace App\DataObjects\Definitions;
 
 use App\Enums\WordClassEnum;
 use Illuminate\Database\Eloquent\Model;

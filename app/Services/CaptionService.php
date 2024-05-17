@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DataObjects\Captions\Caption;
+use App\DataObjects\Captions\CaptionsCollection;
 use App\Events\DurationSaved;
 use App\Models\Duration;
-use App\Services\Captions\Caption;
-use App\Services\Captions\CaptionsCollection;
 use App\Traits\StringArrayOperationsTrait;
 use Illuminate\Database\Eloquent\Model;
 

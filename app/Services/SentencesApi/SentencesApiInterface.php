@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\SentencesApi;
 
-use App\Services\Sentences\SentenceCollection;
+use App\DataObjects\Sentences\SentenceCollection;
 
 interface SentencesApiInterface
 {

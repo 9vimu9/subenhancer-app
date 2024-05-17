@@ -14,7 +14,7 @@ class SaveFilteredWordsTest extends TestCase
 {
     public function test_listener_save_filtered_words(): void
     {
-        $sentence = new \App\Services\Sentences\Sentence();
+        $sentence = new \App\DataObjects\Sentences\Sentence();
         $sentence->setSentence('sample sentence');
         $event = new SentenceSaved(
             ['sample'],
@@ -28,7 +28,7 @@ class SaveFilteredWordsTest extends TestCase
 
 class MockFilteredWordService implements FilteredWordServiceInterface
 {
-    public function saveFilteredWordWhichFoundInSentence(array $filteredWordArray, \App\Services\Sentences\Sentence $sentence, int $sentenceId): void
+    public function saveFilteredWordWhichFoundInSentence(array $filteredWordArray, \App\DataObjects\Sentences\Sentence $sentence, int $sentenceId): void
     {
     }
 }

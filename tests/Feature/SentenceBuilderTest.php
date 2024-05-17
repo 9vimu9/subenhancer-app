@@ -16,7 +16,7 @@ class SentenceBuilderTest extends TestCase
     public function test_create_by_sentence_method(): void
     {
         $duration = Duration::factory()->create();
-        $sentence = new \App\Services\Sentences\Sentence();
+        $sentence = new \App\DataObjects\Sentences\Sentence();
         $order = 1;
         $sentence->setOrder($order);
         $sampleSentence = 'sample sentence';

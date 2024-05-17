@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Captions\Caption;
+use App\DataObjects\Captions\CaptionsCollection;
+use App\DataObjects\FilteredWords\FilteredWord;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Models\Corpus;
-use App\Services\Captions\Caption;
-use App\Services\Captions\CaptionsCollection;
-use App\Services\FilteredWords\FilteredWord;
-use App\Services\FilteredWords\FilteredWordCollection;
 use App\Services\WordService;
 use App\Services\WordsFilterApi\WordFilterApiInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Definitions\Definition;
 use App\Enums\WordClassEnum;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\DefinitionsApiErrorException;
 use App\Exceptions\InvalidWordClassFoundException;
-use App\Services\Definitions\Definition;
 use App\Services\DefinitionsAPI\FreeDictionaryApi;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Services\Captions\Caption;
-use App\Services\Sentences\Sentence;
-use App\Services\Sentences\SentenceCollection;
+use App\DataObjects\Captions\Caption;
+use App\DataObjects\Sentences\Sentence;
+use App\DataObjects\Sentences\SentenceCollection;
 use Illuminate\Database\Eloquent\Model;
 
 interface SentenceServiceInterface

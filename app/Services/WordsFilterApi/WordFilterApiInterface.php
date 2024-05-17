@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\WordsFilterApi;
 
-use App\Services\FilteredWords\FilteredWordCollection;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
 
 interface WordFilterApiInterface
 {

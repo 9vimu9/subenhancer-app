@@ -18,7 +18,7 @@ class FilteredWordServiceTest extends TestCase
     public function test_saveFilteredWordWhichFoundInSentence(): void
     {
         $sentenceModel = Sentence::factory()->create();
-        $sentence = new \App\Services\Sentences\Sentence();
+        $sentence = new \App\DataObjects\Sentences\Sentence();
         $sentence->setSentence('RANDOM_TEXT');
 
         $wordOne = 'word_one';
@@ -37,7 +37,7 @@ class FilteredWordServiceTest extends TestCase
     public function test_not_saving_the_word_when_it_is_not_in_corpus(): void
     {
         $sentenceModel = Sentence::factory()->create();
-        $sentence = new \App\Services\Sentences\Sentence();
+        $sentence = new \App\DataObjects\Sentences\Sentence();
         $sentence->setSentence('RANDOM_TEXT');
 
         $wordOne = 'word_one';

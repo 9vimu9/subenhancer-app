@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Sentences\Sentence;
+use App\DataObjects\Sentences\SentenceCollection;
 use App\Exceptions\SentencingApiErrorException;
-use App\Services\Sentences\Sentence;
-use App\Services\Sentences\SentenceCollection;
 use App\Services\SentencesApi\FirstPartySentencingApi;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Services\Captions\CaptionsCollection;
+use App\DataObjects\Captions\CaptionsCollection;
 use App\Services\SrtParser\BenlippStrParser;
 use Tests\TestCase;
 

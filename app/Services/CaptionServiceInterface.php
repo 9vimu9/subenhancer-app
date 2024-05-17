@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Services\Captions\CaptionsCollection;
+use App\DataObjects\Captions\CaptionsCollection;
 
 interface CaptionServiceInterface
 {

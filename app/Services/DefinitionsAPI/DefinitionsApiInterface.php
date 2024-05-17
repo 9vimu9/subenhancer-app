@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\DefinitionsAPI;
 
+use App\DataObjects\Definitions\DefinitionCollection;
 use App\Enums\WordClassEnum;
-use App\Services\Definitions\DefinitionCollection;
 
 interface DefinitionsApiInterface
 {

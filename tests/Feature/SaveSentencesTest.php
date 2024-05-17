@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Captions\Caption;
+use App\DataObjects\Sentences\Sentence;
+use App\DataObjects\Sentences\SentenceCollection;
 use App\Events\DurationSaved;
 use App\Events\SentenceSaved;
 use App\Listeners\SaveSentences;
-use App\Services\Captions\Caption;
-use App\Services\Sentences\Sentence;
-use App\Services\Sentences\SentenceCollection;
 use App\Services\SentenceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Definitions\Definition;
+use App\DataObjects\Definitions\DefinitionCollection;
+use App\DataObjects\FilteredWords\FilteredWord;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\DefinitionAlreadyExistException;
 use App\Exceptions\WordNotInCorpusException;
 use App\Models\Corpus;
-use App\Services\Definitions\Definition;
-use App\Services\Definitions\DefinitionCollection;
 use App\Services\DefinitionsService;
-use App\Services\FilteredWords\FilteredWord;
-use App\Services\FilteredWords\FilteredWordCollection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Mocks\MockDefinitionsApi;

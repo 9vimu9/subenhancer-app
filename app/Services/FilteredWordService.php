@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DataObjects\Sentences\Sentence;
 use App\Exceptions\WordNotInCorpusException;
 use App\Models\Captionword;
 use App\Models\Corpus;
-use App\Services\Sentences\Sentence;
 use App\Traits\StringArrayOperationsTrait;
 
 class FilteredWordService implements FilteredWordServiceInterface

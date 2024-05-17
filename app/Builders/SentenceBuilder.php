@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Builders;
 
-use App\Services\Sentences\Sentence;
+use App\DataObjects\Sentences\Sentence;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

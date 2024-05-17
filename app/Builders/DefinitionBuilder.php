@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Builders;
 
+use App\DataObjects\Definitions\Definition;
 use App\Models\Corpus;
-use App\Services\Definitions\Definition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\Captions\Caption;
+use App\DataObjects\Sentences\Sentence;
+use App\DataObjects\Sentences\SentenceCollection;
 use App\Models\Duration;
-use App\Services\Captions\Caption;
-use App\Services\Sentences\Sentence;
-use App\Services\Sentences\SentenceCollection;
 use App\Services\SentenceService;
 use Tests\Mocks\MockSentenceApi;
 use Tests\TestCase;
