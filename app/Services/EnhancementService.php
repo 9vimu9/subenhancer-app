@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Core\Contracts\Resource\ResourceInterface;
 use App\Models\Enhancement;
-use App\Resources\ResourceInterface;
 
 class EnhancementService implements EnhancementServiceInterface
 {

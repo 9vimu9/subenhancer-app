@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Resources;
 
 use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Resource\AbstractResource;
 use App\Core\Contracts\ResourceModels\ResourceModelInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;

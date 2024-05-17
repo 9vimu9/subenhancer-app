@@ -6,10 +6,10 @@ namespace App\Factories;
 
 use App\Core\Contracts\Apis\SrtParserInterface;
 use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
+use App\Core\Contracts\Resource\ResourceInterface;
 use App\Exceptions\ResourceGenerationInputsAreNullException;
 use App\Models\ResourceModels\SrtResourceModel;
 use App\Models\ResourceModels\YoutubeResourceModel;
-use App\Resources\ResourceInterface;
 use App\Resources\SrtFileResource;
 use App\Resources\YoutubeUrlResource;
 use App\Traits\FileResourceTrait;

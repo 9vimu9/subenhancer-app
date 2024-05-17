@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Resources;
+namespace App\Core\Contracts\Resource;
 
 use App\Core\Contracts\ResourceModels\ResourceModelInterface;
 use App\DataObjects\Captions\CaptionsCollection;
