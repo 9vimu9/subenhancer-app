@@ -21,16 +21,15 @@ readonly class DefinitionsService implements DefinitionsServiceInterface
 
     public function setDefinitionsToCollection(FilteredWordCollection $collection): FilteredWordCollection
     {
-        $updatedCollection = new FilteredWordCollection();
-        foreach ($collection as $word) {
+        foreach ($collection as $index => $word) {
             try {
-                $updatedCollection->add($this->setDefinitions($word));
+                $collection->update($index, $this->setDefinitions($word));
             } catch (CantFindDefinitionException $exception) {
                 continue;
             }
         }
 
-        return $updatedCollection;
+        return $collection;
     }
 
     public function setDefinitions(FilteredWord $word): FilteredWord
