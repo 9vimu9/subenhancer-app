@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Exceptions\TryingToStoreRecordForNonPolymorphicallyRelatedTableException;
+use App\Exceptions\UnresourcableModelProvidedException;
 use App\Models\ResourceModels\YoutubeResourceModel;
 use App\Models\Youtubevideo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,7 +25,7 @@ class AbstractResourceModelTest extends TestCase
 
     public function test_saveToSource_throws_exception_when_the_model_is_not_in_polymorphiric_raltionship(): void
     {
-        $this->expectException(TryingToStoreRecordForNonPolymorphicallyRelatedTableException::class);
+        $this->expectException(UnresourcableModelProvidedException::class);
         (new MockResourceModel())->saveToSource();
     }
 }
