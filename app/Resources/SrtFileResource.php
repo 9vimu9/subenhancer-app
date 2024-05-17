@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
+use App\Apis\SrtParser\SrtParserInterface;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\Models\ResourceModels\ResourceModelInterface;
-use App\Services\SrtParser\SrtParserInterface;
 use Illuminate\Http\UploadedFile;
 
 class SrtFileResource extends AbstractFileResource

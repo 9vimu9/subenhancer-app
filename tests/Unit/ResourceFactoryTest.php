@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use App\Apis\SrtParser\SrtParserInterface;
+use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\Exceptions\ResourceGenerationInputsAreNullException;
 use App\Factories\ResourceFactory;
 use App\Resources\SrtFileResource;
 use App\Resources\YoutubeUrlResource;
-use App\Services\SrtParser\SrtParserInterface;
-use App\Services\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use Illuminate\Http\UploadedFile;
 use PHPUnit\Framework\TestCase;
 

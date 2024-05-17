@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\SentencesApi;
+namespace App\Apis\SentencesApi;
 
 use App\DataObjects\Sentences\Sentence;
 use App\DataObjects\Sentences\SentenceCollection;

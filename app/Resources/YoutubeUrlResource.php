@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
+use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\Exceptions\InvalidYoutubeCaptionException;
 use App\Models\ResourceModels\ResourceModelInterface;
-use App\Services\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use App\Traits\YoutubeTrait;
 
 class YoutubeUrlResource extends AbstractUrlResource

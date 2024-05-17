@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Apis\YoutubeCaptionsGrabberApi\FirstPartyYoutubeCaptionsGrabberApi;
 use App\Exceptions\InvalidYoutubeCaptionsFormatException;
 use App\Exceptions\YoutubeVideoCaptionsCannotBeFoundException;
 use App\Exceptions\YoutubeVideoCaptionsFetchException;
-use App\Services\YoutubeCaptionsGrabberApi\FirstPartyYoutubeCaptionsGrabberApi;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\DataProvider;

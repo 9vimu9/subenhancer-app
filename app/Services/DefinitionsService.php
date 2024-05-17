@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Apis\DefinitionsAPI\DefinitionsApiInterface;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\DefinitionAlreadyExistException;
 use App\Models\Corpus;
 use App\Models\Definition;
-use App\Services\DefinitionsAPI\DefinitionsApiInterface;
 
 readonly class DefinitionsService implements DefinitionsServiceInterface
 {

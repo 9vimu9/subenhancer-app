@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\DefinitionsAPI;
+namespace App\Apis\DefinitionsAPI;
 
 use App\DataObjects\Definitions\Definition;
 use App\DataObjects\Definitions\DefinitionCollection;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Apis\SentencesApi\FirstPartySentencingApi;
 use App\DataObjects\Sentences\Sentence;
 use App\DataObjects\Sentences\SentenceCollection;
 use App\Exceptions\SentencingApiErrorException;
-use App\Services\SentencesApi\FirstPartySentencingApi;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;

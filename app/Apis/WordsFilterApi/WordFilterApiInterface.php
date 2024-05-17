@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\WordsFilterApi;
+namespace App\Apis\WordsFilterApi;
 
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 

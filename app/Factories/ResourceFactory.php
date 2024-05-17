@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
+use App\Apis\SrtParser\SrtParserInterface;
+use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use App\Exceptions\ResourceGenerationInputsAreNullException;
 use App\Models\ResourceModels\SrtResourceModel;
 use App\Models\ResourceModels\YoutubeResourceModel;
 use App\Resources\ResourceInterface;
 use App\Resources\SrtFileResource;
 use App\Resources\YoutubeUrlResource;
-use App\Services\SrtParser\SrtParserInterface;
-use App\Services\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use App\Traits\FileResourceTrait;
 use Illuminate\Http\UploadedFile;
 

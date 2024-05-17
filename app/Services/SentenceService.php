@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Apis\SentencesApi\SentencesApiInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Sentences\SentenceCollection;
 use App\Models\Sentence;
-use App\Services\SentencesApi\SentencesApiInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class SentenceService implements SentenceServiceInterface

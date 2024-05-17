@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\YoutubeCaptionsGrabberApi;
+namespace App\Apis\YoutubeCaptionsGrabberApi;
 
 use App\Exceptions\InvalidYoutubeCaptionsFormatException;
 use App\Exceptions\YoutubeVideoCaptionsCannotBeFoundException;

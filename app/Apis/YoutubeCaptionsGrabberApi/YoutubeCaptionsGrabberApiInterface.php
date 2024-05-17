@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\YoutubeCaptionsGrabberApi;
+namespace App\Apis\YoutubeCaptionsGrabberApi;
 
 interface YoutubeCaptionsGrabberApiInterface
 {

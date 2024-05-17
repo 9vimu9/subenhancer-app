@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Mocks;
 
+use App\Apis\SentencesApi\SentencesApiInterface;
 use App\DataObjects\Sentences\Sentence;
 use App\DataObjects\Sentences\SentenceCollection;
-use App\Services\SentencesApi\SentencesApiInterface;
 
 class MockSentenceApi implements SentencesApiInterface
 {

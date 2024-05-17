@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Apis\SrtParser\SrtParserInterface;
+use App\Apis\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use App\Factories\ResourceFactory;
 use App\Http\Requests\SubmitEnhanceRequest;
-use App\Services\CaptionSetviceInterface;
+use App\Services\CaptionServiceInterface;
 use App\Services\DefinitionsServiceInterface;
 use App\Services\EnhancementServiceInterface;
-use App\Services\SrtParser\SrtParserInterface;
 use App\Services\WordServiceInterface;
-use App\Services\YoutubeCaptionsGrabberApi\YoutubeCaptionsGrabberApiInterface;
 use Illuminate\Http\RedirectResponse;
 
 class EnhanceSubmissionController extends Controller
@@ -23,7 +23,7 @@ class EnhanceSubmissionController extends Controller
         YoutubeCaptionsGrabberApiInterface $youtubeCaptionsGrabberApi,
         DefinitionsServiceInterface $definitionsService,
         WordServiceInterface $wordService,
-        CaptionSetviceInterface $captionService
+        CaptionServiceInterface $captionService
     ): RedirectResponse {
         $resource = (new ResourceFactory())->generate(
             $request->file('subtitle_file'),
