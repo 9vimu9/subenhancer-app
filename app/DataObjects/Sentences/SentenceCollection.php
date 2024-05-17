@@ -12,8 +12,4 @@ use IteratorAggregate;
  */
 class SentenceCollection extends AbstractCollection
 {
-    public function add(Sentence $sentence): void
-    {
-        $this->items[] = $sentence;
-    }
 }

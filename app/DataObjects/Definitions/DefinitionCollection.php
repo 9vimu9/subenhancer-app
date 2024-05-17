@@ -12,8 +12,4 @@ use IteratorAggregate;
  */
 class DefinitionCollection extends AbstractCollection
 {
-    public function add(Definition $definition): void
-    {
-        $this->items[] = $definition;
-    }
 }

@@ -12,11 +12,6 @@ use IteratorAggregate;
  */
 class FilteredWordCollection extends AbstractCollection
 {
-    public function add(FilteredWord $filteredWord): void
-    {
-        $this->items[] = $filteredWord;
-    }
-
     public function toArrayOfWords(): array
     {
         $words = [];

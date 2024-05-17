@@ -12,11 +12,6 @@ use IteratorAggregate;
  */
 class CaptionsCollection extends AbstractCollection
 {
-    public function add(Caption $caption): void
-    {
-        $this->items[] = $caption;
-    }
-
     public function toString(): string
     {
         $captionsStrings = [];
