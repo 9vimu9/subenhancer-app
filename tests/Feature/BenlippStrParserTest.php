@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Apis\SrtParser\BenlippStrParser;
+use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use Tests\TestCase;
 
@@ -22,14 +23,11 @@ A Film Poeta Production
 A DIRTY CARNIVAL';
 
         $parser = new BenlippStrParser(new CaptionsCollection());
-        $captions = iterator_to_array($parser->parse($fileContent));
-        $this->assertEquals('A Film Poeta Production', $captions[0]->getCaption());
-        $this->assertEquals(63063, $captions[0]->getStartTime());
-        $this->assertEquals(66148, $captions[0]->getEndTime());
-
-        $this->assertEquals('A DIRTY CARNIVAL', $captions[1]->getCaption());
-        $this->assertEquals(68443, $captions[1]->getStartTime());
-        $this->assertEquals(73864, $captions[1]->getEndTime());
-
+        $expected = new CaptionsCollection(
+            new Caption(captionString: 'A Film Poeta Production', startTime: 63063, endTime: 66148),
+            new Caption(captionString: 'A DIRTY CARNIVAL', startTime: 68443, endTime: 73864),
+        );
+        $captions = $parser->parse($fileContent);
+        $this->assertEqualsCanonicalizing($expected, $captions);
     }
 }

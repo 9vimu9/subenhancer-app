@@ -23,9 +23,10 @@ class CorpusBuilderTest extends TestCase
 
     public function test_saveWord_throws_exception_when_word_does_exist(): void
     {
-        Corpus::factory()->create(['word' => 'word']);
+        $savedWord = 'word';
+        Corpus::factory()->create(['word' => $savedWord]);
         $this->expectException(WordInCorpusException::class);
-        Corpus::query()->saveWord('word');
+        Corpus::query()->saveWord($savedWord);
     }
 
     #[DataProvider('wordVariations')]
@@ -48,8 +49,8 @@ class CorpusBuilderTest extends TestCase
     public static function wordVariations(): array
     {
         return [
-            'word with all upper case' => ['RANDOM_WORD_1'],
-            'word with all small case' => ['random_word_2'],
-            'word with mix case' => ['ranDom_Word_3']];
+            'uppercase word' => ['RANDOM_WORD_1'],
+            'lowercase word' => ['random_word_2'],
+            'mixcase word' => ['ranDom_Word_3']];
     }
 }

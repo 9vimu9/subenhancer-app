@@ -29,20 +29,22 @@ class CaptionServiceTest extends TestCase
 
     public static function dataProvider(): array
     {
-        $captionOne = new Caption(
-            captionString: 'caption string 1',
-            startTime: self::CAPTION_ONE_START_TIME,
-            endTime: self::CAPTION_ONE_END_TIME
-        );
-        $captionTwo = new Caption(
-            captionString: 'caption string 2',
-            startTime: self::CAPTION_TWO_START_TIME,
-            endTime: self::CAPTION_TWO_END_TIME
-        );
-
-        $collection = new CaptionsCollection($captionOne, $captionTwo);
-
-        return [[$collection]];
+        return [
+            [
+                new CaptionsCollection(
+                    new Caption(
+                        captionString: 'caption string 1',
+                        startTime: self::CAPTION_ONE_START_TIME,
+                        endTime: self::CAPTION_ONE_END_TIME
+                    ),
+                    new Caption(
+                        captionString: 'caption string 2',
+                        startTime: self::CAPTION_TWO_START_TIME,
+                        endTime: self::CAPTION_TWO_END_TIME
+                    )
+                ),
+            ],
+        ];
     }
 
     #[DataProvider('dataProvider')]
@@ -52,11 +54,11 @@ class CaptionServiceTest extends TestCase
         Event::fake();
         $service = $this->partialMock(CaptionService::class, function (MockInterface $mock) {
             $mock->shouldReceive('getintersectionofwordarrays')
-                ->andReturn([1]);
+                ->andReturn(['random_common_word']);
         });
         $service->saveDurationsByCollection($collection, $source->id, []);
 
-        Event::assertDispatched(DurationSaved::class, 2);
+        Event::assertDispatched(DurationSaved::class, iterator_count($collection));
 
         $this->assertDatabaseHas('durations',
             [
