@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\ResourceModels;
+namespace App\Core\Contracts\ResourceModels;
 
 use App\Models\Source;
 use Illuminate\Database\Eloquent\Model;

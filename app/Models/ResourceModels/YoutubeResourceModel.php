@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\ResourceModels;
 
+use App\Core\Contracts\ResourceModels\AbstractResourceModel;
 use App\Models\Youtubevideo;
 use App\Traits\YoutubeTrait;
 use Illuminate\Database\Eloquent\Model;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
-use App\Models\ResourceModels\ResourceModelInterface;
+use App\Core\Contracts\ResourceModels\ResourceModelInterface;
 
 abstract class AbstractResource implements ResourceInterface
 {

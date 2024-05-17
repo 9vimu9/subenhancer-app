@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\ResourceModels;
+namespace App\Core\Contracts\ResourceModels;
 
 use App\Exceptions\UnresourcableModelProvidedException;
 use App\Models\Source;

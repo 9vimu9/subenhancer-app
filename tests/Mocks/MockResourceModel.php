@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Mocks;
 
-use App\Models\ResourceModels\AbstractResourceModel;
+use App\Core\Contracts\ResourceModels\AbstractResourceModel;
 use Illuminate\Database\Eloquent\Model;
 
 class MockResourceModel extends AbstractResourceModel

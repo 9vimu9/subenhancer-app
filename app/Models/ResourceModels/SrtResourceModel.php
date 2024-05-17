@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\ResourceModels;
 
+use App\Core\Contracts\ResourceModels\AbstractResourceModel;
 use App\Models\Srt;
 use Illuminate\Database\Eloquent\Model;
 
