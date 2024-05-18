@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Core\Contracts\DataObjects\AbstractCollection;
-use Mockery;
 use OutOfBoundsException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -14,17 +13,17 @@ class AbstractCollectionTest extends TestCase
 {
     public function test_count_method(): void
     {
-        $collection = new MockCollection(1, 2, 3);
-        $this->assertEquals(3, $collection->count());
+        $this->assertEquals(
+            3,
+            (new MockCollection(1, 2, 3))->count());
     }
 
     public function test_update_method(): void
     {
         $items = [1, 2, 3];
-        $mockedCollection = Mockery::mock(MockCollection::class.'[count]', $items);
-        $mockedCollection->shouldReceive('count')->andReturn(count($items));
         $index = 2;
         $newValue = 5;
+        $mockedCollection = new MockCollection(...$items);
         $mockedCollection->update($index, $newValue);
         $this->assertEquals($newValue, $mockedCollection->getIterator()->offsetGet($index));
     }
@@ -34,51 +33,45 @@ class AbstractCollectionTest extends TestCase
     {
 
         $items = [1, 2, 3];
-        $mockedCollection = Mockery::mock(MockCollection::class.'[count]', $items);
-        $mockedCollection->shouldReceive('count')->andReturn(count($items));
-        $newValue = 5;
+        $mockedCollection = new MockCollection(...$items);
         $this->expectException(OutOfBoundsException::class);
-        $mockedCollection->update($index, $newValue);
+        $mockedCollection->update($index, 5);
     }
 
     public function test_remove_method(): void
     {
         $items = [1, 2, 3];
-        $mockedCollection = Mockery::mock(MockCollection::class.'[count]', $items);
-        $mockedCollection->shouldReceive('count')->andReturn(count($items));
-        $index = 2;
-        $mockedCollection->remove($index);
-        $this->assertEquals([1, 2], iterator_to_array($mockedCollection->getIterator()));
+        $collection = new MockCollection(...$items);
+        foreach ($items as $index => $item) {
+            $collection->remove($index);
+        }
+        $this->assertEquals(0, $collection->count());
     }
 
     #[DataProvider('provideIndex')]
     public function test_throws_exception_when_remove_value_out_of_bound(int $index): void
     {
         $items = [1, 2, 3];
-        $mockedCollection = Mockery::mock(MockCollection::class.'[count]', $items);
-        $mockedCollection->shouldReceive('count')->andReturn(count($items));
         $this->expectException(OutOfBoundsException::class);
-        $mockedCollection->remove($index);
+        (new MockCollection(...$items))->remove($index);
     }
 
     public function test_get_method(): void
     {
         $items = [1, 2, 3];
-        $mockedCollection = Mockery::mock(MockCollection::class.'[count]', $items);
-        $mockedCollection->shouldReceive('count')->andReturn(count($items));
         $index = 2;
-        $this->assertEquals($items[$index], $mockedCollection->get($index));
+        $this->assertEquals(
+            $items[$index],
+            (new MockCollection(...$items))->get($index)
+        );
     }
 
     #[DataProvider('provideIndex')]
     public function test_throws_exception_when_get_value_out_of_bound(int $index): void
     {
-
         $items = [1, 2, 3];
-        $mockedCollection = Mockery::mock(MockCollection::class.'[count]', $items);
-        $mockedCollection->shouldReceive('count')->andReturn(count($items));
         $this->expectException(OutOfBoundsException::class);
-        $mockedCollection->get($index);
+        (new MockCollection(...$items))->get($index);
     }
 
     public function test_add_method(): void

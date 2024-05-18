@@ -25,7 +25,7 @@ abstract class AbstractCollection implements IteratorAggregate
 
     public function remove(int $index): void
     {
-        if ($this->count() - 1 < $index || $index < 0) {
+        if (! array_key_exists($index, $this->items)) {
             throw new OutOfBoundsException();
         }
         unset($this->items[$index]);
@@ -33,7 +33,7 @@ abstract class AbstractCollection implements IteratorAggregate
 
     public function update(int $index, mixed $item): void
     {
-        if ($this->count() - 1 < $index || $index < 0) {
+        if (! array_key_exists($index, $this->items)) {
             throw new OutOfBoundsException();
         }
         $this->items[$index] = $item;
@@ -46,7 +46,7 @@ abstract class AbstractCollection implements IteratorAggregate
 
     public function get(int $index): mixed
     {
-        if ($this->count() - 1 < $index || $index < 0) {
+        if (! array_key_exists($index, $this->items)) {
             throw new OutOfBoundsException();
         }
 
