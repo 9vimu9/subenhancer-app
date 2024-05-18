@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\DataObjects\Definitions\Definition;
 use App\DataObjects\Definitions\DefinitionCollection;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
+use App\Enums\WordClassEnum;
+use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\DefinitionAlreadyExistException;
 use App\Exceptions\WordNotInCorpusException;
 use App\Models\Corpus;
@@ -81,6 +84,51 @@ class DefinitionsServiceTest extends TestCase
     ): void {
         $this->expectException(WordNotInCorpusException::class);
         $service->storeDefinitions($filteredWord);
+
+    }
+
+    public function test_remove_filtered_word_from_the_collection_when_no_definition_is_available(): void
+    {
+        $service = new DefinitionsService(new class implements DefinitionsApiInterface
+        {
+            public function getDefinitions(string $word): DefinitionCollection
+            {
+                throw new CantFindDefinitionException();
+            }
+
+            public function wordClassMapper(string $wordClass): WordClassEnum
+            {
+                return WordClassEnum::NOUN;
+            }
+        });
+
+        $filteredWordCollection = new FilteredWordCollection(
+            new FilteredWord('random_word_1'),
+            new FilteredWord('random_word_2')
+        );
+        $filteredWordCollection = $service->setDefinitionsToCollection($filteredWordCollection);
+        $this->assertEquals(0, $filteredWordCollection->count());
+    }
+
+    public function test_store_definitions_by_collection(): void
+    {
+        $filteredWordCollection = new FilteredWordCollection(
+            new FilteredWord('random_word_1'),
+            new FilteredWord('random_word_2')
+        );
+        $service = $this->getMockBuilder(DefinitionsService::class)
+            ->onlyMethods(['storeDefinitions'])
+            ->setConstructorArgs([new MockDefinitionsApi()])
+            ->getMock();
+        $service->method('storeDefinitions')
+            ->willThrowException(new DefinitionAlreadyExistException());
+        $service->storeDefinitionsByCollection($filteredWordCollection);
+        $this->assertDatabaseCount('definitions', 0);
+
+        $service->method('storeDefinitions')
+            ->willThrowException(new WordNotInCorpusException());
+        $service->storeDefinitionsByCollection($filteredWordCollection);
+        $this->assertDatabaseCount('definitions', 0);
 
     }
 

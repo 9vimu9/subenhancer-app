@@ -10,10 +10,11 @@ use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\DefinitionAlreadyExistException;
+use App\Exceptions\WordNotInCorpusException;
 use App\Models\Corpus;
 use App\Models\Definition;
 
-readonly class DefinitionsService implements DefinitionsServiceInterface
+class DefinitionsService implements DefinitionsServiceInterface
 {
     public function __construct(private DefinitionsApiInterface $definitionsApi)
     {
@@ -25,7 +26,7 @@ readonly class DefinitionsService implements DefinitionsServiceInterface
             try {
                 $collection->update($index, $this->setDefinitions($word));
             } catch (CantFindDefinitionException $exception) {
-                continue;
+                $collection->remove($index);
             }
         }
 
@@ -42,7 +43,11 @@ readonly class DefinitionsService implements DefinitionsServiceInterface
     public function storeDefinitionsByCollection(FilteredWordCollection $collection): void
     {
         foreach ($collection as $word) {
-            $this->storeDefinitions($word);
+            try {
+                $this->storeDefinitions($word);
+            } catch (DefinitionAlreadyExistException|WordNotInCorpusException $exception) {
+                continue;
+            }
         }
     }
 
@@ -50,7 +55,7 @@ readonly class DefinitionsService implements DefinitionsServiceInterface
     {
         $word = Corpus::query()->findByWordOrFail($filteredWord->getWord());
 
-        if (Definition::query()->findDefinitionsByWord($filteredWord->getWord())->count()) {
+        if ($word->definitions()->count()) {
             throw new DefinitionAlreadyExistException();
         }
 
