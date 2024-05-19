@@ -23,16 +23,16 @@ class FilteredWordService implements FilteredWordServiceInterface
         $cleansedWordArray = $this->stringToCleansedWordArray($sentence->getSentence());
         $filteredWordsInSentence = $this->getIntersectionOfWordArrays($cleansedWordArray, $filteredWordArray);
         if (count($filteredWordsInSentence)) {
-            $this->saveCaptionWords($filteredWordsInSentence, $sentenceId);
+            $this->saveFilteredWords($filteredWordsInSentence, $sentence, $sentenceId);
         }
 
     }
 
-    public function saveCaptionWords(array $filteredWordsInSentence, int $sentenceId): void
+    public function saveFilteredWords(array $filteredWordsInSentence, Sentence $sentence, int $sentenceId): void
     {
         foreach ($filteredWordsInSentence as $order => $word) {
             try {
-                Captionword::query()->create([
+                $filteredWord = Captionword::query()->create([
                     'order_in_sentence' => $order,
                     'sentence_id' => $sentenceId,
                     'corpus_id' => Corpus::query()->findByWordOrFail($word)->id,
