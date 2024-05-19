@@ -130,6 +130,7 @@ return [
     'nlp_endpoint' => env('NLP_ENDPOINT'),
     'captions_endpoint' => env('CAPTIONS_ENDPOINT'),
     'sentencing_endpoint' => env('SENTENCING_ENDPOINT'),
+    'definition_pick_endpoint' => env('DEFINITION_PICK_ENDPOINT'),
 
     'definition_apis' => [
         'free_dictionary_api' => env('FREE_DICTIONARY_API'),
