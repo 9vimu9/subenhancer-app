@@ -15,5 +15,7 @@ interface DefinitionsServiceInterface
 
     public function storeDefinitionsByCollection(FilteredWordCollection $collection): void;
 
+    public function processDefinitionsByCollection(FilteredWordCollection $collection): FilteredWordCollection;
+
     public function storeDefinitions(FilteredWord $filteredWord): void;
 }

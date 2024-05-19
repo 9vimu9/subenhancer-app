@@ -64,4 +64,13 @@ class DefinitionsService implements DefinitionsServiceInterface
 
         }
     }
+
+    public function processDefinitionsByCollection(FilteredWordCollection $collection): FilteredWordCollection
+    {
+        $this->storeDefinitionsByCollection(
+            $filteredWordCollection = $this->setDefinitionsToCollection($collection)
+        );
+
+        return $filteredWordCollection;
+    }
 }

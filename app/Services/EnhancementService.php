@@ -34,10 +34,9 @@ class EnhancementService implements EnhancementServiceInterface
     {
         $source = $resource->resourceModel()->saveToSource();
         $captionsCollection = $resource->toCaptions();
-        $filteredWordCollection = $wordService->filterWordsByCollection($captionsCollection);
-        $wordService->storeWordsByCollection($filteredWordCollection);
-        $filteredWordCollection = $definitionsService->setDefinitionsToCollection($filteredWordCollection);
-        $definitionsService->storeDefinitionsByCollection($filteredWordCollection);
+        $filteredWordCollection = $definitionsService->processDefinitionsByCollection(
+            $wordService->processWordsByCollection($captionsCollection)
+        );
         $captionService->saveDurationsByCollection(
             $captionsCollection,
             $source->getAttribute('id'),

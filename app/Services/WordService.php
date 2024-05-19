@@ -39,4 +39,13 @@ class WordService implements WordServiceInterface
 
         return $collection;
     }
+
+    public function processWordsByCollection(CaptionsCollection $captionsCollection): FilteredWordCollection
+    {
+        $this->storeWordsByCollection(
+            $filteredWordCollection = $this->filterWordsByCollection($captionsCollection)
+        );
+
+        return $filteredWordCollection;
+    }
 }
