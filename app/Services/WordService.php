@@ -30,6 +30,13 @@ class WordService implements WordServiceInterface
 
     public function filterWordsByCollection(CaptionsCollection $captionsCollection): FilteredWordCollection
     {
-        return $this->wordFilterApi->filter($captionsCollection->toString());
+        $collection = $this->wordFilterApi->filter($captionsCollection->toString());
+        foreach ($collection as $index => $word) {
+            if (Corpus::query()->findByWord($word->getWord())) {
+                $collection->remove($index);
+            }
+        }
+
+        return $collection;
     }
 }

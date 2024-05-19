@@ -56,6 +56,20 @@ class WordServiceTest extends TestCase
         $this->assertEqualsCanonicalizing($actualfilteredWordCollection, $expectedFilteredWordCollection);
 
     }
+
+    #[DataProvider('provideInputs')]
+    public function test_existing_words_removed_from_the_collection(WordService $service): void
+    {
+        Corpus::factory()->create(['word' => 'word 2']);
+        $actual = $service->filterWordsByCollection(
+            new CaptionsCollection(new Caption('random', 1, 2))
+        );
+        $expected = new FilteredWordCollection(
+            new FilteredWord('word 1'),
+        );
+        $this->assertEqualsCanonicalizing($actual, $expected);
+
+    }
 }
 
 class MockWordFilterApi implements WordFilterApiInterface
