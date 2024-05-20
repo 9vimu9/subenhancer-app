@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('captionword_id');
-            $table->foreign('captionword_id')->references('id')->on('captionwords')->onDelete('cascade');
+            $table->unsignedBigInteger('definition_id');
+            $table->foreign('definition_id')->references('id')->on('definitions')->onDelete('cascade');
             $table->enum('vocabulary_type', [
                 VocabularyEnum::FILTERED_OUT_AS_KNOWN_USING_THE_TEST->name,
                 VocabularyEnum::MARKED_AS_KNOWN->name,

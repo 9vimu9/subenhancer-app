@@ -10,12 +10,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('enhancement_vocabulary', function (Blueprint $table) {
+        Schema::create('filteredword_enhancement', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('enhancement_id');
             $table->foreign('enhancement_id')->references('id')->on('enhancements')->onDelete('cascade');
-            $table->unsignedBigInteger('vocabulary_id');
-            $table->foreign('vocabulary_id')->references('id')->on('vocabularies')->onDelete('cascade');
+            $table->unsignedBigInteger('captionword_id');
+            $table->foreign('captionword_id')->references('id')->on('captionwords')->onDelete('cascade');
             $table->timestamps();
         });
     }
