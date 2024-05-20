@@ -39,7 +39,6 @@ class FilteredWordService implements FilteredWordServiceInterface
             $filteredWord = Captionword::query()->create([
                 'order_in_sentence' => $order,
                 'sentence_id' => $sentenceId,
-                'corpus_id' => $corpus->id,
             ]);
             NewFilteredWordsStored::dispatch(
                 $filteredWord->getAttribute('id'),

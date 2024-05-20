@@ -28,7 +28,6 @@ class DefinitionSelectorServiceTest extends TestCase
         $sentence = Sentence::factory()->create();
         $filteredWord = Captionword::factory()->create([
             'sentence_id' => $sentence->id,
-            'corpus_id' => $corpus->id,
             'definition_id' => null,
         ]);
         $service->updateFilteredWordDefinition(
@@ -53,7 +52,6 @@ class DefinitionSelectorServiceTest extends TestCase
         $sentence = Sentence::factory()->create();
         $filteredWord = Captionword::factory()->create([
             'sentence_id' => $sentence->id,
-            'corpus_id' => $corpus->id,
             'definition_id' => null,
         ]);
         $this->expectException(NoCandidateDefinitionsAvailabletoChooseException::class);

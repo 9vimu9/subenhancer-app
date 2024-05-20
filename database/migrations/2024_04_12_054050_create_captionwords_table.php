@@ -18,8 +18,6 @@ return new class extends Migration
             $table->unsignedTinyInteger('order_in_sentence');
             $table->unsignedBigInteger('sentence_id');
             $table->foreign('sentence_id')->references('id')->on('sentences')->onDelete('cascade');
-            $table->unsignedBigInteger('corpus_id');
-            $table->foreign('corpus_id')->references('id')->on('corpuses')->onDelete('cascade');
             $table->unsignedBigInteger('definition_id')->nullable();
             $table->foreign('definition_id')->references('id')->on('definitions')->onDelete('cascade');
             $table->timestamps();

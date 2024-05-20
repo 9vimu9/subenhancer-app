@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Captionword extends Model
 {
-    protected $fillable = ['order_in_sentence', 'sentence_id', 'corpus_id', 'definition_id'];
+    protected $fillable = ['order_in_sentence', 'sentence_id', 'definition_id'];
 
     use HasFactory;
 
