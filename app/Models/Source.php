@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Source extends Model
@@ -15,5 +16,10 @@ class Source extends Model
     public function sourceable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function durations(): HasMany
+    {
+        return $this->hasMany(Duration::class);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Builders\FilteredwordBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Captionword extends Model
 {
@@ -18,5 +19,10 @@ class Captionword extends Model
     public function newEloquentBuilder($query): Builder
     {
         return new FilteredwordBuilder($query);
+    }
+
+    public function sentence(): BelongsTo
+    {
+        return $this->belongsTo(Sentence::class);
     }
 }
