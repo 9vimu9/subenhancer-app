@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
-use App\DataObjects\Definitions\Definition;
+use App\Exceptions\NoCandidateDefinitionsAvailabletoChooseException;
+use App\Models\Definition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,9 +22,11 @@ class DefinitionBuilder extends Builder
 
     public function getCandidateDefinitionsArrayByWord(int $corpusId): array
     {
-        return $this->where('corpus_id', $corpusId)
+        $definitions = $this->where('corpus_id', $corpusId)
             ->pluck('definition')
             ->toArray();
+
+        return count($definitions) ? $definitions : throw new NoCandidateDefinitionsAvailabletoChooseException();
     }
 
     public function findByDefinitionAndCorpusId(string $definition, int $corpusId): Definition
