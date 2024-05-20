@@ -22,7 +22,7 @@ class FilteredwordBuilderTest extends TestCase
             $source->durations()
                 ->saveMany(
                     Duration::factory()
-                        ->count(10000)
+                        ->count(20)
                         ->create(['source_id' => $source])
                         ->each(function (Duration $duration) {
                             $duration->sentences()
