@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
+use App\DataObjects\Definitions\Definition;
 use App\Exceptions\NoCandidateDefinitionsAvailabletoChooseException;
-use App\Models\Definition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,7 +29,7 @@ class DefinitionBuilder extends Builder
         return count($definitions) ? $definitions : throw new NoCandidateDefinitionsAvailabletoChooseException();
     }
 
-    public function findByDefinitionAndCorpusId(string $definition, int $corpusId): Definition
+    public function findByDefinitionAndCorpusId(string $definition, int $corpusId): \App\Models\Definition
     {
         return $this->where('definition', $definition)
             ->where('corpus_id', $corpusId)
