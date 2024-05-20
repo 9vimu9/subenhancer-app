@@ -18,4 +18,19 @@ class DefinitionBuilder extends Builder
             'word_class' => $definition->getWordClass()->name,
         ]);
     }
+
+    public function getCandidateDefinitionsArrayByWord(int $corpusId): array
+    {
+        return $this->where('corpus_id', $corpusId)
+            ->pluck('definition')
+            ->toArray();
+    }
+
+    public function findByDefinitionAndCorpusId(string $definition, int $corpusId): Definition
+    {
+        return $this->where('definition', $definition)
+            ->where('corpus_id', $corpusId)
+            ->firstOrFail();
+
+    }
 }
