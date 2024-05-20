@@ -20,7 +20,7 @@ class DefinitionBuilder extends Builder
         ]);
     }
 
-    public function getCandidateDefinitionsArrayByWord(int $corpusId): array
+    public function getCandidateDefinitionsArrayByWordOrFail(int $corpusId): array
     {
         $definitions = $this->where('corpus_id', $corpusId)
             ->pluck('definition')

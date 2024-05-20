@@ -18,7 +18,7 @@ class DefinitionBuilderTest extends TestCase
         $corpus = Corpus::factory()->create();
         $definitions = Definition::factory()->count(3)->create(['corpus_id' => $corpus->id]);
         $expected = $definitions->pluck('definition')->toArray();
-        $actual = Definition::query()->getCandidateDefinitionsArrayByWord($corpus->id);
+        $actual = Definition::query()->getCandidateDefinitionsArrayByWordOrFail($corpus->id);
         $this->assertEquals($expected, $actual);
 
     }

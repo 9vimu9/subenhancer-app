@@ -22,7 +22,7 @@ class DefinitionSelectorService implements DefinitionSelectorServiceInterface
         $definition = $this->definitionSelectorApi
             ->pickADefinitionBasedOnContext(
                 $sentence->getSentence(),
-                Definition::query()->getCandidateDefinitionsArrayByWord($corpusId),
+                Definition::query()->getCandidateDefinitionsArrayByWordOrFail($corpusId),
                 Corpus::query()->findOrFail($corpusId)->getAttribute('word'),
                 $orderInTheSentence);
 
