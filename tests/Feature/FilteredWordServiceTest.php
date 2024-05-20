@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Events\NewFilteredWordsStored;
 use App\Models\Corpus;
 use App\Models\Sentence;
 use App\Services\FilteredWordService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -17,6 +19,7 @@ class FilteredWordServiceTest extends TestCase
 
     public function test_saveFilteredWordWhichFoundInSentence(): void
     {
+        Event::fake();
         $sentenceModel = Sentence::factory()->create();
         $sentence = new \App\DataObjects\Sentences\Sentence(
             sentence: 'RANDOM_TEXT'
@@ -31,11 +34,13 @@ class FilteredWordServiceTest extends TestCase
         });
         $service->saveFilteredWordWhichFoundInSentence([], $sentence, $sentenceModel->id);
         $this->assertDatabaseCount('captionwords', 2);
+        Event::assertDispatchedTimes(NewFilteredWordsStored::class, 2);
 
     }
 
     public function test_not_saving_the_word_when_it_is_not_in_corpus(): void
     {
+        Event::fake();
         $sentenceModel = Sentence::factory()->create();
         $sentence = new \App\DataObjects\Sentences\Sentence(
             sentence: 'RANDOM_TEXT'
@@ -50,6 +55,6 @@ class FilteredWordServiceTest extends TestCase
         });
         $service->saveFilteredWordWhichFoundInSentence([], $sentence, $sentenceModel->id);
         $this->assertDatabaseCount('captionwords', 1);
-
+        Event::assertDispatchedTimes(NewFilteredWordsStored::class, 1);
     }
 }

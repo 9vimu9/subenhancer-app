@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Core\Contracts\Services\FilteredWordServiceInterface;
 use App\DataObjects\Sentences\Sentence;
-use App\Exceptions\WordNotInCorpusException;
+use App\Events\NewFilteredWordsStored;
 use App\Models\Captionword;
 use App\Models\Corpus;
 use App\Traits\StringArrayOperationsTrait;
@@ -28,18 +28,27 @@ class FilteredWordService implements FilteredWordServiceInterface
 
     }
 
-    public function saveFilteredWords(array $filteredWordsInSentence, Sentence $sentence, int $sentenceId): void
+    private function saveFilteredWords(array $filteredWordsInSentence, Sentence $sentence, int $sentenceId): void
     {
         foreach ($filteredWordsInSentence as $order => $word) {
-            try {
-                $filteredWord = Captionword::query()->create([
-                    'order_in_sentence' => $order,
-                    'sentence_id' => $sentenceId,
-                    'corpus_id' => Corpus::query()->findByWordOrFail($word)->id,
-                ]);
-            } catch (WordNotInCorpusException $exception) {
+            if (is_null(
+                $corpus = Corpus::query()->findByWord($word)
+            )) {
                 continue;
             }
+            $filteredWord = Captionword::query()->create([
+                'order_in_sentence' => $order,
+                'sentence_id' => $sentenceId,
+                'corpus_id' => $corpus->id,
+            ]);
+            NewFilteredWordsStored::dispatch(
+                $filteredWord->getAttribute('id'),
+                $sentence,
+                $sentenceId,
+                $corpus->id,
+                $order
+            );
+
         }
     }
 }
