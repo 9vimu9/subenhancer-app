@@ -22,6 +22,7 @@ use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\Core\Contracts\Services\EnhancementServiceInterface;
 use App\Core\Contracts\Services\FilteredWordServiceInterface;
 use App\Core\Contracts\Services\SentenceServiceInterface;
+use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\Events\DurationSaved;
 use App\Events\NewFilteredWordsStored;
@@ -35,6 +36,7 @@ use App\Services\DefinitionsService;
 use App\Services\EnhancementService;
 use App\Services\FilteredWordService;
 use App\Services\SentenceService;
+use App\Services\VocabularyService;
 use App\Services\WordService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
@@ -51,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SentenceServiceInterface::class, SentenceService::class);
         $this->app->bind(WordServiceInterface::class, WordService::class);
         $this->app->bind(DefinitionSelectorServiceInterface::class, DefinitionSelectorService::class);
+        $this->app->bind(VocabularyServiceInterface::class, VocabularyService::class);
 
         $this->app->bind(DefinitionsApiInterface::class, FreeDictionaryApi::class);
         $this->app->bind(SentencesApiInterface::class, FirstPartySentencingApi::class);

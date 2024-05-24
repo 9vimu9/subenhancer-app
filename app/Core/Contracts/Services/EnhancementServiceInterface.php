@@ -16,6 +16,7 @@ interface EnhancementServiceInterface
         DefinitionsService $definitionsService,
         WordService $wordService,
         CaptionService $captionService,
+        VocabularyServiceInterface $vocabularyService
 
     ): void;
 }
