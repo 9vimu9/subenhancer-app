@@ -76,4 +76,46 @@ class VocabularyServiceTest extends TestCase
         ]);
 
     }
+
+    public function test_getVocabularyBySource_method(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $source = Source::factory()->create();
+        $source->durations()
+            ->saveMany(
+                Duration::factory()
+                    ->count(1)
+                    ->create(['source_id' => $source])
+                    ->each(function (Duration $duration) {
+                        $duration->sentences()
+                            ->saveMany(
+                                Sentence::factory()
+                                    ->count(1)
+                                    ->create(['duration_id' => $duration->id])
+                                    ->each(function (Sentence $sentence) {
+                                        $sentence
+                                            ->filteredwords()
+                                            ->saveMany(
+                                                Captionword::factory()
+                                                    ->count(1)
+                                                    ->create([
+                                                        'sentence_id' => $sentence->id,
+                                                    ])
+                                            );
+                                    })
+                            );
+
+                    })
+            );
+
+        Definition::all()->each(function (Definition $definition) use ($user) {
+            Vocabulary::factory()->create(['definition_id' => $definition->id, 'user_id' => $user->id]);
+        });
+        $this->assertEquals(
+            Vocabulary::all()->count(),
+            (new VocabularyService())->getVocabularyBySource($source->id)->count()
+        );
+
+    }
 }
