@@ -14,6 +14,8 @@ class Captionword extends Model
 {
     protected $fillable = ['order_in_sentence', 'sentence_id', 'definition_id'];
 
+    protected $with = ['definition'];
+
     use HasFactory;
 
     public function newEloquentBuilder($query): Builder
@@ -24,5 +26,10 @@ class Captionword extends Model
     public function sentence(): BelongsTo
     {
         return $this->belongsTo(Sentence::class);
+    }
+
+    public function definition(): BelongsTo
+    {
+        return $this->belongsTo(Definition::class);
     }
 }
