@@ -9,7 +9,8 @@
         "benlipp/srt-parser": "^1.1",
         "laravel/framework": "^11.0",
         "laravel/telescope": "^5.0",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "vanderlee/php-sentence": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

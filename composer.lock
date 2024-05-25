@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d029e366f53994edee8b627efe94ea0b",
+    "content-hash": "8c041d2c61f1ec115cddd202e6237619",
     "packages": [
         {
             "name": "benlipp/srt-parser",
@@ -5584,6 +5584,54 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.2.7"
             },
             "time": "2023-12-08T13:03:43+00:00"
+        },
+        {
+            "name": "vanderlee/php-sentence",
+            "version": "1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vanderlee/php-sentence.git",
+                "reference": "3febfae719c7dfbb51800ec1cfcab35eb3260b7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vanderlee/php-sentence/zipball/3febfae719c7dfbb51800ec1cfcab35eb3260b7d",
+                "reference": "3febfae719c7dfbb51800ec1cfcab35eb3260b7d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^3.6.12"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Vanderlee\\Sentence\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Simple text sentence splitting and counting. Supports at least english, german and dutch, possibly more.",
+            "homepage": "https://github.com/vanderlee/php-sentence.git",
+            "keywords": [
+                "boundary",
+                "count",
+                "disambiguation",
+                "segmentation",
+                "sentence",
+                "split"
+            ],
+            "support": {
+                "issues": "https://github.com/vanderlee/php-sentence/issues",
+                "source": "https://github.com/vanderlee/php-sentence"
+            },
+            "time": "2024-04-11T09:45:10+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
