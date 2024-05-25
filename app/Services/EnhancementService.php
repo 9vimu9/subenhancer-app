@@ -11,6 +11,7 @@ use App\Core\Contracts\Services\EnhancementServiceInterface;
 use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\Models\Enhancement;
+use App\Models\Source;
 
 class EnhancementService implements EnhancementServiceInterface
 {
@@ -22,19 +23,18 @@ class EnhancementService implements EnhancementServiceInterface
         VocabularyServiceInterface $vocabularyService
 
     ): void {
-        $enhancement = Enhancement::query()->createByUserId(auth()->id());
-        if (! $resource->resourceModel()->resourceExists()) {
-            $source = $this->createSource($resource, $wordService, $definitionsService, $captionService);
-        }
-        $source = $source ?? $resource->resourceModel()->getSource();
-        Enhancement::query()->updateSourceId(
-            $enhancement->getAttribute('id'),
-            $source->getAttribute('id'));
-        $vocabularyService->updateVocabularyBySource($source->getAttribute('id'));
-        $definedWordsCollection = $vocabularyService->getVocabularyBySource($source->getAttribute('id'));
+        $sourceId = $resource->resourceModel()->resourceExists()
+            ? $resource->resourceModel()->getSource()->getAttribute('id')
+            : $this->createSource($resource, $wordService, $definitionsService, $captionService)->getAttribute('id');
+        $enhancement = Enhancement::query()->createByUserId(auth()->id(), $sourceId);
+        $vocabularyService->updateVocabularyBySource($sourceId);
+        $definedWordsCollection = $vocabularyService->getVocabularyBySource($sourceId);
     }
 
-    private function createSource(ResourceInterface $resource, WordServiceInterface $wordService, DefinitionsServiceInterface $definitionsService, CaptionServiceInterface $captionService): \App\Models\Source
+    private function createSource(ResourceInterface $resource,
+        WordServiceInterface $wordService,
+        DefinitionsServiceInterface $definitionsService,
+        CaptionServiceInterface $captionService): Source
     {
         $source = $resource->resourceModel()->saveToSource();
         $captionsCollection = $resource->toCaptions();
