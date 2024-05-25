@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Feature;
+
+use App\Apis\WordsFilterApi\PhpBasedWordFilterApi;
+use App\DataObjects\FilteredWords\FilteredWord;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\TestCase;
+
+class PhpBasedWordFilterApiTest extends TestCase
+{
+    public static function sampleSentences(): array
+    {
+        return [[
+            'aa bb cc',
+            new FilteredWordCollection(
+                new FilteredWord('aa'),
+                new FilteredWord('bb'),
+                new FilteredWord('cc'),
+            ),
+        ], [
+            'aa   act  bb   aa',
+            new FilteredWordCollection(
+                new FilteredWord('aa'),
+                new FilteredWord('bb'),
+            ),
+        ],
+        ];
+    }
+
+    #[DataProvider('sampleSentences')]
+    public function test_filter_method(string $sentence, FilteredWordCollection $filteredWordCollection): void
+    {
+        $this->assertEquals($filteredWordCollection, (new PhpBasedWordFilterApi())->filter($sentence));
+
+    }
+}
