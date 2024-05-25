@@ -7,9 +7,9 @@ namespace Tests\Helpers;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Event;
 
-trait DatabaseHelper
+class DatabaseHelper
 {
-    public function logQueriesToConsole(): void
+    public static function logQueriesToConsole(): void
     {
         Event::listen(QueryExecuted::class, static function ($query) {
             error_log(str_replace('\"', '"', json_encode([
