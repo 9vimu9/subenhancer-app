@@ -6,7 +6,9 @@ namespace App\Models\Builders;
 
 use App\Enums\VocabularyEnum;
 use App\Exceptions\UserHasNotBeenAuthenticatedException;
+use App\Exceptions\VocabularyNotFoundWithDefinitionForUserException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class VocabularyBuilder extends Builder
 {
@@ -22,9 +24,22 @@ class VocabularyBuilder extends Builder
 
     public function alreadyIncludedForTheUser(int $definitionId, ?int $userId = null): bool
     {
+        try {
+            $this->findOrFailByDefinitionIdForUser($definitionId, $userId);
+
+            return true;
+        } catch (VocabularyNotFoundWithDefinitionForUserException $exception) {
+            return false;
+        }
+    }
+
+    public function findOrFailByDefinitionIdForUser(int $definitionId, ?int $userId = null): Model
+    {
         return $this->where('definition_id', $definitionId)
             ->where('user_id',
-                $userId ?? auth()->id() ?? throw new UserHasNotBeenAuthenticatedException())
-            ->exists();
+                $userId ?? auth()->id() ?? throw new UserHasNotBeenAuthenticatedException()
+            )->first()
+            ??
+            throw new VocabularyNotFoundWithDefinitionForUserException();
     }
 }
