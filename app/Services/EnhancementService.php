@@ -8,6 +8,7 @@ use App\Core\Contracts\Resource\ResourceInterface;
 use App\Core\Contracts\Services\CaptionServiceInterface;
 use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\Core\Contracts\Services\EnhancementServiceInterface;
+use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\Models\Enhancement;
 
@@ -18,6 +19,7 @@ class EnhancementService implements EnhancementServiceInterface
         DefinitionsServiceInterface $definitionsService,
         WordServiceInterface $wordService,
         CaptionServiceInterface $captionService,
+        VocabularyServiceInterface $vocabularyService
 
     ): void {
         $enhancement = Enhancement::query()->createByUserId(auth()->id());
@@ -28,9 +30,10 @@ class EnhancementService implements EnhancementServiceInterface
         Enhancement::query()->updateSourceId(
             $enhancement->getAttribute('id'),
             $source->getAttribute('id'));
+        $vocabularyService->updateVocabularyBySource($source->getAttribute('id'));
     }
 
-    public function createSource(ResourceInterface $resource, WordServiceInterface $wordService, DefinitionsServiceInterface $definitionsService, CaptionServiceInterface $captionService): \App\Models\Source
+    private function createSource(ResourceInterface $resource, WordServiceInterface $wordService, DefinitionsServiceInterface $definitionsService, CaptionServiceInterface $captionService): \App\Models\Source
     {
         $source = $resource->resourceModel()->saveToSource();
         $captionsCollection = $resource->toCaptions();
