@@ -9,6 +9,7 @@ use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\Core\Contracts\Services\CaptionServiceInterface;
 use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\Core\Contracts\Services\EnhancementServiceInterface;
+use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\Factories\ResourceFactory;
 use App\Http\Requests\SubmitEnhanceRequest;
@@ -23,7 +24,8 @@ class EnhanceSubmissionController extends Controller
         YoutubeCaptionsGrabberApiInterface $youtubeCaptionsGrabberApi,
         DefinitionsServiceInterface $definitionsService,
         WordServiceInterface $wordService,
-        CaptionServiceInterface $captionService
+        CaptionServiceInterface $captionService,
+        VocabularyServiceInterface $vocabularyService,
     ): RedirectResponse {
         $resource = (new ResourceFactory())->generate(
             $request->file('subtitle_file'),
@@ -36,6 +38,7 @@ class EnhanceSubmissionController extends Controller
             $definitionsService,
             $wordService,
             $captionService,
+            $vocabularyService
 
         );
 

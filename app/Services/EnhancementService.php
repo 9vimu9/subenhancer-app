@@ -31,6 +31,7 @@ class EnhancementService implements EnhancementServiceInterface
             $enhancement->getAttribute('id'),
             $source->getAttribute('id'));
         $vocabularyService->updateVocabularyBySource($source->getAttribute('id'));
+        $definedWordsCollection = $vocabularyService->getVocabularyBySource($source->getAttribute('id'));
     }
 
     private function createSource(ResourceInterface $resource, WordServiceInterface $wordService, DefinitionsServiceInterface $definitionsService, CaptionServiceInterface $captionService): \App\Models\Source
