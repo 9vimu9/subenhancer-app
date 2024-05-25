@@ -6,20 +6,21 @@ namespace App\Models\Builders;
 
 use App\Enums\VocabularyEnum;
 use App\Exceptions\UserHasNotBeenAuthenticatedException;
+use Illuminate\Database\Eloquent\Builder;
 
-class VocabularyBuilder
+class VocabularyBuilder extends Builder
 {
-    public function store(VocabularyEnum $type, int $definitionId, ?int $userId): void
+    public function store(VocabularyEnum $type, int $definitionId, ?int $userId = null): void
     {
         $this->create([
             'definition_id' => $definitionId,
             'user_id' => $userId ?? auth()->id() ?? throw new UserHasNotBeenAuthenticatedException(),
-            'type' => $type->name,
+            'vocabulary_type' => $type->name,
         ]);
 
     }
 
-    public function alreadyIncludedForTheUser(int $definitionId, ?int $userId): bool
+    public function alreadyIncludedForTheUser(int $definitionId, ?int $userId = null): bool
     {
         return $this->where('definition_id', $definitionId)
             ->where('user_id',

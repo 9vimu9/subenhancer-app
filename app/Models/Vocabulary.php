@@ -14,6 +14,8 @@ class Vocabulary extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'definition_id', 'vocabulary_type'];
+
     public function Enhancements(): BelongsToMany
     {
         return $this->belongsToMany(Enhancement::class);
