@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Helpers;
+namespace Tests\Helpers;
 
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Event;
