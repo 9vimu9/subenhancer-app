@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Exceptions\EnhancementCannotBeFoundException;
 use App\Models\Enhancement;
 use App\Models\Source;
 use App\Models\User;
@@ -25,6 +24,7 @@ class EnhancementQueryBuilderTest extends TestCase
     public function test_create_by_user_id_method(): void
     {
         $user = User::factory()->create();
+        $source = Source::factory()->create();
         $uuid = 'RANDOM_UUID';
         $this->instance(
             Uuid::class,
@@ -33,28 +33,12 @@ class EnhancementQueryBuilderTest extends TestCase
             })
         );
 
-        Enhancement::query()->createByUserId($user->id);
+        Enhancement::query()->createByUserId($user->id, $source->id);
         $this->assertDatabaseHas('enhancements', [
             'user_id' => $user->id,
             'uuid' => $uuid,
+            'source_id' => $source->id,
         ]);
-
-    }
-
-    public function test_update_source_id_method(): void
-    {
-        $enhancement = Enhancement::factory()->create(['source_id' => null]);
-        $source = Source::factory()->create();
-        Enhancement::query()->updateSourceId($enhancement->id, $source->id);
-        $this->assertDatabaseHas('enhancements', ['source_id' => $source->id]);
-
-    }
-
-    public function test_throws_exception_when_the_enhancement_does_not_exist(): void
-    {
-        $source = Source::factory()->create();
-        $this->expectException(EnhancementCannotBeFoundException::class);
-        Enhancement::query()->updateSourceId(1, $source->id);
 
     }
 }
