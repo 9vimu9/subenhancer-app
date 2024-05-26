@@ -10,6 +10,6 @@ class MockDefinitionSelectorApi implements DefinitionSelectorApiInterface
 {
     public function pickADefinitionBasedOnContext(string $context, array $definitionArray, string $word, int $orderInTheContext): string
     {
-        return array_rand($definitionArray);
+        return $definitionArray[array_rand($definitionArray)];
     }
 }
