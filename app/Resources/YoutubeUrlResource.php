@@ -42,4 +42,12 @@ class YoutubeUrlResource extends AbstractResource
 
         return $captionCollection;
     }
+
+    public function sanitize(string $content): string
+    {
+        $content = str_replace(['\\n', '\\r', "\b", "\a", '\\t'],
+            ' ', $content);
+
+        return preg_replace('/\s+/', ' ', $content);
+    }
 }

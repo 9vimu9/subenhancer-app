@@ -8,6 +8,7 @@ use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\Exceptions\InvalidYoutubeCaptionException;
 use App\Resources\YoutubeUrlResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Mocks\MockResourceModel;
 use Tests\TestCase;
 
@@ -41,6 +42,29 @@ class YoutubeUrlResourceTest extends TestCase
             new MockResourceModel(),
             new MockInvalidYoutubeCaptionsGrabberApi())
         )->toCaptions();
+    }
+
+    public static function inputCaptions(): array
+    {
+        return [
+            'new line character' => ['abc\ndef.', 'abc def.'],
+            'alert character' => ['abc\adef.', 'abc def.'],
+            'tab character' => ['abc\tdef.', 'abc def.'],
+            'carriage return character' => ['abc\rdef.', 'abc def.'],
+            'backscape character' => ['abc\bdef.', 'abc def.'],
+            'extra spaces' => ['a  b  c       def.', 'a b c def.'],
+
+        ];
+    }
+
+    #[DataProvider('inputCaptions')]
+    public function test_sanitize(string $input, string $expected): void
+    {
+        $actual = (new YoutubeUrlResource(
+            'http://youtu.be/0zM3nApSvMg',
+            new MockResourceModel(), new MockValidYoutubeCaptionsGrabberApi())
+        )->sanitize($input);
+        $this->assertEquals($expected, $actual);
     }
 }
 
