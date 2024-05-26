@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Traits\StringArrayOperationsTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class StringArrayOperationsTraitTest extends TestCase
 {
