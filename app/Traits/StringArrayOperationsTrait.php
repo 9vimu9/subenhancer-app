@@ -6,14 +6,26 @@ namespace App\Traits;
 
 trait StringArrayOperationsTrait
 {
-    public function stringToCleansedWordArray(string $text): array
+    public function getIncludedFilteredWordsInTheSentence(string $text, array $filteredWords): array
     {
-        return [];
+        $filteredWords = array_map('strtolower', $filteredWords);
+        $text = $this->processText($text);
+        $containedWords = [];
+        array_walk($filteredWords, static function ($item) use (&$containedWords, $text) {
+            if (str_contains($text, $item)) {
+                $containedWords[] = $item;
+            }
+        });
 
+        return $containedWords;
     }
 
-    public function getIntersectionOfWordArrays(array $arrayOne, array $arrayTwo): array
+    private function processText(string $text): string
     {
-        return array_intersect($arrayOne, $arrayTwo);
+        $text = strtolower($text);
+        $text = str_replace(['<', '>', '[', ']', '{', '}', '(', ')'], ' ', $text);
+        $text = preg_replace('/\s+/', ' ', $text);
+
+        return preg_replace('/[^a-zA-Z0-9\s]/', '', $text);
     }
 }

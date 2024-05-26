@@ -20,8 +20,7 @@ class FilteredWordService implements FilteredWordServiceInterface
         Sentence $sentence,
         int $sentenceId): void
     {
-        $cleansedWordArray = $this->stringToCleansedWordArray($sentence->getSentence());
-        $filteredWordsInSentence = $this->getIntersectionOfWordArrays($cleansedWordArray, $filteredWordArray);
+        $filteredWordsInSentence = $this->getIncludedFilteredWordsInTheSentence($sentence->getSentence(), $filteredWordArray);
         if (count($filteredWordsInSentence)) {
             $this->saveFilteredWords($filteredWordsInSentence, $sentence, $sentenceId);
         }

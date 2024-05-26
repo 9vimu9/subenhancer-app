@@ -29,7 +29,7 @@ class FilteredWordServiceTest extends TestCase
         Corpus::factory()->create(['word' => $wordOne]);
         Corpus::factory()->create(['word' => $wordTwo]);
         $service = $this->partialMock(FilteredWordService::class, function (MockInterface $mock) use ($wordOne, $wordTwo) {
-            $mock->shouldReceive('getintersectionofwordarrays')
+            $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
                 ->andReturn([$wordOne, $wordTwo]);
         });
         $service->saveFilteredWordWhichFoundInSentence([], $sentence, $sentenceModel->id);
@@ -50,7 +50,7 @@ class FilteredWordServiceTest extends TestCase
         $wordTwo = 'word_two';
         Corpus::factory()->create(['word' => $wordOne]);
         $service = $this->partialMock(FilteredWordService::class, function (MockInterface $mock) use ($wordOne, $wordTwo) {
-            $mock->shouldReceive('getintersectionofwordarrays')
+            $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
                 ->andReturn([$wordOne, $wordTwo]);
         });
         $service->saveFilteredWordWhichFoundInSentence([], $sentence, $sentenceModel->id);

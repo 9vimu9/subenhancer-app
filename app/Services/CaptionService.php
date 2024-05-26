@@ -32,8 +32,7 @@ class CaptionService implements CaptionServiceInterface
         array $filteredWords,
     ): void {
         foreach ($captionsCollection as $caption) {
-            $captionWordArray = $this->stringToCleansedWordArray($caption->getCaption());
-            if (! count($this->getIntersectionOfWordArrays($captionWordArray, $filteredWords))) {
+            if (! count($this->getIncludedFilteredWordsInTheSentence($caption->getCaption(), $filteredWords))) {
                 continue;
             }
             $duration = $this->saveDuration($sourceId, $caption);

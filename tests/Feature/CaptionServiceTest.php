@@ -53,7 +53,7 @@ class CaptionServiceTest extends TestCase
         $source = Source::factory()->create();
         Event::fake();
         $service = $this->partialMock(CaptionService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getintersectionofwordarrays')
+            $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
                 ->andReturn(['random_common_word']);
         });
         $service->saveDurationsByCollection($collection, $source->id, []);
@@ -84,7 +84,7 @@ class CaptionServiceTest extends TestCase
         $source = Source::factory()->create();
         Event::fake();
         $service = $this->partialMock(CaptionService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getintersectionofwordarrays')
+            $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
                 ->andReturn([]);
         });
         $service->saveDurationsByCollection($collection, $source->id, []);
