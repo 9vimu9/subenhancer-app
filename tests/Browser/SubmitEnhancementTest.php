@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Browser;
 
 use App\Models\User;
-use App\Traits\Testing\DatabaseMigrationsAndSeeders;
+use Helpers\DatabaseMigrationsAndSeeders;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 

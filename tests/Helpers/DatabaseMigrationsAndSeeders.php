@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits\Testing;
+namespace Helpers;
 
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
