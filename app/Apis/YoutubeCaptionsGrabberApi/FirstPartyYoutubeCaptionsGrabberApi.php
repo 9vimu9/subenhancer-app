@@ -18,7 +18,7 @@ class FirstPartyYoutubeCaptionsGrabberApi implements YoutubeCaptionsGrabberApiIn
         $response = Http::get(config('app.captions_endpoint').'?source=youtube&id='.$videoId);
 
         if ($response->status() === Response::HTTP_NOT_FOUND) {
-            throw new YoutubeVideoCaptionsCannotBeFoundException();
+            throw new YoutubeVideoCaptionsCannotBeFoundException($videoId);
         }
 
         if ($response->status() !== Response::HTTP_OK) {
