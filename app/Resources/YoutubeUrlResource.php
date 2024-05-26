@@ -29,7 +29,7 @@ class YoutubeUrlResource extends AbstractResource
         $captions = json_decode($this->captionsGrabberApi->getCaptions($this->getVideoId($this->videoUrl)), true, 512, JSON_THROW_ON_ERROR);
         foreach ($captions as $cap) {
             if (! isset($cap['text'], $cap['end'], $cap['start'])) {
-                throw new InvalidYoutubeCaptionException();
+                throw new InvalidYoutubeCaptionException($cap);
             }
             $captionCollection->add(
                 new Caption(
