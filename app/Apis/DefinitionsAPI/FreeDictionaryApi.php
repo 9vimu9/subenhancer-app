@@ -25,7 +25,7 @@ class FreeDictionaryApi implements DefinitionsApiInterface
             throw new CantFindDefinitionException();
         }
         if ($response->status() !== Response::HTTP_OK) {
-            throw new DefinitionsApiErrorException();
+            throw new DefinitionsApiErrorException($response, $word);
         }
         $definitionCollection = new DefinitionCollection();
         foreach ($response->json()[0]['meanings'] as $meaning) {
