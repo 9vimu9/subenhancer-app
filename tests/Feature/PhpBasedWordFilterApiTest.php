@@ -27,6 +27,18 @@ class PhpBasedWordFilterApiTest extends TestCase
                 new FilteredWord('aa'),
                 new FilteredWord('bb'),
             ),
+        ], [
+            '+aa   aa-  bb.',
+            new FilteredWordCollection(
+                new FilteredWord('aa'),
+                new FilteredWord('bb'),
+            ),
+        ], [
+            'aa 1234 bb.',
+            new FilteredWordCollection(
+                new FilteredWord('aa'),
+                new FilteredWord('bb'),
+            ),
         ],
         ];
     }

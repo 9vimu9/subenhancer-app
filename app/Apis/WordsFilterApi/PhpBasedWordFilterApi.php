@@ -14,7 +14,11 @@ class PhpBasedWordFilterApi implements WordFilterApiInterface
     public function filter(string $words): FilteredWordCollection
     {
         $words = strtolower($words);
-        $words = preg_replace('/\s+/', ' ', $words);
+        $words = preg_replace([
+            '/\s+/',
+            '/\b[\W_]+|[\W_]+\b/',
+            '/\d/',
+        ], ' ', $words);
         $words = (new StopWords('english'))->clean($words);
 
         $filteredWords = array_unique(explode(' ', $words), SORT_REGULAR);
