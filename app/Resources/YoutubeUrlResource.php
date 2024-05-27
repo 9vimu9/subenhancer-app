@@ -26,7 +26,8 @@ class YoutubeUrlResource extends AbstractResource
     public function toCaptions(): CaptionsCollection
     {
         $captionCollection = new CaptionsCollection();
-        $captions = json_decode($this->captionsGrabberApi->getCaptions($this->getVideoId($this->videoUrl)), true, 512, JSON_THROW_ON_ERROR);
+        $captionInJson = $this->sanitize($this->captionsGrabberApi->getCaptions($this->getVideoId($this->videoUrl)));
+        $captions = json_decode($captionInJson, true, 512, JSON_THROW_ON_ERROR);
         foreach ($captions as $cap) {
             if (! isset($cap['text'], $cap['end'], $cap['start'])) {
                 throw new InvalidYoutubeCaptionException($cap);
