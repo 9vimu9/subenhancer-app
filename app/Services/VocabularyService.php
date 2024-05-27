@@ -32,9 +32,8 @@ class VocabularyService implements VocabularyServiceInterface
         $userId = auth()->id();
         Captionword::query()->getWordsBySourceId($sourceId)->each(function (Captionword $captionword) use ($userId, $definedWords) {
             try {
-                $vocabulary = Vocabulary::query()->findOrFailByDefinitionIdForUser(
-                    $captionword->getAttribute('definition_id'), $userId);
-                $definedWords->add(new DefinedWord($vocabulary, $captionword));
+                Vocabulary::query()->findOrFailByDefinitionIdForUser($captionword->definition_id, $userId, ['id']);
+                $definedWords->add(new DefinedWord($captionword));
             } catch (VocabularyNotFoundWithDefinitionForUserException $exception) {
                 return true;
             }

@@ -33,12 +33,12 @@ class VocabularyBuilder extends Builder
         }
     }
 
-    public function findOrFailByDefinitionIdForUser(int $definitionId, ?int $userId = null): Model
+    public function findOrFailByDefinitionIdForUser(int $definitionId, ?int $userId = null, $columns = ['*']): Model
     {
         return $this->where('definition_id', $definitionId)
             ->where('user_id',
                 $userId ?? auth()->id() ?? throw new UserHasNotBeenAuthenticatedException()
-            )->first()
+            )->first($columns)
             ??
             throw new VocabularyNotFoundWithDefinitionForUserException();
     }
