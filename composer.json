@@ -8,12 +8,12 @@
         "php": "^8.2",
         "benlipp/srt-parser": "^1.1",
         "laravel/framework": "^11.0",
-        "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.9",
         "vanderlee/php-sentence": "^1.0",
         "juanantoniodelgado/stopwords": "dev-main"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.13",
         "fakerphp/faker": "^1.23",
         "larastan/larastan": "^2.0",
         "laravel/breeze": "^2.0",
