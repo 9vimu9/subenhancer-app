@@ -29,11 +29,11 @@ class DefinitionBuilder extends Builder
         return count($definitions) ? $definitions : throw new NoCandidateDefinitionsAvailabletoChooseException();
     }
 
-    public function findByDefinitionAndCorpusId(string $definition, int $corpusId): \App\Models\Definition
+    public function findByDefinitionAndCorpusId(string $definition, int $corpusId, array $columns = ['id']): \App\Models\Definition
     {
         return $this->where('definition', $definition)
             ->where('corpus_id', $corpusId)
-            ->firstOrFail();
+            ->firstOrFail($columns);
 
     }
 }

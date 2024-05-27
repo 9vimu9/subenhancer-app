@@ -17,7 +17,7 @@ class VocabularyService implements VocabularyServiceInterface
     public function updateVocabularyBySource(int $sourceId): void
     {
         $userId = auth()->id();
-        Captionword::query()->getWordsBySourceId($sourceId)->each(function (Captionword $word) use ($userId) {
+        Captionword::query()->getWordsBySourceId($sourceId, ['definition_id'])->each(function (Captionword $word) use ($userId) {
             $definitionId = $word->getAttribute('definition_id');
             if (! Vocabulary::query()->alreadyIncludedForTheUser($definitionId, $userId)) {
                 Vocabulary::query()->store(VocabularyEnum::HAVE_NOT_SPECIFIED, $definitionId, $userId);
@@ -30,9 +30,9 @@ class VocabularyService implements VocabularyServiceInterface
     {
         $definedWords = new DefinedWordCollection();
         $userId = auth()->id();
-        Captionword::query()->getWordsBySourceId($sourceId)->each(function (Captionword $captionword) use ($userId, $definedWords) {
+        Captionword::query()->getWordsBySourceId($sourceId, ['definition_id'])->each(function (Captionword $captionword) use ($userId, $definedWords) {
             try {
-                Vocabulary::query()->findOrFailByDefinitionIdForUser($captionword->definition_id, $userId, ['id']);
+                Vocabulary::query()->findOrFailByDefinitionIdForUser($captionword->definition_id, $userId);
                 $definedWords->add(new DefinedWord($captionword));
             } catch (VocabularyNotFoundWithDefinitionForUserException $exception) {
                 return true;

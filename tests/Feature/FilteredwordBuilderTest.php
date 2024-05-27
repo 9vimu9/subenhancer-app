@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Captionword;
+use App\Models\Definition;
 use App\Models\Duration;
 use App\Models\Sentence;
 use App\Models\Source;
@@ -50,5 +51,13 @@ class FilteredwordBuilderTest extends TestCase
             Captionword::all(),
             Captionword::query()->getWordsBySourceId($source->id));
 
+    }
+
+    public function test_updateDefinition_test(): void
+    {
+        $captionWord = Captionword::factory()->create();
+        $definition = Definition::factory()->create();
+        CaptionWord::query()->updateDefinition($captionWord->id, $definition->id);
+        $this->assertDatabaseHas('captionwords', ['definition_id' => $definition->id]);
     }
 }

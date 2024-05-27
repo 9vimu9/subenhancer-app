@@ -33,7 +33,7 @@ class VocabularyBuilder extends Builder
         }
     }
 
-    public function findOrFailByDefinitionIdForUser(int $definitionId, ?int $userId = null, $columns = ['*']): Model
+    public function findOrFailByDefinitionIdForUser(int $definitionId, ?int $userId = null, $columns = ['id']): Model
     {
         return $this->where('definition_id', $definitionId)
             ->where('user_id',

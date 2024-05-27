@@ -12,11 +12,11 @@ class FilteredwordBuilder extends Builder
 {
     public function updateDefinition(int $filterWordId, int $definitionId): void
     {
-        $this->findOrFail($filterWordId)->update(['definition_id' => $definitionId]);
+        $this->findOrFail($filterWordId, ['id', 'definition_id'])->update(['definition_id' => $definitionId]);
 
     }
 
-    public function getWordsBySourceId(int $sourceId): Collection
+    public function getWordsBySourceId(int $sourceId, array $columns = ['*']): Collection
     {
         return Captionword::query()
             ->whereHas('sentence',
@@ -25,7 +25,7 @@ class FilteredwordBuilder extends Builder
                         function (Builder $duration) use ($sourceId) {
                             $duration->where('source_id', $sourceId);
                         });
-                })->get();
+                })->get($columns);
 
     }
 }

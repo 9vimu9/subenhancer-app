@@ -33,7 +33,7 @@ class CorpusBuilderTest extends TestCase
     public function test_findByWord(string $word): void
     {
         $expected = Corpus::factory()->create(['word' => strtolower($word)]);
-        $actual = Corpus::query()->findByWord($word);
+        $actual = Corpus::query()->findByWord($word, ['word']);
         $this->assertSame($expected->word, $actual->word);
 
     }

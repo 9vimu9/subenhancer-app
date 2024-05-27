@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class CorpusBuilder extends Builder
 {
-    public function findByWordOrFail(string $word): Model
+    public function findByWordOrFail(string $word, array $columns = ['id']): Model
     {
-        return $this->findByWord($word) ?: throw new WordNotInCorpusException();
+        return $this->findByWord($word, $columns) ?: throw new WordNotInCorpusException();
     }
 
-    public function findByWord(string $word): ?Model
+    public function findByWord(string $word, array $columns = ['id']): ?Model
     {
-        return $this->where('word', strtolower($word))->first();
+        return $this->where('word', strtolower($word))->first($columns);
     }
 
     public function saveWord(string $word): Model
