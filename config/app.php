@@ -134,5 +134,10 @@ return [
 
     'definition_apis' => [
         'free_dictionary_api' => env('FREE_DICTIONARY_API'),
+        'dp_ventures' => [
+            'endpoint' => env('DP_VENTURES_WORDS_ENDPOINT'),
+            'host' => env('DP_VENTURES_HOST'),
+            'api_key' => env('DP_VENTURES_API_KEY'),
+        ],
     ],
 ];
