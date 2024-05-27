@@ -24,12 +24,6 @@ use App\Core\Contracts\Services\FilteredWordServiceInterface;
 use App\Core\Contracts\Services\SentenceServiceInterface;
 use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
-use App\Events\DurationSaved;
-use App\Events\NewFilteredWordsStored;
-use App\Events\SentenceSaved;
-use App\Listeners\SaveFilteredWords;
-use App\Listeners\SaveSentences;
-use App\Listeners\UpdateDefiniton;
 use App\Services\CaptionService;
 use App\Services\DefinitionSelectorService;
 use App\Services\DefinitionsService;
@@ -39,7 +33,6 @@ use App\Services\SentenceService;
 use App\Services\VocabularyService;
 use App\Services\WordService;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -66,9 +59,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Event::listen(DurationSaved::class, SaveSentences::class);
-        Event::listen(SentenceSaved::class, SaveFilteredWords::class);
-        Event::listen(NewFilteredWordsStored::class, UpdateDefiniton::class);
         Model::shouldBeStrict();
     }
 }
