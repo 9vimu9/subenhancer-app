@@ -37,17 +37,19 @@ class DpVenturesWordsApi implements DefinitionsApiInterface
         $definitions = $content['definitions'];
         $definitionCollection = new DefinitionCollection();
         foreach ($definitions as $definition) {
-            if (! isset($definition['definition'])) {
-                throw new InvalidDefinitionResponseFormatException('no definition was found', $content, $word);
+            if (! isset($definition['definition'], $definition['partOfSpeech'])) {
+                continue;
             }
-            if (! isset($definition['partOfSpeech'])) {
-                throw new InvalidDefinitionResponseFormatException('no partOfSpeech was found', $content, $word);
+
+            try {
+                $definitionCollection->add(
+                    new Definition(
+                        $this->wordClassMapper($definition['partOfSpeech']),
+                        $definition['definition'],
+                        $word));
+            } catch (InvalidWordClassFoundException $e) {
+                continue;
             }
-            $definitionCollection->add(
-                new Definition(
-                    $this->wordClassMapper($definition['partOfSpeech']),
-                    $definition['definition'],
-                    $word));
         }
 
         return $definitionCollection;

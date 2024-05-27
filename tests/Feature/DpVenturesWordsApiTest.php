@@ -6,6 +6,7 @@ namespace Feature;
 
 use App\Apis\DefinitionsAPI\DpVenturesWordsApi;
 use App\DataObjects\Definitions\Definition;
+use App\DataObjects\Definitions\DefinitionCollection;
 use App\Enums\WordClassEnum;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\DefinitionsApiErrorException;
@@ -68,39 +69,69 @@ class DpVenturesWordsApiTest extends TestCase
 
     public static function invalidResponses(): array
     {
-        return [
-            'without definitions' => [
-                [
-                    'word' => 'hello',
-                ],
-            ],
+        $word = 'hello';
 
+        return [
             'without definition' => [
                 [
-                    'word' => 'hello',
+                    'word' => $word,
                     'definitions' => [
                         [
                             'partOfSpeech' => 'noun',
                         ],
+                        [
+                            'definition' => 'an expression of greeting.',
+                            'partOfSpeech' => 'noun',
+                        ],
+
                     ],
                 ],
+                new DefinitionCollection(
+                    new Definition(WordClassEnum::NOUN, 'an expression of greeting.', $word),
+                ),
+                $word,
             ],
             'without part of speech' => [
                 [
-                    'word' => 'hello',
+                    'word' => $word,
                     'definitions' => [
                         [
                             'definition' => 'an expression of greeting.',
                         ],
+                        [
+                            'definition' => '2nd greeting.',
+                            'partOfSpeech' => 'noun',
+                        ],
                     ],
                 ],
+                new DefinitionCollection(
+                    new Definition(WordClassEnum::NOUN, '2nd greeting.', $word),
+                ),
+                $word,
+
             ],
         ];
     }
 
     #[DataProvider('invalidResponses')]
-    public function test_invalid_formats(array $invalidResponse): void
+    public function test_invalid_formats(array $invalidResponse, DefinitionCollection $expected, string $word): void
     {
+
+        $url = config('app.definition_apis.dp_ventures.endpoint').$word.'/definitions';
+        Http::fake([
+            $url => Http::response($invalidResponse, Response::HTTP_OK),
+        ]);
+        $actual = (new DpVenturesWordsApi())->getDefinitions($word);
+        $this->assertEquals($expected, $actual);
+
+    }
+
+    public function test_throw_exception_when_no_definitions_available(): void
+    {
+        $invalidResponse =
+            [
+                'word' => 'hello',
+            ];
         $word = 'RANDOM';
         $url = config('app.definition_apis.dp_ventures.endpoint').$word.'/definitions';
         Http::fake([
