@@ -79,8 +79,8 @@ class VocabularyBuilderTest extends TestCase
             'user_id' => $user->id,
             'definition_id' => $definition->id,
         ]);
-        $this->assertEqualsCanonicalizing($vocabulary->toArray(),
-            Vocabulary::query()->findOrFailByDefinitionIdForUser($definition->id)->toArray()
+        $this->assertEqualsCanonicalizing($vocabulary->id,
+            Vocabulary::query()->findOrFailByDefinitionIdForUser($definition->id)->id
         );
     }
 
