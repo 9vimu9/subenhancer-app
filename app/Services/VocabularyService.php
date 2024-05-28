@@ -19,9 +19,10 @@ class VocabularyService implements VocabularyServiceInterface
         $userId = auth()->id();
         Captionword::query()->getWordsBySourceId($sourceId, ['definition_id'])->each(function (Captionword $word) use ($userId) {
             $definitionId = $word->getAttribute('definition_id');
-            if (! Vocabulary::query()->alreadyIncludedForTheUser($definitionId, $userId)) {
-                Vocabulary::query()->store(VocabularyEnum::HAVE_NOT_SPECIFIED, $definitionId, $userId);
-            }
+            Vocabulary::query()->firstOrCreate(
+                ['definition_id' => $definitionId, 'user_id' => $userId],
+                ['definition_id' => $definitionId, 'user_id' => $userId, 'vocabulary_type' => VocabularyEnum::HAVE_NOT_SPECIFIED->name],
+            );
         });
 
     }

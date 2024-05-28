@@ -11,7 +11,5 @@ interface WordServiceInterface
 {
     public function storeWordsByCollection(FilteredWordCollection $filteredWordCollection): void;
 
-    public function filterWordsByCollection(CaptionsCollection $captionsCollection): FilteredWordCollection;
-
     public function processWordsByCollection(CaptionsCollection $captionsCaptionsCollection): FilteredWordCollection;
 }
