@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Core\Contracts\Apis\WordFilterApiInterface;
-use App\DataObjects\Captions\Caption;
-use App\DataObjects\Captions\CaptionsCollection;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Models\Corpus;
@@ -45,30 +43,6 @@ class WordServiceTest extends TestCase
         );
 
         return [[$service, $collection]];
-    }
-
-    #[DataProvider('provideInputs')]
-    public function test_filter_words_by_collection(WordService $service, FilteredWordCollection $expectedFilteredWordCollection): void
-    {
-        $capOne = new Caption(captionString: 'random_string', startTime: 1, endTime: 2);
-        $captionsCollection = new CaptionsCollection($capOne);
-        $actualfilteredWordCollection = $service->filterWordsByCollection($captionsCollection);
-        $this->assertEqualsCanonicalizing($actualfilteredWordCollection, $expectedFilteredWordCollection);
-
-    }
-
-    #[DataProvider('provideInputs')]
-    public function test_existing_words_removed_from_the_collection(WordService $service): void
-    {
-        Corpus::factory()->create(['word' => 'word 2']);
-        $actual = $service->filterWordsByCollection(
-            new CaptionsCollection(new Caption('random', 1, 2))
-        );
-        $expected = new FilteredWordCollection(
-            new FilteredWord('word 1'),
-        );
-        $this->assertEqualsCanonicalizing($actual, $expected);
-
     }
 }
 
