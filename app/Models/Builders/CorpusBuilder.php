@@ -25,4 +25,12 @@ class CorpusBuilder extends Builder
     {
         return $this->findByWord($word) ? throw new WordInCorpusException() : $this->create(['word' => strtolower($word)]);
     }
+
+    public function removeByWord(string $word): void
+    {
+        if (is_null($corpus = $this->findByWord($word))) {
+            return;
+        }
+        $corpus->delete();
+    }
 }
