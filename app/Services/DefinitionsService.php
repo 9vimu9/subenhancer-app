@@ -29,6 +29,8 @@ class DefinitionsService implements DefinitionsServiceInterface
                 Corpus::query()->removeByWord($word->getWord());
                 $collection->remove($index);
             } catch (InvalidDefinitionResponseFormatException $exception) {
+                $collection->remove($index);
+
                 continue;
             }
         }

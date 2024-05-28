@@ -23,7 +23,7 @@ class FilteredWord
     public function getDefinitions(): DefinitionCollection
     {
         if (! isset($this->definitions)) {
-            throw new DefinitionsHasNotBeenDefinedException();
+            throw new DefinitionsHasNotBeenDefinedException($this->word);
         }
 
         return $this->definitions;
