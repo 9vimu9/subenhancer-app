@@ -22,12 +22,12 @@ class DefinitionsServiceTest extends TestCase
     use RefreshDatabase;
 
     #[DataProvider('provideInputs')]
-    public function test_set_definitions(
+    public function test_set_definitions_to_word(
         DefinitionsService $service,
         string $wordToDefine,
         DefinitionCollection $definitionCollection,
     ): void {
-        $word = $service->setDefinitions(new FilteredWord($wordToDefine));
+        $word = $service->setDefinitionsToWord(new FilteredWord($wordToDefine));
         $this->assertEquals($definitionCollection, $word->getDefinitions());
     }
 

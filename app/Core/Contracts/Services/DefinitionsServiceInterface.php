@@ -11,7 +11,7 @@ interface DefinitionsServiceInterface
 {
     public function setDefinitionsToCollection(FilteredWordCollection $collection): FilteredWordCollection;
 
-    public function setDefinitions(FilteredWord $word): FilteredWord;
+    public function setDefinitionsToWord(FilteredWord $word): FilteredWord;
 
     public function processDefinitionsByCollection(FilteredWordCollection $collection): FilteredWordCollection;
 }

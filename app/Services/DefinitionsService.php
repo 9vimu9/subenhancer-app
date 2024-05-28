@@ -10,6 +10,7 @@ use App\DataObjects\Definitions\DefinitionCollection;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CantFindDefinitionException;
+use App\Exceptions\InvalidDefinitionResponseFormatException;
 use App\Models\Corpus;
 use App\Models\Definition;
 
@@ -23,17 +24,19 @@ class DefinitionsService implements DefinitionsServiceInterface
     {
         foreach ($collection as $index => $word) {
             try {
-                $collection->update($index, $this->setDefinitions($word));
+                $collection->update($index, $this->setDefinitionsToWord($word));
             } catch (CantFindDefinitionException $exception) {
                 Corpus::query()->removeByWord($word->getWord());
                 $collection->remove($index);
+            } catch (InvalidDefinitionResponseFormatException $exception) {
+                continue;
             }
         }
 
         return $collection;
     }
 
-    public function setDefinitions(FilteredWord $word): FilteredWord
+    public function setDefinitionsToWord(FilteredWord $word): FilteredWord
     {
         $collection = new DefinitionCollection();
         $word->setDefinitions(
