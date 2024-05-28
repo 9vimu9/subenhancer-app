@@ -16,17 +16,7 @@ return new class extends Migration
             $table->mediumText('definition');
             $table->unsignedBigInteger('corpus_id');
             $table->foreign('corpus_id')->references('id')->on('corpuses')->onDelete('cascade');
-            $table->enum('word_class', [
-                WordClassEnum::NOUN->name,
-                WordClassEnum::VERB->name,
-                WordClassEnum::ADJECTIVE->name,
-                WordClassEnum::ADVERB->name,
-                WordClassEnum::PREPOSITION->name,
-                WordClassEnum::DETERMINER->name,
-                WordClassEnum::PRONOUN->name,
-                WordClassEnum::CONJUNCTION->name,
-                WordClassEnum::INTERJECTION->name,
-            ]);
+            $table->enum('word_class', array_column(WordClassEnum::cases(), 'name'));
             $table->timestamps();
         });
 
