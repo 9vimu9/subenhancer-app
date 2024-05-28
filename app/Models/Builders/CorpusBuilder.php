@@ -39,11 +39,18 @@ class CorpusBuilder extends Builder
         $this->insertOrIgnore($processedInputs);
     }
 
-    public function wordsWithDefinitionsByFilteredWordCollection(FilteredWordCollection $filteredWordCollection, array $columns = ['id']): Collection
-    {
-        return $this->has('definitions')->with('definitions')->whereIn('word',
+    public function wordsWithDefinitionsByFilteredWordCollection(
+        FilteredWordCollection $filteredWordCollection,
+        array $corpusColumns = ['id'],
+        array $definitionColumns = ['id'],
+    ): Collection {
+        $definitionColumns[] = 'corpus_id';
+
+        return $this->has('definitions')->with(['definitions' => function ($builder) use ($definitionColumns) {
+            $builder->select($definitionColumns);
+        }])->whereIn('word',
             $filteredWordCollection->toArrayOfWords()
-        )->get($columns);
+        )->get($corpusColumns);
     }
 
     public function wordsWithoutDefinitionsByFilteredWordCollection(FilteredWordCollection $filteredWordCollection, array $columns = ['id']): Collection
