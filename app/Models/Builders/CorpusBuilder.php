@@ -7,6 +7,7 @@ namespace App\Models\Builders;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\WordNotInCorpusException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class CorpusBuilder extends Builder
@@ -36,5 +37,19 @@ class CorpusBuilder extends Builder
             $processedInputs[] = ['word' => $word->getWord()];
         }
         $this->insertOrIgnore($processedInputs);
+    }
+
+    public function wordsWithDefinitionsByFilteredWordCollection(FilteredWordCollection $filteredWordCollection, array $columns = ['id']): Collection
+    {
+        return $this->has('definitions')->with('definitions')->whereIn('word',
+            $filteredWordCollection->toArrayOfWords()
+        )->get($columns);
+    }
+
+    public function wordsWithoutDefinitionsByFilteredWordCollection(FilteredWordCollection $filteredWordCollection, array $columns = ['id']): Collection
+    {
+        return $this->whereDoesntHave('definitions')->whereIn('word',
+            $filteredWordCollection->toArrayOfWords()
+        )->get($columns);
     }
 }
