@@ -16,4 +16,9 @@ enum WordClassEnum: int
     case CONJUNCTION = 8;
     case INTERJECTION = 9;
 
+    public static function fromName(string $name)
+    {
+
+        return constant("self::$name");
+    }
 }
