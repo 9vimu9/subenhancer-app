@@ -14,18 +14,10 @@ class DefinitionBuilder extends Builder
     public function getCandidateDefinitionsArrayByWordOrFail(int $corpusId): array
     {
         $definitions = $this->where('corpus_id', $corpusId)
-            ->pluck('definition')
+            ->pluck('definition', 'id')
             ->toArray();
 
         return count($definitions) ? $definitions : throw new NoCandidateDefinitionsAvailabletoChooseException();
-    }
-
-    public function findByDefinitionAndCorpusId(string $definition, int $corpusId, array $columns = ['id']): \App\Models\Definition
-    {
-        return $this->where('definition', $definition)
-            ->where('corpus_id', $corpusId)
-            ->firstOrFail($columns);
-
     }
 
     public function storeByCollection(FilteredWordCollection $collection): void

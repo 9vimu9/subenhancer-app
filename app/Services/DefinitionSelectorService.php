@@ -19,15 +19,14 @@ class DefinitionSelectorService implements DefinitionSelectorServiceInterface
 
     private function chooseDefinition(Sentence $sentence, int $corpusId, int $orderInTheSentence, array $columns): Definition
     {
-        $definition = $this->definitionSelectorApi
-            ->pickADefinitionBasedOnContext(
-                $sentence->getSentence(),
-                Definition::query()->getCandidateDefinitionsArrayByWordOrFail($corpusId),
-                Corpus::query()->findOrFail($corpusId, ['word'])->getAttribute('word'),
-                $orderInTheSentence);
+        $definitions = Definition::query()->getCandidateDefinitionsArrayByWordOrFail($corpusId);
+        $definition = $this->definitionSelectorApi->pickADefinitionBasedOnContext(
+            $sentence->getSentence(),
+            array_values($definitions),
+            Corpus::query()->findOrFail($corpusId, ['word'])->getAttribute('word'),
+            $orderInTheSentence);
 
-        return Definition::query()->findByDefinitionAndCorpusId($definition, $corpusId, $columns);
-
+        return Definition::query()->findOrFail(array_search($definition, $definitions, true), $columns);
     }
 
     public function updateFilteredWordDefinition(

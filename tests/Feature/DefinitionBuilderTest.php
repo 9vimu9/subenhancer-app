@@ -16,8 +16,9 @@ class DefinitionBuilderTest extends TestCase
     public function test_getCandidateDefinitionsArrayByWord(): void
     {
         $corpus = Corpus::factory()->create();
-        $definitions = Definition::factory()->count(3)->create(['corpus_id' => $corpus->id]);
-        $expected = $definitions->pluck('definition')->toArray();
+        Definition::factory()->create(['definition' => 'RANDOM_1', 'corpus_id' => $corpus->id]);
+        Definition::factory()->create(['definition' => 'RANDOM_2', 'corpus_id' => $corpus->id]);
+        $expected = [1 => 'RANDOM_1', 2 => 'RANDOM_2'];
         $actual = Definition::query()->getCandidateDefinitionsArrayByWordOrFail($corpus->id);
         $this->assertEquals($expected, $actual);
 
