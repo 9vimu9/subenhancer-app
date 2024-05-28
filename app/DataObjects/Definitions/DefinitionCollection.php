@@ -20,7 +20,8 @@ class DefinitionCollection extends AbstractCollection
         if (is_null($corpus)) {
             return false;
         }
-        if (is_null($definitions = $corpus->definitions()->get())) {
+        $definitions = $corpus->definitions()->get();
+        if ($definitions->count() === 0) {
             return false;
         }
         foreach ($definitions as $definition) {

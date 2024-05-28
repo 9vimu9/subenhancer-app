@@ -22,4 +22,11 @@ class DefinitionCollectionTest extends TestCase
         $this->assertTrue($collection->loadByWord($corpus->word));
         $this->assertEquals(4, $collection->count());
     }
+
+    public function test_loadByWord_returns_false_when_no_definitions(): void
+    {
+        $corpus = Corpus::factory()->create();
+        $collection = new DefinitionCollection();
+        $this->assertFalse($collection->loadByWord($corpus->word));
+    }
 }
