@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Apis\DefinitionsAPI\DpVenturesWordsApi;
 use App\Apis\DefinitionsAPI\FreeDictionaryApi;
 use App\Apis\DefinitionSelectorApi\FirstPartyDefinitionSelectorApi;
+use App\Apis\DefinitionSelectorApi\MockDefinitionSelectorApi;
 use App\Apis\SentencesApi\FirstPartySentencingApi;
+use App\Apis\SentencesApi\VanderleeePhpSentence;
 use App\Apis\SrtParser\BenlippStrParser;
 use App\Apis\WordsFilterApi\FirstPartyWordFilterApi;
+use App\Apis\WordsFilterApi\PhpBasedWordFilterApi;
 use App\Apis\YoutubeCaptionsGrabberApi\FirstPartyYoutubeCaptionsGrabberApi;
+use App\Apis\YoutubeCaptionsGrabberApi\MockYoutubeCaptionsGrabberApi;
 use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\Core\Contracts\Apis\DefinitionSelectorApiInterface;
 use App\Core\Contracts\Apis\SentencesApiInterface;
@@ -48,13 +53,20 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DefinitionSelectorServiceInterface::class, DefinitionSelectorService::class);
         $this->app->bind(VocabularyServiceInterface::class, VocabularyService::class);
 
-        $this->app->bind(DefinitionsApiInterface::class, FreeDictionaryApi::class);
-        $this->app->bind(SentencesApiInterface::class, FirstPartySentencingApi::class);
-        $this->app->bind(SrtParserInterface::class, BenlippStrParser::class);
-        $this->app->bind(WordFilterApiInterface::class, FirstPartyWordFilterApi::class);
-        $this->app->bind(YoutubeCaptionsGrabberApiInterface::class, FirstPartyYoutubeCaptionsGrabberApi::class);
-        $this->app->bind(DefinitionSelectorApiInterface::class, FirstPartyDefinitionSelectorApi::class);
+        //        $this->app->bind(DefinitionsApiInterface::class, FreeDictionaryApi::class);
+        //        $this->app->bind(SentencesApiInterface::class, FirstPartySentencingApi::class);
+        //        $this->app->bind(SrtParserInterface::class, BenlippStrParser::class);
+        //        $this->app->bind(WordFilterApiInterface::class, FirstPartyWordFilterApi::class);
+        //        $this->app->bind(YoutubeCaptionsGrabberApiInterface::class, FirstPartyYoutubeCaptionsGrabberApi::class);
+        //        $this->app->bind(DefinitionSelectorApiInterface::class, FirstPartyDefinitionSelectorApi::class);
+        //        $this->app->bind(DefinitionsApiInterface::class, FreeDictionaryApi::class);
 
+        $this->app->bind(DefinitionsApiInterface::class, DpVenturesWordsApi::class);
+        $this->app->bind(SentencesApiInterface::class, VanderleeePhpSentence::class);
+        $this->app->bind(SrtParserInterface::class, BenlippStrParser::class);
+        $this->app->bind(WordFilterApiInterface::class, PhpBasedWordFilterApi::class);
+        $this->app->bind(YoutubeCaptionsGrabberApiInterface::class, MockYoutubeCaptionsGrabberApi::class);
+        $this->app->bind(DefinitionSelectorApiInterface::class, MockDefinitionSelectorApi::class);
     }
 
     public function boot(): void
