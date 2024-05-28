@@ -9,7 +9,5 @@ use App\DataObjects\FilteredWords\FilteredWordCollection;
 
 interface WordServiceInterface
 {
-    public function storeWordsByCollection(FilteredWordCollection $filteredWordCollection): void;
-
     public function processWordsByCollection(CaptionsCollection $captionsCaptionsCollection): FilteredWordCollection;
 }

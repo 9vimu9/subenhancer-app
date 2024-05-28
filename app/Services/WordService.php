@@ -8,7 +8,6 @@ use App\Core\Contracts\Apis\WordFilterApiInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
-use App\Exceptions\WordInCorpusException;
 use App\Models\Corpus;
 
 class WordService implements WordServiceInterface
@@ -17,20 +16,9 @@ class WordService implements WordServiceInterface
     {
     }
 
-    public function storeWordsByCollection(FilteredWordCollection $filteredWordCollection): void
-    {
-        foreach ($filteredWordCollection as $filteredWord) {
-            try {
-                Corpus::query()->saveWord($filteredWord->getWord());
-            } catch (WordInCorpusException $exception) {
-                continue;
-            }
-        }
-    }
-
     public function processWordsByCollection(CaptionsCollection $captionsCollection): FilteredWordCollection
     {
-        $this->storeWordsByCollection(
+        Corpus::query()->storeByCollection(
             $filteredWordCollection = $this->wordFilterApi->filter($captionsCollection->toString())
         );
 

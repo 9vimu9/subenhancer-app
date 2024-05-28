@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\DataObjects\FilteredWords\FilteredWord;
+use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\WordInCorpusException;
 use App\Exceptions\WordNotInCorpusException;
 use App\Models\Corpus;
@@ -52,5 +54,19 @@ class CorpusBuilderTest extends TestCase
             'uppercase word' => ['RANDOM_WORD_1'],
             'lowercase word' => ['random_word_2'],
             'mixcase word' => ['ranDom_Word_3']];
+    }
+
+    public function test_storeByCollection(): void
+    {
+
+        $collection = new FilteredWordCollection(
+            new FilteredWord('aa'),
+            new FilteredWord('bb'),
+            new FilteredWord('cc'),
+        );
+        Corpus::query()->storeByCollection($collection);
+        $this->assertDatabaseHas('corpuses', ['word' => 'aa']);
+        $this->assertDatabaseHas('corpuses', ['word' => 'bb']);
+        $this->assertDatabaseHas('corpuses', ['word' => 'cc']);
     }
 }
