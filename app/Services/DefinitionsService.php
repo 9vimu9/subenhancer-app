@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\Core\Contracts\Services\DefinitionsServiceInterface;
+use App\DataObjects\Definitions\DefinitionCollection;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CantFindDefinitionException;
@@ -36,7 +37,12 @@ class DefinitionsService implements DefinitionsServiceInterface
 
     public function setDefinitions(FilteredWord $word): FilteredWord
     {
-        $word->setDefinitions($this->definitionsApi->getDefinitions($word->getWord()));
+        $collection = new DefinitionCollection();
+        $word->setDefinitions(
+            $collection->loadByWord($word->getWord())
+                ? $collection
+                : $this->definitionsApi->getDefinitions($word->getWord())
+        );
 
         return $word;
     }
