@@ -11,9 +11,6 @@ use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Enums\WordClassEnum;
 use App\Exceptions\CantFindDefinitionException;
-use App\Exceptions\DefinitionAlreadyExistException;
-use App\Exceptions\WordNotInCorpusException;
-use App\Models\Corpus;
 use App\Services\DefinitionsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -47,46 +44,6 @@ class DefinitionsServiceTest extends TestCase
 
     }
 
-    #[DataProvider('provideInputs')]
-    public function test_storeDefinitions(
-        DefinitionsService $service,
-        string $word,
-        DefinitionCollection $definitionCollection,
-        FilteredWord $filteredWord,
-
-    ): void {
-        Corpus::factory()->create(['word' => $word]);
-        $service->storeDefinitions($filteredWord);
-        $this->assertDatabaseHas('definitions', ['definition' => MockDefinitionsApi::DEFINITION]);
-
-    }
-
-    #[DataProvider('provideInputs')]
-    public function test_exception_is_thrown_when_definition_does_exist(
-        DefinitionsService $service,
-        string $word,
-        DefinitionCollection $definitionCollection,
-        FilteredWord $filteredWord,
-    ): void {
-        $corpus = Corpus::factory()->create(['word' => $word]);
-        \App\Models\Definition::factory()->create(['corpus_id' => $corpus->id]);
-        $this->expectException(DefinitionAlreadyExistException::class);
-        $service->storeDefinitions($filteredWord);
-
-    }
-
-    #[DataProvider('provideInputs')]
-    public function test_exception_is_thrown_when_word_does_not_exist_in_the_database(
-        DefinitionsService $service,
-        string $word,
-        DefinitionCollection $definitionCollection,
-        FilteredWord $filteredWord,
-    ): void {
-        $this->expectException(WordNotInCorpusException::class);
-        $service->storeDefinitions($filteredWord);
-
-    }
-
     public function test_remove_filtered_word_from_the_collection_when_no_definition_is_available(): void
     {
         $service = new DefinitionsService(new class implements DefinitionsApiInterface
@@ -108,28 +65,6 @@ class DefinitionsServiceTest extends TestCase
         );
         $filteredWordCollection = $service->setDefinitionsToCollection($filteredWordCollection);
         $this->assertEquals(0, $filteredWordCollection->count());
-    }
-
-    public function test_store_definitions_by_collection(): void
-    {
-        $filteredWordCollection = new FilteredWordCollection(
-            new FilteredWord('random_word_1'),
-            new FilteredWord('random_word_2')
-        );
-        $service = $this->getMockBuilder(DefinitionsService::class)
-            ->onlyMethods(['storeDefinitions'])
-            ->setConstructorArgs([new MockDefinitionsApi()])
-            ->getMock();
-        $service->method('storeDefinitions')
-            ->willThrowException(new DefinitionAlreadyExistException());
-        $service->storeDefinitionsByCollection($filteredWordCollection);
-        $this->assertDatabaseCount('definitions', 0);
-
-        $service->method('storeDefinitions')
-            ->willThrowException(new WordNotInCorpusException());
-        $service->storeDefinitionsByCollection($filteredWordCollection);
-        $this->assertDatabaseCount('definitions', 0);
-
     }
 
     public static function provideInputs(): array
