@@ -51,6 +51,9 @@ class DpVenturesWordsApi implements DefinitionsApiInterface
                 continue;
             }
         }
+        if ($definitionCollection->count() === 0) {
+            throw new CantFindDefinitionException();
+        }
 
         return $definitionCollection;
     }
