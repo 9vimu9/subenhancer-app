@@ -10,8 +10,6 @@ use App\DataObjects\Definitions\DefinitionCollection;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CantFindDefinitionException;
-use App\Exceptions\DefinitionAlreadyExistException;
-use App\Exceptions\WordNotInCorpusException;
 use App\Models\Corpus;
 use App\Models\Definition;
 
@@ -47,34 +45,9 @@ class DefinitionsService implements DefinitionsServiceInterface
         return $word;
     }
 
-    public function storeDefinitionsByCollection(FilteredWordCollection $collection): void
-    {
-        foreach ($collection as $word) {
-            try {
-                $this->storeDefinitions($word);
-            } catch (DefinitionAlreadyExistException|WordNotInCorpusException $exception) {
-                continue;
-            }
-        }
-    }
-
-    public function storeDefinitions(FilteredWord $filteredWord): void
-    {
-        $word = Corpus::query()->findByWordOrFail($filteredWord->getWord());
-
-        if ($word->definitions()->count()) {
-            throw new DefinitionAlreadyExistException();
-        }
-
-        foreach ($filteredWord->getDefinitions() as $definition) {
-            Definition::query()->createByDefinition($word->id, $definition);
-
-        }
-    }
-
     public function processDefinitionsByCollection(FilteredWordCollection $collection): FilteredWordCollection
     {
-        $this->storeDefinitionsByCollection(
+        Definition::query()->storeByCollection(
             $filteredWordCollection = $this->setDefinitionsToCollection($collection)
         );
 
