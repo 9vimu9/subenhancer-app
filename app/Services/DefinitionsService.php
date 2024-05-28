@@ -26,6 +26,7 @@ class DefinitionsService implements DefinitionsServiceInterface
             try {
                 $collection->update($index, $this->setDefinitions($word));
             } catch (CantFindDefinitionException $exception) {
+                Corpus::query()->removeByWord($word->getWord());
                 $collection->remove($index);
             }
         }
