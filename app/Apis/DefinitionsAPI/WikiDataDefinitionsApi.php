@@ -28,7 +28,7 @@ class WikiDataDefinitionsApi implements DefinitionsApiInterface
             'word' => $word,
             'redirection' => 'false',
         ])->get('{+endpoint}/{word}?redirect={redirection}');
-
+        usleep(100000);
         if ($response->status() === Response::HTTP_NOT_FOUND) {
             throw new CantFindDefinitionException();
         }
