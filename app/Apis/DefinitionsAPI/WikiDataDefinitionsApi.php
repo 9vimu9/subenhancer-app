@@ -14,6 +14,7 @@ use App\Exceptions\InvalidDefinitionResponseFormatException;
 use App\Exceptions\InvalidWordClassFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class WikiDataDefinitionsApi implements DefinitionsApiInterface
@@ -28,7 +29,6 @@ class WikiDataDefinitionsApi implements DefinitionsApiInterface
             'word' => $word,
             'redirection' => 'false',
         ])->get('{+endpoint}/{word}?redirect={redirection}');
-        usleep(100000);
         if ($response->status() === Response::HTTP_NOT_FOUND) {
             throw new CantFindDefinitionException();
         }
@@ -41,6 +41,7 @@ class WikiDataDefinitionsApi implements DefinitionsApiInterface
             throw new InvalidDefinitionResponseFormatException('no English definitions were found', $content, $word);
         }
         $definitions = $content['en'];
+        Log::info(json_encode($definitions, JSON_PRETTY_PRINT));
         $definitionCollection = new DefinitionCollection();
         foreach ($definitions as $definition) {
             if (! isset($definition['partOfSpeech'])) {
