@@ -30,7 +30,7 @@ enum WordClassEnum: int
     case PARTICLE = 22;
     case PREDICATIVE = 23;
     case PARTICIPLE = 24;
-    case SUFFUX = 25;
+    case SUFFIX = 25;
 
     public static function fromName(string $name)
     {
