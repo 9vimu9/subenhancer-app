@@ -7,9 +7,6 @@ namespace App\Services;
 use App\Core\Contracts\Apis\DefinitionSelectorApiInterface;
 use App\Core\Contracts\Services\DefinitionSelectorServiceInterface;
 use App\DataObjects\Sentences\Sentence;
-use App\Models\Captionword;
-use App\Models\Corpus;
-use App\Models\Definition;
 
 class DefinitionSelectorService implements DefinitionSelectorServiceInterface
 {
@@ -17,27 +14,24 @@ class DefinitionSelectorService implements DefinitionSelectorServiceInterface
     {
     }
 
-    private function chooseDefinition(Sentence $sentence, int $corpusId, int $orderInTheSentence, array $columns): Definition
-    {
-        $definitions = Definition::query()->getCandidateDefinitionsArrayByWordOrFail($corpusId);
-        $definition = $this->definitionSelectorApi->pickADefinitionBasedOnContext(
-            $sentence->getSentence(),
-            array_values($definitions),
-            Corpus::query()->findOrFail($corpusId, ['word'])->getAttribute('word'),
-            $orderInTheSentence);
-
-        return Definition::query()->findOrFail(array_search($definition, $definitions, true), $columns);
-    }
-
-    public function updateFilteredWordDefinition(
-        int $filteredWordId,
+    public function findMostSuitableDefinitionId(
         Sentence $sentence,
-        int $corpusId,
-        int $orderInTheSentence): void
+        array $word,
+        int $orderInTheSentence): ?int
     {
-        Captionword::query()->updateDefinition(
-            $filteredWordId,
-            $this->chooseDefinition($sentence, $corpusId, $orderInTheSentence, ['id'])->getAttribute('id')
-        );
+        $definitions = $word['definitions'];
+        if (count($definitions) === 0) {
+            return null;
+        }
+
+        $definitionArray = array_column($definitions, 'definition');
+        $definition = count($definitions) === 1
+            ? array_values($definitions)[0]['definition']
+            : $this->definitionSelectorApi->pickADefinitionBasedOnContext(
+                $sentence->getSentence(),
+                $definitionArray,
+                $word['word'], $orderInTheSentence);
+
+        return $definitions[(array_search($definition, $definitionArray, true))]['id'];
     }
 }

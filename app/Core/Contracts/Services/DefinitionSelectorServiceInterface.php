@@ -8,9 +8,8 @@ use App\DataObjects\Sentences\Sentence;
 
 interface DefinitionSelectorServiceInterface
 {
-    public function updateFilteredWordDefinition(
-        int $filteredWordId,
+    public function findMostSuitableDefinitionId(
         Sentence $sentence,
-        int $corpusId,
-        int $orderInTheSentence): void;
+        array $word,
+        int $orderInTheSentence): ?int;
 }
