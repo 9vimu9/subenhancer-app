@@ -6,14 +6,13 @@ namespace App\Traits;
 
 trait StringArrayOperationsTrait
 {
-    public function getIncludedFilteredWordsInTheSentence(string $text, array $filteredWords): array
+    public function getIncludedFilteredWordsInTheSentence(string $text, array $filteredWordsWithIdsArray): array
     {
-        $filteredWords = array_map('strtolower', $filteredWords);
         $text = $this->processText($text);
         $containedWords = [];
-        array_walk($filteredWords, static function ($item) use (&$containedWords, $text) {
-            if (str_contains($text, $item)) {
-                $containedWords[] = $item;
+        array_walk($filteredWordsWithIdsArray, static function ($word) use (&$containedWords, $text) {
+            if (str_contains($text, strtolower($word['word']))) {//need improvement
+                $containedWords[] = $word;
             }
         });
 

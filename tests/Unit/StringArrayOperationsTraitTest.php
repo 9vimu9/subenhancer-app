@@ -13,11 +13,11 @@ class StringArrayOperationsTraitTest extends TestCase
     public static function sampleSentences(): array
     {
         return [
-            'Happy path' => ['aa bb cc', ['aa', 'dd'], ['aa']],
-            'With Parenthis' => ['aa<bb cc', ['aa', 'dd'], ['aa']],
-            'With Upper case letters' => ['aA<bb cc', ['aa', 'dd'], ['aa']],
-            'when array has upper case item' => ['aa bb cc', ['AA', 'dd'], ['aa']],
-            'With special chars' => ['++++aA<&&&bb cc', ['aa', 'dd'], ['aa']],
+            'Happy path' => ['aa bb cc', [['word' => 'aa'], ['word' => 'dd']], [['word' => 'aa']]],
+            'With Parenthis' => ['aa<bb cc', [['word' => 'aa'], ['word' => 'dd']], [['word' => 'aa']]],
+            'With Upper case letters' => ['aA<bb cc', [['word' => 'aa'], ['word' => 'dd']], [['word' => 'aa']]],
+            'when array has upper case item' => ['aa bb cc', [['word' => 'AA'], ['word' => 'dd']], [['word' => 'AA']]],
+            'With special chars' => ['++++aA<&&&bb cc', [['word' => 'aa'], ['word' => 'dd']], [['word' => 'aa']]],
         ];
     }
 
@@ -28,9 +28,9 @@ class StringArrayOperationsTraitTest extends TestCase
         {
             use StringArrayOperationsTrait;
         };
-        $this->assertEquals(
-            $expected,
-            $objectWithTrait->getIncludedFilteredWordsInTheSentence($sentence, $filteredWords));
+        $actual = $objectWithTrait->getIncludedFilteredWordsInTheSentence($sentence, $filteredWords);
+        var_export($actual);
+        $this->assertEquals($expected, $actual);
 
     }
 }
