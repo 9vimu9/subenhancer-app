@@ -8,21 +8,11 @@ use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\InvalidDefinitionResponseFormatException;
-use App\Exceptions\NoCandidateDefinitionsAvailabletoChooseException;
 use App\Models\Corpus;
 use Illuminate\Database\Eloquent\Builder;
 
 class DefinitionBuilder extends Builder
 {
-    public function getCandidateDefinitionsArrayByWordOrFail(int $corpusId): array
-    {
-        $definitions = $this->where('corpus_id', $corpusId)
-            ->pluck('definition', 'id')
-            ->toArray();
-
-        return count($definitions) ? $definitions : throw new NoCandidateDefinitionsAvailabletoChooseException();
-    }
-
     public function storeByCollection(FilteredWordCollection $collection, DefinitionsApiInterface $definitionsApi): void
     {
         $definitionsDataArray = [];
