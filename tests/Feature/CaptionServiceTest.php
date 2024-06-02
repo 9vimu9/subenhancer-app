@@ -4,93 +4,144 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Core\Contracts\Services\DefinitionSelectorServiceInterface;
+use App\Core\Contracts\Services\SentenceServiceInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
-use App\Events\DurationSaved;
+use App\DataObjects\Sentences\Sentence;
+use App\DataObjects\Sentences\SentenceCollection;
+use App\Models\Corpus;
+use App\Models\Definition;
 use App\Models\Source;
 use App\Services\CaptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CaptionServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    const int CAPTION_ONE_START_TIME = 10;
+    const int SOURCE_ID = 1;
 
-    const int CAPTION_ONE_END_TIME = 20;
+    const string WORD_1 = 'rw_1';
 
-    const int CAPTION_TWO_START_TIME = 30;
+    const string WORD_2 = 'rw_2';
 
-    const int CAPTION_TWO_END_TIME = 40;
+    const string WORD_3 = 'rw_3';
 
-    public static function dataProvider(): array
+    const int SELECTED_DEFINITION_ID_FOR_WORD_1 = 1;
+
+    const int SELECTED_DEFINITION_ID_FOR_WORD_2 = 2;
+
+    const int SELECTED_DEFINITION_ID_FOR_WORD_3 = 3;
+
+    const int ID_FOR_WORD_1 = 1;
+
+    const int ID_FOR_WORD_2 = 2;
+
+    const int ID_FOR_WORD_3 = 3;
+
+    const string SENTENCE_ONE = 'Random '.self::WORD_1.' woRds '.self::WORD_2.' Here.';
+
+    const string SENTENCE_TWO = 'anotther Random '.self::WORD_2.' woRds '.self::WORD_1.' Here.';
+
+    const string CAPTION = self::SENTENCE_ONE.' '.self::SENTENCE_TWO;
+
+    const int START_TIME = 100;
+
+    const int END_TIME = 200;
+
+    const string SELECTED_DEFINITION_FOR_WORD_1 = 'What the hell is going here 1';
+
+    const string SELECTED_DEFINITION_FOR_WORD_2 = 'What the hell is going here 2';
+
+    const string SELECTED_DEFINITION_FOR_WORD_3 = 'What the hell is going here 3';
+
+    protected function setUp(): void
     {
-        return [
-            [
-                new CaptionsCollection(
-                    new Caption(
-                        captionString: 'caption string 1',
-                        startTime: self::CAPTION_ONE_START_TIME,
-                        endTime: self::CAPTION_ONE_END_TIME
-                    ),
-                    new Caption(
-                        captionString: 'caption string 2',
-                        startTime: self::CAPTION_TWO_START_TIME,
-                        endTime: self::CAPTION_TWO_END_TIME
-                    )
-                ),
-            ],
-        ];
+        parent::setUp();
+        $source = Source::factory()->create(['id' => self::SOURCE_ID]);
+
+        $wordOne = Corpus::factory()->create(['id' => self::ID_FOR_WORD_1, 'word' => self::WORD_1]);
+        Definition::factory()->create(['id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1, 'corpus_id' => $wordOne->id]);
+
+        $wordTwo = Corpus::factory()->create(['id' => self::ID_FOR_WORD_2, 'word' => self::WORD_2]);
+        Definition::factory()->create(['id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2, 'corpus_id' => $wordTwo->id]);
+
+        $wordThree = Corpus::factory()->create(['id' => self::ID_FOR_WORD_3, 'word' => self::WORD_3]);
+        Definition::factory()->create(['id' => self::SELECTED_DEFINITION_ID_FOR_WORD_3, 'corpus_id' => $wordThree->id]);
     }
 
-    #[DataProvider('dataProvider')]
-    public function test_save_durations_by_collection(CaptionsCollection $collection): void
+    public function test_processResourceMethod(): void
     {
-        $source = Source::factory()->create();
-        Event::fake();
+
+        $captionCollection = new CaptionsCollection(
+            new Caption(self::CAPTION, 100, 200),
+        );
         $service = $this->partialMock(CaptionService::class, function (MockInterface $mock) {
             $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
-                ->andReturn(['random_common_word']);
+                ->andReturn([
+                    [
+                        'id' => self::ID_FOR_WORD_1,
+                        'word' => self::WORD_1,
+                        'definitions' => [
+                            [
+                                'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1,
+                                'definition' => self::SELECTED_DEFINITION_FOR_WORD_1,
+                                'corpus_id' => self::ID_FOR_WORD_1],
+                        ],
+                    ],
+                    [
+                        'id' => self::ID_FOR_WORD_2,
+                        'word' => self::WORD_2,
+                        'definitions' => [
+                            [
+                                'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2,
+                                'definition' => self::SELECTED_DEFINITION_FOR_WORD_2,
+                                'corpus_id' => self::ID_FOR_WORD_2],
+                        ],
+                    ],
+                ]);
+            $mock->shouldReceive('getLastInsertedId')
+                ->andReturn(0);
         });
-        $service->saveDurationsByCollection($collection, $source->id, []);
 
-        Event::assertDispatched(DurationSaved::class, iterator_count($collection));
+        $service->processResource(
+            definitionSelectorService: new class implements DefinitionSelectorServiceInterface
+            {
+                public function findMostSuitableDefinitionId(Sentence $sentence, array $wordArray, int $orderInTheSentence): ?int
+                {
+                    return match ($wordArray['word']) {
+                        CaptionServiceTest::WORD_1 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_1,
+                        CaptionServiceTest::WORD_2 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_2,
+                        CaptionServiceTest::WORD_3 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_3,
+                    };
 
-        $this->assertDatabaseHas('durations',
-            [
-                'source_id' => $source->id,
-                'start_time_in_millis' => self::CAPTION_ONE_START_TIME,
-                'end_time_in_millis' => self::CAPTION_ONE_END_TIME,
-            ],
+                }
+            },
+            sentenceService: new class implements SentenceServiceInterface
+            {
+                public function captionToSentences(Caption $caption): SentenceCollection
+                {
+                    return new SentenceCollection(
+                        new Sentence(CaptionServiceTest::SENTENCE_ONE, 0),
+                        new Sentence(CaptionServiceTest::SENTENCE_TWO, 1),
+                    );
+
+                }
+            },
+            captionsCollection: $captionCollection,
+            sourceId: self::SOURCE_ID,
+            filteredWords: [self::WORD_1, self::WORD_2, self::WORD_3],
 
         );
-        $this->assertDatabaseHas('durations',
-            [
-                'source_id' => $source->id,
-                'start_time_in_millis' => self::CAPTION_TWO_START_TIME,
-                'end_time_in_millis' => self::CAPTION_TWO_END_TIME,
-            ]
-        );
-
-    }
-
-    #[DataProvider('dataProvider')]
-    public function test_no_duration_is_saved_when_caption_has_no_common_words_with_filtered_words(CaptionsCollection $collection): void
-    {
-        $source = Source::factory()->create();
-        Event::fake();
-        $service = $this->partialMock(CaptionService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
-                ->andReturn([]);
-        });
-        $service->saveDurationsByCollection($collection, $source->id, []);
-
-        $this->assertDatabaseCount('durations', 0);
-
-        Event::assertNotDispatched(DurationSaved::class);
+        $this->assertDatabaseHas('durations', ['start_time_in_millis' => self::START_TIME, 'end_time_in_millis' => self::END_TIME]);
+        $this->assertDatabaseHas('sentences', ['sentence' => self::SENTENCE_ONE]);
+        $this->assertDatabaseHas('sentences', ['sentence' => self::SENTENCE_TWO]);
+        $this->assertDatabaseHas('captionwords', ['sentence_id' => 1, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2]);
+        $this->assertDatabaseHas('captionwords', ['sentence_id' => 1, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1]);
+        $this->assertDatabaseHas('captionwords', ['sentence_id' => 2, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2]);
+        $this->assertDatabaseHas('captionwords', ['sentence_id' => 2, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1]);
     }
 }
