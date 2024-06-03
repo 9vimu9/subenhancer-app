@@ -6,10 +6,8 @@ namespace App\Services;
 
 use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\Core\Contracts\Services\DefinitionsServiceInterface;
-use App\DataObjects\Definitions\DefinitionCollection;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
-use App\Enums\WordClassEnum;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\InvalidDefinitionResponseFormatException;
 use App\Models\Corpus;
@@ -21,7 +19,7 @@ class DefinitionsService implements DefinitionsServiceInterface
     {
     }
 
-    public function setDefinitionsToCollection(FilteredWordCollection $collection): FilteredWordCollection
+    public function removeWordsHasNoDefinitionsFromCollection(FilteredWordCollection $collection): FilteredWordCollection
     {
         $newCollection = new FilteredWordCollection();
 
@@ -30,18 +28,7 @@ class DefinitionsService implements DefinitionsServiceInterface
             corpusColumns: ['id', 'word'],
             definitionColumns: ['id', 'word_class', 'definition']
         )->each(function (Corpus $corpus) use (&$newCollection) {
-            $definitionCollection = new DefinitionCollection();
-            $corpus->definitions->each(function (Definition $definition) use (&$definitionCollection, $corpus) {
-                $definitionCollection->add(
-                    new \App\DataObjects\Definitions\Definition(
-                        WordClassEnum::fromName($definition->word_class),
-                        $definition->definition,
-                        $corpus->word
-                    )
-                );
-            });
             $word = new FilteredWord($corpus->word);
-            $word->setDefinitions($definitionCollection);
             $newCollection->add($word);
         });
 
@@ -54,7 +41,7 @@ class DefinitionsService implements DefinitionsServiceInterface
             $this->findDefinitionsForWordsWhichHasNot($collection)
         );
 
-        return $this->setDefinitionsToCollection($collection);
+        return $this->removeWordsHasNoDefinitionsFromCollection($collection);
     }
 
     public function findDefinitionsForWordsWhichHasNot(FilteredWordCollection $collection): array
