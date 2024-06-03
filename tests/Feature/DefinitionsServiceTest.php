@@ -86,27 +86,34 @@ class DefinitionsServiceTest extends TestCase
         $this->assertEquals(0, $filteredWordCollection->count());
     }
 
-    public static function provideInputs(): array
+    public function test_processDefinitionsByCollection(): void
     {
-        $service = new DefinitionsService(new MockDefinitionsApi());
-        $word = 'random_word';
-        $definition = new Definition(
-            MockDefinitionsApi::WORD_CLASS,
-            MockDefinitionsApi::DEFINITION,
-            $word
+        $corpus = Corpus::factory()->create(['word' => 'OLD_WORD']);
+        Corpus::factory()->create(['word' => 'NEW_WORD']);
+        $definitionsForTheWord = 3;
+        \App\Models\Definition::factory()->count($definitionsForTheWord)->create(['corpus_id' => $corpus->id]);
+
+        $collection = new FilteredWordCollection(
+            new FilteredWord('OLD_WORD'),
+            new FilteredWord('NEW_WORD'),
         );
-        $definitionCollection = new DefinitionCollection();
-        $definitionCollection->add($definition);
 
-        $filteredWord = new FilteredWord($word);
-        $filteredWord->setDefinitions($definitionCollection);
+        $service = new DefinitionsService(new class implements DefinitionsApiInterface
+        {
+            public function getDefinitions(string $word): DefinitionCollection
+            {
+                return new DefinitionCollection(
+                    new Definition(WordClassEnum::NOUN, 'TEST DEFINITION', 'NEW_WORD'),
+                );
+            }
 
-        return [[
-            $service,
-            $word,
-            $definitionCollection,
-            $filteredWord,
-        ]];
-
+            public function wordClassMapper(string $wordClass): WordClassEnum
+            {
+                return WordClassEnum::NOUN;
+            }
+        });
+        $actual = $service->processDefinitionsByCollection($collection);
+        $this->assertDatabaseCount('definitions', $definitionsForTheWord + 1);
+        $this->assertDatabaseHas('definitions', ['definition' => 'TEST DEFINITION']);
     }
 }
