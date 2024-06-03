@@ -7,10 +7,8 @@ namespace App\Http\Controllers;
 use App\Core\Contracts\Apis\SrtParserInterface;
 use App\Core\Contracts\Apis\YoutubeCaptionsGrabberApiInterface;
 use App\Core\Contracts\Services\CaptionServiceInterface;
-use App\Core\Contracts\Services\DefinitionSelectorServiceInterface;
 use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\Core\Contracts\Services\EnhancementServiceInterface;
-use App\Core\Contracts\Services\SentenceServiceInterface;
 use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\Factories\ResourceFactory;
@@ -20,8 +18,6 @@ use Illuminate\Http\RedirectResponse;
 class EnhanceSubmissionController extends Controller
 {
     public function submit(
-        DefinitionSelectorServiceInterface $definitionSelectorService,
-        SentenceServiceInterface $sentenceService,
         SubmitEnhanceRequest $request,
         EnhancementServiceInterface $enhancementService,
         SrtParserInterface $srtParser,
@@ -38,8 +34,6 @@ class EnhanceSubmissionController extends Controller
             $youtubeCaptionsGrabberApi,
         );
         $enhancementService->submitEnhancement(
-            $definitionSelectorService,
-            $sentenceService,
             $resource,
             $definitionsService,
             $wordService,

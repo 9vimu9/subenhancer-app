@@ -23,11 +23,15 @@ use App\Traits\StringArrayOperationsTrait;
 
 class CaptionService implements CaptionServiceInterface
 {
+    public function __construct(
+        private DefinitionSelectorServiceInterface $definitionSelectorService,
+        private SentenceServiceInterface $sentenceService,
+    ) {
+    }
+
     use LastInsertedIdTrait, StringArrayOperationsTrait;
 
     public function processResource(
-        DefinitionSelectorServiceInterface $definitionSelectorService,
-        SentenceServiceInterface $sentenceService,
         CaptionsCollection $captionsCollection,
         int $sourceId,
         array $filteredWords,
@@ -64,7 +68,7 @@ class CaptionService implements CaptionServiceInterface
                     sourceId: $sourceId
                 )
             );
-            foreach ($sentenceService->captionToSentences($caption) as $sentence) {
+            foreach ($this->sentenceService->captionToSentences($caption) as $sentence) {
                 $nextSentenceId = $currentSentenceId + 1;
                 $sentences->add(
                     new SentenceDto(
@@ -83,7 +87,7 @@ class CaptionService implements CaptionServiceInterface
                         id: $nextFilteredWordId,
                         order: $order,
                         sentenceId: $nextSentenceId,
-                        definitionId: $definitionSelectorService->findMostSuitableDefinitionId($sentence, $filteredWord, $order)
+                        definitionId: $this->definitionSelectorService->findMostSuitableDefinitionId($sentence, $filteredWord, $order)
                     ));
 
                     $currentFilteredWordId = $nextFilteredWordId;

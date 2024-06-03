@@ -15,7 +15,7 @@ use App\Models\Definition;
 use App\Models\Source;
 use App\Services\CaptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery\MockInterface;
+use Mockery;
 use Tests\TestCase;
 
 class CaptionServiceTest extends TestCase
@@ -79,58 +79,59 @@ class CaptionServiceTest extends TestCase
         $captionCollection = new CaptionsCollection(
             new Caption(self::CAPTION, 100, 200),
         );
-        $service = $this->partialMock(CaptionService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
-                ->andReturn([
-                    [
-                        'id' => self::ID_FOR_WORD_1,
-                        'word' => self::WORD_1,
-                        'definitions' => [
-                            [
-                                'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1,
-                                'definition' => self::SELECTED_DEFINITION_FOR_WORD_1,
-                                'corpus_id' => self::ID_FOR_WORD_1],
-                        ],
-                    ],
-                    [
-                        'id' => self::ID_FOR_WORD_2,
-                        'word' => self::WORD_2,
-                        'definitions' => [
-                            [
-                                'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2,
-                                'definition' => self::SELECTED_DEFINITION_FOR_WORD_2,
-                                'corpus_id' => self::ID_FOR_WORD_2],
-                        ],
-                    ],
-                ]);
-            $mock->shouldReceive('getLastInsertedId')
-                ->andReturn(0);
-        });
 
-        $service->processResource(
-            definitionSelectorService: new class implements DefinitionSelectorServiceInterface
+        $definitionSelectorService = new class implements DefinitionSelectorServiceInterface
+        {
+            public function findMostSuitableDefinitionId(Sentence $sentence, array $wordArray, int $orderInTheSentence): ?int
             {
-                public function findMostSuitableDefinitionId(Sentence $sentence, array $wordArray, int $orderInTheSentence): ?int
-                {
-                    return match ($wordArray['word']) {
-                        CaptionServiceTest::WORD_1 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_1,
-                        CaptionServiceTest::WORD_2 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_2,
-                        CaptionServiceTest::WORD_3 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_3,
-                    };
+                return match ($wordArray['word']) {
+                    CaptionServiceTest::WORD_1 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_1,
+                    CaptionServiceTest::WORD_2 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_2,
+                    CaptionServiceTest::WORD_3 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_3,
+                };
 
-                }
-            },
-            sentenceService: new class implements SentenceServiceInterface
+            }
+        };
+        $sentenceService = new class implements SentenceServiceInterface
+        {
+            public function captionToSentences(Caption $caption): SentenceCollection
             {
-                public function captionToSentences(Caption $caption): SentenceCollection
-                {
-                    return new SentenceCollection(
-                        new Sentence(CaptionServiceTest::SENTENCE_ONE, 0),
-                        new Sentence(CaptionServiceTest::SENTENCE_TWO, 1),
-                    );
+                return new SentenceCollection(
+                    new Sentence(CaptionServiceTest::SENTENCE_ONE, 0),
+                    new Sentence(CaptionServiceTest::SENTENCE_TWO, 1),
+                );
 
-                }
-            },
+            }
+        };
+        $mock = Mockery::mock(CaptionService::class, [$definitionSelectorService, $sentenceService])->makePartial();
+
+        $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
+            ->andReturn([
+                [
+                    'id' => self::ID_FOR_WORD_1,
+                    'word' => self::WORD_1,
+                    'definitions' => [
+                        [
+                            'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1,
+                            'definition' => self::SELECTED_DEFINITION_FOR_WORD_1,
+                            'corpus_id' => self::ID_FOR_WORD_1],
+                    ],
+                ],
+                [
+                    'id' => self::ID_FOR_WORD_2,
+                    'word' => self::WORD_2,
+                    'definitions' => [
+                        [
+                            'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2,
+                            'definition' => self::SELECTED_DEFINITION_FOR_WORD_2,
+                            'corpus_id' => self::ID_FOR_WORD_2],
+                    ],
+                ],
+            ]);
+        $mock->shouldReceive('getLastInsertedId')
+            ->andReturn(0);
+
+        $mock->processResource(
             captionsCollection: $captionCollection,
             sourceId: self::SOURCE_ID,
             filteredWords: [self::WORD_1, self::WORD_2, self::WORD_3],
