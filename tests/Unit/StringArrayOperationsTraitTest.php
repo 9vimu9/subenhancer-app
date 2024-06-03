@@ -29,7 +29,6 @@ class StringArrayOperationsTraitTest extends TestCase
             use StringArrayOperationsTrait;
         };
         $actual = $objectWithTrait->getIncludedFilteredWordsInTheSentence($sentence, $filteredWords);
-        var_export($actual);
         $this->assertEquals($expected, $actual);
 
     }
