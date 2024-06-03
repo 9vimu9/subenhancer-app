@@ -8,8 +8,6 @@ use App\Core\Contracts\Apis\SentencesApiInterface;
 use App\Core\Contracts\Services\SentenceServiceInterface;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Sentences\SentenceCollection;
-use App\Models\Sentence;
-use Illuminate\Database\Eloquent\Model;
 
 class SentenceService implements SentenceServiceInterface
 {
@@ -20,10 +18,5 @@ class SentenceService implements SentenceServiceInterface
     public function captionToSentences(Caption $caption): SentenceCollection
     {
         return $this->sentencesApi->getSentences($caption->getCaption());
-    }
-
-    public function storeSentence(int $durationId, \App\DataObjects\Sentences\Sentence $sentence): Model
-    {
-        return Sentence::query()->createBySentence($durationId, $sentence);
     }
 }

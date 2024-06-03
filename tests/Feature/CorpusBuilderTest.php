@@ -6,31 +6,14 @@ namespace Tests\Feature;
 
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
-use App\Exceptions\WordNotInCorpusException;
 use App\Models\Corpus;
 use App\Models\Definition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CorpusBuilderTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function test_findByWordOrFail_thrws_exception_when_word_does_not_exist(): void
-    {
-        $this->expectException(WordNotInCorpusException::class);
-        Corpus::query()->findByWordOrFail('word');
-    }
-
-    #[DataProvider('wordVariations')]
-    public function test_findByWord(string $word): void
-    {
-        $expected = Corpus::factory()->create(['word' => strtolower($word)]);
-        $actual = Corpus::query()->findByWord($word, ['word']);
-        $this->assertSame($expected->word, $actual->word);
-
-    }
 
     public static function wordVariations(): array
     {

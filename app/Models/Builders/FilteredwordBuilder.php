@@ -10,12 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FilteredwordBuilder extends Builder
 {
-    public function updateDefinition(int $filterWordId, int $definitionId): void
-    {
-        $this->findOrFail($filterWordId, ['id', 'definition_id'])->update(['definition_id' => $definitionId]);
-
-    }
-
     public function getWordsBySourceId(int $sourceId, array $columns = ['*']): Collection
     {
         return Captionword::query()
