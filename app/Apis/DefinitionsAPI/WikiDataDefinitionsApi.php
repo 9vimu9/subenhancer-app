@@ -14,7 +14,6 @@ use App\Exceptions\InvalidDefinitionResponseFormatException;
 use App\Exceptions\InvalidWordClassFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class WikiDataDefinitionsApi implements DefinitionsApiInterface
@@ -41,39 +40,8 @@ class WikiDataDefinitionsApi implements DefinitionsApiInterface
             throw new InvalidDefinitionResponseFormatException('no English definitions were found', $content, $word);
         }
         $definitions = $content['en'];
-        Log::info(json_encode($definitions, JSON_PRETTY_PRINT));
-        $definitionCollection = new DefinitionCollection();
-        foreach ($definitions as $definition) {
-            if (! isset($definition['partOfSpeech'])) {
-                continue;
-            }
-            try {
-                $wordClass = $this->wordClassMapper($definition['partOfSpeech']);
-            } catch (InvalidWordClassFoundException $e) {
-                continue;
-            }
 
-            if (! isset($definition['definitions'])) {
-                continue;
-            }
-            foreach ($definition['definitions'] as $definitionItem) {
-                if (! isset($definitionItem['definition'])) {
-                    continue;
-                }
-                $definitionCollection->add(new Definition(
-                    $wordClass,
-                    trim(strip_tags($definitionItem['definition'])),
-                    $word
-                ));
-
-            }
-
-        }
-        if ($definitionCollection->count() === 0) {
-            throw new CantFindDefinitionException();
-        }
-
-        return $definitionCollection;
+        return $this->createDefinitionCollection($definitions, $word);
     }
 
     public function wordClassMapper(string $wordClass): WordClassEnum
@@ -84,5 +52,44 @@ class WikiDataDefinitionsApi implements DefinitionsApiInterface
             }
         }
         throw new InvalidWordClassFoundException;
+    }
+
+    private function addToDefinitionCollection(array $definitions, DefinitionCollection $definitionCollection, WordClassEnum $wordClass, string $word): void
+    {
+        foreach ($definitions as $definitionItem) {
+            if (! isset($definitionItem['definition'])) {
+                continue;
+            }
+            $definitionCollection->add(new Definition(
+                $wordClass,
+                trim(strip_tags($definitionItem['definition'])),
+                $word
+            ));
+
+        }
+    }
+
+    public function createDefinitionCollection(array $definitions, string $word): DefinitionCollection
+    {
+        $definitionCollection = new DefinitionCollection();
+        foreach ($definitions as $definition) {
+            if (! isset($definition['partOfSpeech'], $definition['definitions'])) {
+                continue;
+            }
+
+            try {
+                $wordClass = $this->wordClassMapper($definition['partOfSpeech']);
+            } catch (InvalidWordClassFoundException $e) {
+                continue;
+            }
+
+            $this->addToDefinitionCollection($definition['definitions'], $definitionCollection, $wordClass, $word);
+
+        }
+        if ($definitionCollection->count() === 0) {
+            throw new CantFindDefinitionException();
+        }
+
+        return $definitionCollection;
     }
 }
