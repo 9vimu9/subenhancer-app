@@ -59,10 +59,7 @@ class DefinitionsServiceTest extends TestCase
             )
         );
 
-        $expected = new FilteredWordCollection(
-            $wordWithDefinitionFilteredWord,
-            $wordWithoutDefinitionFilteredWord,
-        );
+        $expected = new FilteredWordCollection($wordWithDefinitionFilteredWord);
         $this->assertEquals($expected, $actual);
     }
 

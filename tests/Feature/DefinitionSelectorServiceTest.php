@@ -28,7 +28,7 @@ class DefinitionSelectorServiceTest extends TestCase
             'definitions' => $corpus->definitions->toArray(),
         ];
         $actual = $service->findMostSuitableDefinitionId($sentence, $wordData, 0);
-        $this->assertEquals(1, $actual);
+        $this->assertEquals($definictions->first()->id, $actual);
 
     }
 
