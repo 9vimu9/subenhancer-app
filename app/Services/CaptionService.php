@@ -46,16 +46,14 @@ class CaptionService implements CaptionServiceInterface
         $currentFilteredWordId = $this->getLastInsertedId('captionwords');
         $filteredWordsWithIdsArray = [];
 
-        Corpus::query()->with('definitions:id,definition,corpus_id')
-            ->whereIn('word', $filteredWords)
-            ->select(['word', 'id'])->get()->each(
-                function (Corpus $corpus) use (&$filteredWordsWithIdsArray) {
-                    $filteredWordsWithIdsArray[] = [
-                        'id' => $corpus->id,
-                        'word' => $corpus->word,
-                        'definitions' => $corpus->definitions->toArray(),
-                    ];
-                });
+        Corpus::query()->filteredWordArrayToModels($filteredWords)->each(
+            function (Corpus $corpus) use (&$filteredWordsWithIdsArray) {
+                $filteredWordsWithIdsArray[] = [
+                    'id' => $corpus->id,
+                    'word' => $corpus->word,
+                    'definitions' => $corpus->definitions->toArray(),
+                ];
+            });
         foreach ($captionsCollection as $caption) {
             $nextDurationId = $currentDurationId + 1;
             $durations->add(

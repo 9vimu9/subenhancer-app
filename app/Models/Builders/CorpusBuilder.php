@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models\Builders;
 
 use App\DataObjects\FilteredWords\FilteredWordCollection;
-use App\Models\Corpus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -41,18 +40,11 @@ class CorpusBuilder extends Builder
         )->get($columns);
     }
 
-    public function filteredWordArrayToModels(FilteredWordCollection $collection)
+    public function filteredWordArrayToModels(array $filteredWords): Collection
     {
-        $this->with('definitions:id,definition,corpus_id')
-            ->whereIn('word', $collection->toArrayOfWords())
-            ->select(['word', 'id'])->get()->each(
-                function (Corpus $corpus) use (&$filteredWordsWithIdsArray) {
-                    $filteredWordsWithIdsArray[] = [
-                        'id' => $corpus->id,
-                        'word' => $corpus->word,
-                        'definitions' => $corpus->definitions->toArray(),
-                    ];
-                });
+        return $this->with('definitions:id,definition,corpus_id')
+            ->whereIn('word', $filteredWords)
+            ->select(['word', 'id'])->get();
 
     }
 }
