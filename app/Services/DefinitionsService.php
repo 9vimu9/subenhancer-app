@@ -37,7 +37,7 @@ class DefinitionsService implements DefinitionsServiceInterface
 
     public function processDefinitionsByCollection(FilteredWordCollection $collection): FilteredWordCollection
     {
-        Definition::query()->storeByCollection(
+        Definition::query()->insertOrIgnore(
             $this->findDefinitionsForWordsWhichHasNot($collection)
         );
 
