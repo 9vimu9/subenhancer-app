@@ -9,6 +9,12 @@ use App\Core\Contracts\Services\DefinitionSelectorServiceInterface;
 use App\Core\Contracts\Services\SentenceServiceInterface;
 use App\Core\Database\LastInsertedIdTrait;
 use App\DataObjects\Captions\CaptionsCollection;
+use App\Dtos\Duration\CaptionwordDto;
+use App\Dtos\Duration\CaptionwordDtoCollection;
+use App\Dtos\Duration\DurationDto;
+use App\Dtos\Duration\DurationDtoCollection;
+use App\Dtos\Duration\SentenceDto;
+use App\Dtos\Duration\SentenceDtoCollection;
 use App\Models\Captionword;
 use App\Models\Corpus;
 use App\Models\Duration;
@@ -32,9 +38,9 @@ class CaptionService implements CaptionServiceInterface
                 EVENTS ARE CANCELLED. no more freaking events.
          * */
 
-        $durations = [];
-        $sentences = [];
-        $filteredSentences = [];
+        $durations = new DurationDtoCollection();
+        $sentences = new SentenceDtoCollection();
+        $captionWords = new CaptionwordDtoCollection();
         $currentDurationId = $this->getLastInsertedId('durations');
         $currentSentenceId = $this->getLastInsertedId('sentences');
         $currentFilteredWordId = $this->getLastInsertedId('captionwords');
@@ -52,31 +58,35 @@ class CaptionService implements CaptionServiceInterface
                 });
         foreach ($captionsCollection as $caption) {
             $nextDurationId = $currentDurationId + 1;
-            $durations[] = [
-                'id' => $nextDurationId,
-                'start_time_in_millis' => $caption->getStartTime(),
-                'end_time_in_millis' => $caption->getEndTime(),
-                'source_id' => $sourceId,
-            ];
+            $durations->add(
+                new DurationDto(
+                    id: $nextDurationId,
+                    startTime: $caption->getStartTime(),
+                    endTime: $caption->getEndTime(),
+                    sourceId: $sourceId
+                )
+            );
             foreach ($sentenceService->captionToSentences($caption) as $sentence) {
                 $nextSentenceId = $currentSentenceId + 1;
-                $sentences[] = [
-                    'id' => $nextSentenceId,
-                    'order' => $sentence->getOrder(),
-                    'sentence' => $sentence->getSentence(),
-                    'duration_id' => $nextDurationId,
-                ];
+                $sentences->add(
+                    new SentenceDto(
+                        id: $nextSentenceId,
+                        order: $sentence->getOrder(),
+                        sentence: $sentence->getSentence(),
+                        durationId: $nextDurationId
+                    )
+                );
 
                 $filteredWordsInSentence = $this->getIncludedFilteredWordsInTheSentence($sentence->getSentence(), $filteredWordsWithIdsArray);
 
                 foreach ($filteredWordsInSentence as $order => $filteredWord) {
                     $nextFilteredWordId = $currentFilteredWordId + 1;
-                    $filteredSentences[] = [
-                        'id' => $nextFilteredWordId,
-                        'order_in_sentence' => $order,
-                        'sentence_id' => $nextSentenceId,
-                        'definition_id' => $definitionSelectorService->findMostSuitableDefinitionId($sentence, $filteredWord, $order),
-                    ];
+                    $captionWords->add(new CaptionwordDto(
+                        id: $nextFilteredWordId,
+                        order: $order,
+                        sentenceId: $nextSentenceId,
+                        definitionId: $definitionSelectorService->findMostSuitableDefinitionId($sentence, $filteredWord, $order)
+                    ));
 
                     $currentFilteredWordId = $nextFilteredWordId;
                 }
@@ -84,8 +94,8 @@ class CaptionService implements CaptionServiceInterface
             }
             $currentDurationId = $nextDurationId;
         }
-        Duration::query()->insertOrIgnore($durations);
-        Sentence::query()->insertOrIgnore($sentences);
-        Captionword::query()->insertOrIgnore($filteredSentences);
+        Duration::query()->insertOrIgnore($durations->toArray());
+        Sentence::query()->insertOrIgnore($sentences->toArray());
+        Captionword::query()->insertOrIgnore($captionWords->toArray());
     }
 }
