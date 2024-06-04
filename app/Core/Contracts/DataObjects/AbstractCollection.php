@@ -57,4 +57,9 @@ abstract class AbstractCollection implements IteratorAggregate
     {
         $this->items[] = $item;
     }
+
+    public function items(): array
+    {
+        return $this->items;
+    }
 }
