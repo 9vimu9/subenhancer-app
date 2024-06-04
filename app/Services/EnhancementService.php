@@ -10,6 +10,7 @@ use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\Core\Contracts\Services\EnhancementServiceInterface;
 use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
+use App\Models\Corpus;
 use App\Models\Enhancement;
 use App\Models\Source;
 
@@ -39,12 +40,14 @@ class EnhancementService implements EnhancementServiceInterface
     {
         $source = $resource->resourceModel()->saveToSource();
         $captionsCollection = $resource->toCaptions();
+        $filteredWordsCollection = $definitionsService->processDefinitionsByCollection(
+            $wordService->processWordsByCollection($captionsCollection)
+        );
+
         $captionService->processResource(
             $captionsCollection,
             $source->getAttribute('id'),
-            $definitionsService->processDefinitionsByCollection(
-                $wordService->processWordsByCollection($captionsCollection)
-            )->toArrayOfWords()
+            Corpus::query()->filteredWordArrayToModels($filteredWordsCollection->toArrayOfWords())
         );
 
         return $source;

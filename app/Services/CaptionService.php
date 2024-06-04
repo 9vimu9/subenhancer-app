@@ -18,7 +18,6 @@ use App\Dtos\DurationDtoCollection;
 use App\Dtos\SentenceDto;
 use App\Dtos\SentenceDtoCollection;
 use App\Models\Captionword;
-use App\Models\Corpus;
 use App\Models\Duration;
 use App\Models\Sentence;
 use App\Traits\StringArrayOperationsTrait;
@@ -36,7 +35,7 @@ class CaptionService implements CaptionServiceInterface
     public function processResource(
         CaptionsCollection $captionsCollection,
         int $sourceId,
-        array $filteredWords,
+        CorpusDtoCollection $filteredWordsCorpusDtoCollection,
     ): void {
         /*
                 make sure these processes are queued. one resource at a time. this is FUCKING important
@@ -50,7 +49,6 @@ class CaptionService implements CaptionServiceInterface
         $currentDurationId = $this->getLastInsertedId('durations');
         $currentSentenceId = $this->getLastInsertedId('sentences');
         $currentFilteredWordId = $this->getLastInsertedId('captionwords');
-        $filteredWordsCorpusDtoCollection = Corpus::query()->filteredWordArrayToModels($filteredWords);
 
         foreach ($captionsCollection as $caption) {
             $currentDurationId++;

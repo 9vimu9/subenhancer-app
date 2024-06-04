@@ -40,6 +40,12 @@ class CaptionServiceTest extends TestCase
 
     const int SELECTED_DEFINITION_ID_FOR_WORD_3 = 3;
 
+    const int UN_SELECTED_DEFINITION_ID_FOR_WORD_1 = 4;
+
+    const int UN_SELECTED_DEFINITION_ID_FOR_WORD_2 = 5;
+
+    const int UN_SELECTED_DEFINITION_ID_FOR_WORD_3 = 6;
+
     const int ID_FOR_WORD_1 = 1;
 
     const int ID_FOR_WORD_2 = 2;
@@ -62,19 +68,28 @@ class CaptionServiceTest extends TestCase
 
     const string SELECTED_DEFINITION_FOR_WORD_3 = 'What the hell is going here 3';
 
+    const string UN_SELECTED_DEFINITION_FOR_WORD_1 = 'What the hell is not going here 1';
+
+    const string UN_SELECTED_DEFINITION_FOR_WORD_2 = 'What the hell is not going here 2';
+
+    const string UN_SELECTED_DEFINITION_FOR_WORD_3 = 'What the hell is not going here 3';
+
     protected function setUp(): void
     {
         parent::setUp();
         $source = Source::factory()->create(['id' => self::SOURCE_ID]);
 
         $wordOne = Corpus::factory()->create(['id' => self::ID_FOR_WORD_1, 'word' => self::WORD_1]);
-        Definition::factory()->create(['id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1, 'corpus_id' => $wordOne->id]);
+        Definition::factory()->create(['definition' => self::SELECTED_DEFINITION_FOR_WORD_1, 'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1, 'corpus_id' => $wordOne->id]);
+        Definition::factory()->create(['definition' => self::UN_SELECTED_DEFINITION_FOR_WORD_1, 'id' => self::UN_SELECTED_DEFINITION_ID_FOR_WORD_1, 'corpus_id' => $wordOne->id]);
 
         $wordTwo = Corpus::factory()->create(['id' => self::ID_FOR_WORD_2, 'word' => self::WORD_2]);
-        Definition::factory()->create(['id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2, 'corpus_id' => $wordTwo->id]);
+        Definition::factory()->create(['definition' => self::SELECTED_DEFINITION_FOR_WORD_2, 'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2, 'corpus_id' => $wordTwo->id]);
+        Definition::factory()->create(['definition' => self::UN_SELECTED_DEFINITION_FOR_WORD_2, 'id' => self::UN_SELECTED_DEFINITION_ID_FOR_WORD_2, 'corpus_id' => $wordTwo->id]);
 
         $wordThree = Corpus::factory()->create(['id' => self::ID_FOR_WORD_3, 'word' => self::WORD_3]);
-        Definition::factory()->create(['id' => self::SELECTED_DEFINITION_ID_FOR_WORD_3, 'corpus_id' => $wordThree->id]);
+        Definition::factory()->create(['definition' => self::SELECTED_DEFINITION_FOR_WORD_3, 'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_3, 'corpus_id' => $wordThree->id]);
+        Definition::factory()->create(['definition' => self::UN_SELECTED_DEFINITION_FOR_WORD_3, 'id' => self::UN_SELECTED_DEFINITION_ID_FOR_WORD_3, 'corpus_id' => $wordThree->id]);
     }
 
     public function test_processResourceMethod(): void
@@ -111,9 +126,9 @@ class CaptionServiceTest extends TestCase
 
         $returningCorpusDtoCollection = new CorpusDtoCollection(
             new CorpusDto(id: self::ID_FOR_WORD_1, word: self::WORD_1, definitions: (
-                new DefinitionDtoCollection(
-                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1),
-                )
+            new DefinitionDtoCollection(
+                new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1),
+            )
             )),
             new CorpusDto(id: self::ID_FOR_WORD_2, word: self::WORD_2, definitions: (new DefinitionDtoCollection(
                 new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::SELECTED_DEFINITION_FOR_WORD_2),
@@ -128,9 +143,25 @@ class CaptionServiceTest extends TestCase
         $mock->processResource(
             captionsCollection: $captionCollection,
             sourceId: self::SOURCE_ID,
-            filteredWords: [self::WORD_1, self::WORD_2, self::WORD_3],
+            filteredWordsCorpusDtoCollection: new CorpusDtoCollection(
+                new CorpusDto(id: self::ID_FOR_WORD_1, word: self::WORD_1, definitions: (
+                new DefinitionDtoCollection(
+                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1),
+                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_1),
+                )
+                )),
+                new CorpusDto(id: self::ID_FOR_WORD_2, word: self::WORD_2, definitions: (new DefinitionDtoCollection(
+                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::SELECTED_DEFINITION_FOR_WORD_2),
+                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_2),
+                )
+                )),
+                new CorpusDto(id: self::ID_FOR_WORD_3, word: self::WORD_3, definitions: (new DefinitionDtoCollection(
+                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_3, corpusId: self::ID_FOR_WORD_3, definition: self::SELECTED_DEFINITION_FOR_WORD_3),
+                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_3, corpusId: self::ID_FOR_WORD_3, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_3),
+                )
+                )),
 
-        );
+            ));
         $this->assertDatabaseHas('durations', ['id' => 1, 'start_time_in_millis' => self::START_TIME, 'end_time_in_millis' => self::END_TIME]);
         $this->assertDatabaseHas('sentences', ['id' => 1, 'sentence' => self::SENTENCE_ONE]);
         $this->assertDatabaseHas('sentences', ['id' => 2, 'sentence' => self::SENTENCE_TWO]);
