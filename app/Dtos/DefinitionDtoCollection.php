@@ -12,4 +12,18 @@ use IteratorAggregate;
  */
 class DefinitionDtoCollection extends AbstractDtoCollection
 {
+    public function definitionsArrray(): array
+    {
+        return array_map(static fn (DefinitionDto $dto) => $dto->definition, $this->items);
+    }
+
+    public function findDefinitionDtoByDefinition(string $definition): ?DefinitionDto
+    {
+        foreach ($this->items as $dto) {
+            if ($dto->definition === $definition) {
+                return $dto;
+            }
+        }
+        throw new \InvalidArgumentException();
+    }
 }
