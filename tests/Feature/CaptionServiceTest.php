@@ -137,12 +137,12 @@ class CaptionServiceTest extends TestCase
             filteredWords: [self::WORD_1, self::WORD_2, self::WORD_3],
 
         );
-        $this->assertDatabaseHas('durations', ['start_time_in_millis' => self::START_TIME, 'end_time_in_millis' => self::END_TIME]);
-        $this->assertDatabaseHas('sentences', ['sentence' => self::SENTENCE_ONE]);
-        $this->assertDatabaseHas('sentences', ['sentence' => self::SENTENCE_TWO]);
-        $this->assertDatabaseHas('captionwords', ['sentence_id' => 1, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2]);
-        $this->assertDatabaseHas('captionwords', ['sentence_id' => 1, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1]);
-        $this->assertDatabaseHas('captionwords', ['sentence_id' => 2, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2]);
-        $this->assertDatabaseHas('captionwords', ['sentence_id' => 2, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1]);
+        $this->assertDatabaseHas('durations', ['id' => 1, 'start_time_in_millis' => self::START_TIME, 'end_time_in_millis' => self::END_TIME]);
+        $this->assertDatabaseHas('sentences', ['id' => 1, 'sentence' => self::SENTENCE_ONE]);
+        $this->assertDatabaseHas('sentences', ['id' => 2, 'sentence' => self::SENTENCE_TWO]);
+        $this->assertDatabaseHas('captionwords', ['id' => 1, 'sentence_id' => 1, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1]);
+        $this->assertDatabaseHas('captionwords', ['id' => 2, 'sentence_id' => 1, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2]);
+        $this->assertDatabaseHas('captionwords', ['id' => 3, 'sentence_id' => 2, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1]);
+        $this->assertDatabaseHas('captionwords', ['id' => 4, 'sentence_id' => 2, 'definition_id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2]);
     }
 }

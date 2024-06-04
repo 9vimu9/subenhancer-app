@@ -82,7 +82,7 @@ class CaptionService implements CaptionServiceInterface
         SentenceDtoCollection $sentences,
         int $currentDurationId,
         array $filteredWordsWithIdsArray,
-        int &$currentFilteredWordId,
+        int $currentFilteredWordId,
         CaptionwordDtoCollection $captionWords): void
     {
         foreach ($this->sentenceService->captionToSentences($caption) as $sentence) {
