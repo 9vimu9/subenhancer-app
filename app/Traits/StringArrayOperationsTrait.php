@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Dtos\CorpusDtoCollection;
+
 trait StringArrayOperationsTrait
 {
-    public function getIncludedFilteredWordsInTheSentence(string $text, array $filteredWordsWithIdsArray): array
+    public function getIncludedFilteredWordsInTheSentence(string $text, CorpusDtoCollection $filteredWordsDtoCollection): CorpusDtoCollection
     {
         $text = $this->processText($text);
-        $containedWords = [];
-        array_walk($filteredWordsWithIdsArray, static function ($word) use (&$containedWords, $text) {
-            if (str_contains($text, strtolower($word['word']))) {//need improvement
-                $containedWords[] = $word;
+        $containedWordsDtoCollection = new CorpusDtoCollection();
+        foreach ($filteredWordsDtoCollection as $filteredWord) {
+            if (str_contains($text, strtolower($filteredWord->word))) {
+                $containedWordsDtoCollection->add($filteredWord);
             }
-        });
+        }
 
-        return $containedWords;
+        return $containedWordsDtoCollection;
     }
 
     private function processText(string $text): string
