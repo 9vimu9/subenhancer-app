@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Dtos\DefinitionDto;
 use App\Dtos\DefinitionDtoCollection;
+use App\Models\Definition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -40,6 +41,18 @@ class DefinitionDtoCollectionTest extends TestCase
         $anotherDefinition = new DefinitionDto(id: 1, definition: 'another definition');
         $this->expectException(\InvalidArgumentException::class);
         (new DefinitionDtoCollection($domeDefinition, $anotherDefinition))->findDefinitionDtoByDefinition('no definition');
+
+    }
+
+    public function test_loadByDefinitions(): void
+    {
+        $definitionDtoCollection = new DefinitionDtoCollection();
+        $definitions = Definition::factory()->count(3)->create();
+        $definitionDtoCollection->loadByDefinitions($definitions);
+        $this->assertEquals(3, $definitionDtoCollection->count());
+        $this->assertEquals($definitions->get(0)->definition, $definitionDtoCollection->get(0)->definition);
+        $this->assertEquals($definitions->get(1)->definition, $definitionDtoCollection->get(1)->definition);
+        $this->assertEquals($definitions->get(2)->definition, $definitionDtoCollection->get(2)->definition);
 
     }
 }

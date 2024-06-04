@@ -7,11 +7,8 @@ namespace App\Models\Builders;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Dtos\CorpusDto;
 use App\Dtos\CorpusDtoCollection;
-use App\Dtos\DefinitionDto;
 use App\Dtos\DefinitionDtoCollection;
-use App\Enums\WordClassEnum;
 use App\Models\Corpus;
-use App\Models\Definition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -54,23 +51,11 @@ class CorpusBuilder extends Builder
             ->whereIn('word', $filteredWords)
             ->select(['word', 'id'])->get()->each(
                 function (Corpus $corpus) use (&$corpusDtoCollection) {
-                    $definitionsDtoCollection = new DefinitionDtoCollection();
-                    $corpus->definitions()->each(function (Definition $definition) use (&$definitionsDtoCollection) {
-                        $definitionsDtoCollection->add(
-                            new DefinitionDto(
-                                id: $definition->id,
-                                corpusId: $definition->corpus_id,
-                                definition: $definition->definition,
-                                wordClass: WordClassEnum::fromName($definition->word_class)
-
-                            )
-                        );
-                    });
                     $corpusDtoCollection->add(
                         new CorpusDto(
                             id: $corpus->id,
                             word: $corpus->word,
-                            definitions: $definitionsDtoCollection
+                            definitions: (new DefinitionDtoCollection())->loadByDefinitions($corpus->definitions()->get())
 
                         )
                     );
