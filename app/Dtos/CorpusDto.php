@@ -9,9 +9,9 @@ use App\Core\Contracts\Dtos\DtoInterface;
 class CorpusDto implements DtoInterface
 {
     public function __construct(
-        public ?int $id,
-        public ?string $word,
-        public ?DefinitionDtoCollection $definitions,
+        public ?int $id = null,
+        public ?string $word = null,
+        public ?DefinitionDtoCollection $definitions = null,
     ) {
     }
 

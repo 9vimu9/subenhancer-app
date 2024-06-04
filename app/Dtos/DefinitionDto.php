@@ -10,10 +10,10 @@ use App\Enums\WordClassEnum;
 class DefinitionDto implements DtoInterface
 {
     public function __construct(
-        public ?int $id,
-        public ?int $corpusId,
-        public ?string $definition,
-        public WordClassEnum $wordClass,
+        public ?int $id = null,
+        public ?int $corpusId = null,
+        public ?string $definition = null,
+        public ?WordClassEnum $wordClass = null,
     ) {
     }
 
