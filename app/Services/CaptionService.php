@@ -59,42 +59,18 @@ class CaptionService implements CaptionServiceInterface
                 ];
             });
         foreach ($captionsCollection as $caption) {
-            $nextDurationId = $currentDurationId + 1;
-            $durations->add(
-                new DurationDto(
-                    id: $nextDurationId,
-                    startTime: $caption->getStartTime(),
-                    endTime: $caption->getEndTime(),
-                    sourceId: $sourceId
-                )
-            );
+            $currentDurationId++;
+            $durations->add(new DurationDto(id: $currentDurationId, startTime: $caption->getStartTime(), endTime: $caption->getEndTime(), sourceId: $sourceId));
             foreach ($this->sentenceService->captionToSentences($caption) as $sentence) {
-                $nextSentenceId = $currentSentenceId + 1;
-                $sentences->add(
-                    new SentenceDto(
-                        id: $nextSentenceId,
-                        order: $sentence->getOrder(),
-                        sentence: $sentence->getSentence(),
-                        durationId: $nextDurationId
-                    )
-                );
+                $currentSentenceId++;
+                $sentences->add(new SentenceDto(id: $currentSentenceId, order: $sentence->getOrder(), sentence: $sentence->getSentence(), durationId: $currentDurationId));
 
                 $filteredWordsInSentence = $this->getIncludedFilteredWordsInTheSentence($sentence->getSentence(), $filteredWordsWithIdsArray);
-
                 foreach ($filteredWordsInSentence as $order => $filteredWord) {
-                    $nextFilteredWordId = $currentFilteredWordId + 1;
-                    $captionWords->add(new CaptionwordDto(
-                        id: $nextFilteredWordId,
-                        order: $order,
-                        sentenceId: $nextSentenceId,
-                        definitionId: $this->definitionSelectorService->findMostSuitableDefinitionId($sentence, $filteredWord, $order)
-                    ));
-
-                    $currentFilteredWordId = $nextFilteredWordId;
+                    $currentFilteredWordId++;
+                    $captionWords->add(new CaptionwordDto(id: $currentFilteredWordId, order: $order, sentenceId: $currentSentenceId, definitionId: $this->definitionSelectorService->findMostSuitableDefinitionId($sentence, $filteredWord, $order)));
                 }
-                $currentSentenceId = $nextSentenceId;
             }
-            $currentDurationId = $nextDurationId;
         }
         Duration::query()->insertOrIgnore($durations->toArray());
         Sentence::query()->insertOrIgnore($sentences->toArray());
