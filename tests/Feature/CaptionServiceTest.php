@@ -10,6 +10,10 @@ use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\DataObjects\Sentences\Sentence;
 use App\DataObjects\Sentences\SentenceCollection;
+use App\Dtos\CorpusDto;
+use App\Dtos\CorpusDtoCollection;
+use App\Dtos\DefinitionDto;
+use App\Dtos\DefinitionDtoCollection;
 use App\Models\Corpus;
 use App\Models\Definition;
 use App\Models\Source;
@@ -82,9 +86,9 @@ class CaptionServiceTest extends TestCase
 
         $definitionSelectorService = new class implements DefinitionSelectorServiceInterface
         {
-            public function findMostSuitableDefinitionId(Sentence $sentence, array $wordArray, int $orderInTheSentence): ?int
+            public function findMostSuitableDefinitionId(Sentence $sentence, CorpusDto $corpusDto, int $orderInTheSentence): ?int
             {
-                return match ($wordArray['word']) {
+                return match ($corpusDto->word) {
                     CaptionServiceTest::WORD_1 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_1,
                     CaptionServiceTest::WORD_2 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_2,
                     CaptionServiceTest::WORD_3 => CaptionServiceTest::SELECTED_DEFINITION_ID_FOR_WORD_3,
@@ -105,29 +109,19 @@ class CaptionServiceTest extends TestCase
         };
         $mock = Mockery::mock(CaptionService::class, [$definitionSelectorService, $sentenceService])->makePartial();
 
+        $returningCorpusDtoCollection = new CorpusDtoCollection(
+            new CorpusDto(id: self::ID_FOR_WORD_1, word: self::WORD_1, definitions: (
+                new DefinitionDtoCollection(
+                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1),
+                )
+            )),
+            new CorpusDto(id: self::ID_FOR_WORD_2, word: self::WORD_2, definitions: (new DefinitionDtoCollection(
+                new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::SELECTED_DEFINITION_FOR_WORD_2),
+            )
+            )),
+        );
         $mock->shouldReceive('getIncludedFilteredWordsInTheSentence')
-            ->andReturn([
-                [
-                    'id' => self::ID_FOR_WORD_1,
-                    'word' => self::WORD_1,
-                    'definitions' => [
-                        [
-                            'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_1,
-                            'definition' => self::SELECTED_DEFINITION_FOR_WORD_1,
-                            'corpus_id' => self::ID_FOR_WORD_1],
-                    ],
-                ],
-                [
-                    'id' => self::ID_FOR_WORD_2,
-                    'word' => self::WORD_2,
-                    'definitions' => [
-                        [
-                            'id' => self::SELECTED_DEFINITION_ID_FOR_WORD_2,
-                            'definition' => self::SELECTED_DEFINITION_FOR_WORD_2,
-                            'corpus_id' => self::ID_FOR_WORD_2],
-                    ],
-                ],
-            ]);
+            ->andReturn($returningCorpusDtoCollection);
         $mock->shouldReceive('getLastInsertedId')
             ->andReturn(0);
 

@@ -12,6 +12,7 @@ use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\Dtos\CaptionwordDto;
 use App\Dtos\CaptionwordDtoCollection;
+use App\Dtos\CorpusDtoCollection;
 use App\Dtos\DurationDto;
 use App\Dtos\DurationDtoCollection;
 use App\Dtos\SentenceDto;
@@ -49,16 +50,8 @@ class CaptionService implements CaptionServiceInterface
         $currentDurationId = $this->getLastInsertedId('durations');
         $currentSentenceId = $this->getLastInsertedId('sentences');
         $currentFilteredWordId = $this->getLastInsertedId('captionwords');
-        $filteredWordsWithIdsArray = [];
+        $filteredWordsCorpusDtoCollection = Corpus::query()->filteredWordArrayToModels($filteredWords);
 
-        Corpus::query()->filteredWordArrayToModels($filteredWords)->each(
-            function (Corpus $corpus) use (&$filteredWordsWithIdsArray) {
-                $filteredWordsWithIdsArray[] = [
-                    'id' => $corpus->id,
-                    'word' => $corpus->word,
-                    'definitions' => $corpus->definitions->toArray(),
-                ];
-            });
         foreach ($captionsCollection as $caption) {
             $currentDurationId++;
             $durations->add(new DurationDto(id: $currentDurationId, startTime: $caption->getStartTime(), endTime: $caption->getEndTime(), sourceId: $sourceId));
@@ -67,7 +60,7 @@ class CaptionService implements CaptionServiceInterface
                 $currentSentenceId,
                 $sentences,
                 $currentDurationId,
-                $filteredWordsWithIdsArray,
+                $filteredWordsCorpusDtoCollection,
                 $currentFilteredWordId,
                 $captionWords);
         }
@@ -81,28 +74,28 @@ class CaptionService implements CaptionServiceInterface
         int &$currentSentenceId,
         SentenceDtoCollection $sentences,
         int $currentDurationId,
-        array $filteredWordsWithIdsArray,
+        CorpusDtoCollection $filteredWordsCorpusDtoCollection,
         int $currentFilteredWordId,
         CaptionwordDtoCollection $captionWords): void
     {
         foreach ($this->sentenceService->captionToSentences($caption) as $sentence) {
             $currentSentenceId++;
             $sentences->add(new SentenceDto(id: $currentSentenceId, order: $sentence->getOrder(), sentence: $sentence->getSentence(), durationId: $currentDurationId));
-            $this->processFilteredWords($sentence, $filteredWordsWithIdsArray, $currentFilteredWordId, $captionWords, $currentSentenceId);
+            $this->processFilteredWords($sentence, $filteredWordsCorpusDtoCollection, $currentFilteredWordId, $captionWords, $currentSentenceId);
         }
     }
 
     private function processFilteredWords(
         \App\DataObjects\Sentences\Sentence $sentence,
-        array $filteredWordsWithIdsArray,
+        CorpusDtoCollection $filteredWordsCorpusDtoCollection,
         int &$currentFilteredWordId,
         CaptionwordDtoCollection $captionWords,
         int $currentSentenceId): void
     {
-        $filteredWordsInSentence = $this->getIncludedFilteredWordsInTheSentence($sentence->getSentence(), $filteredWordsWithIdsArray);
-        foreach ($filteredWordsInSentence as $order => $filteredWord) {
+        $filteredWordsInSentence = $this->getIncludedFilteredWordsInTheSentence($sentence->getSentence(), $filteredWordsCorpusDtoCollection);
+        foreach ($filteredWordsInSentence as $order => $corpusDto) {
             $currentFilteredWordId++;
-            $captionWords->add(new CaptionwordDto(id: $currentFilteredWordId, order: $order, sentenceId: $currentSentenceId, definitionId: $this->definitionSelectorService->findMostSuitableDefinitionId($sentence, $filteredWord, $order)));
+            $captionWords->add(new CaptionwordDto(id: $currentFilteredWordId, order: $order, sentenceId: $currentSentenceId, definitionId: $this->definitionSelectorService->findMostSuitableDefinitionId($sentence, $corpusDto, $order)));
         }
     }
 }

@@ -6,6 +6,9 @@ namespace Tests\Feature;
 
 use App\Core\Contracts\Apis\DefinitionSelectorApiInterface;
 use App\DataObjects\Sentences\Sentence;
+use App\Dtos\CorpusDto;
+use App\Dtos\DefinitionDto;
+use App\Dtos\DefinitionDtoCollection;
 use App\Models\Corpus;
 use App\Models\Definition;
 use App\Services\DefinitionSelectorService;
@@ -21,14 +24,14 @@ class DefinitionSelectorServiceTest extends TestCase
         $service = new DefinitionSelectorService(new MockDefinitionSelectorApi());
         $sentence = new Sentence('Sentence here');
         $corpus = Corpus::factory()->create();
-        $definictions = Definition::factory()->count(3)->create(['corpus_id' => $corpus->id]);
-        $wordData = [
-            'id' => $corpus->id,
-            'word' => $corpus->word,
-            'definitions' => $corpus->definitions->toArray(),
-        ];
-        $actual = $service->findMostSuitableDefinitionId($sentence, $wordData, 0);
-        $this->assertEquals($definictions->first()->id, $actual);
+        $definitions = Definition::factory()->count(3)->create(['corpus_id' => $corpus->id]);
+        $definitionDtoCollection = new DefinitionDtoCollection();
+        $corpus->definitions->each(function (Definition $definition) use (&$definitionDtoCollection) {
+            $definitionDtoCollection->add(new DefinitionDto($definition->id, $definition->corpus_id, $definition->definition));
+        });
+        $corpusDto = new CorpusDto($corpus->id, $corpus->word, $definitionDtoCollection);
+        $actual = $service->findMostSuitableDefinitionId($sentence, $corpusDto, 0);
+        $this->assertEquals($definitions->first()->id, $actual);
 
     }
 
@@ -37,12 +40,9 @@ class DefinitionSelectorServiceTest extends TestCase
         $service = new DefinitionSelectorService(new MockDefinitionSelectorApi());
         $sentence = new Sentence('Sentence here');
         $corpus = Corpus::factory()->create();
-        $wordData = [
-            'id' => $corpus->id,
-            'word' => $corpus->word,
-            'definitions' => $corpus->definitions->toArray(),
-        ];
-        $actual = $service->findMostSuitableDefinitionId($sentence, $wordData, 0);
+        $definitionDtoCollection = new DefinitionDtoCollection();
+        $corpusDto = new CorpusDto($corpus->id, $corpus->word, $definitionDtoCollection);
+        $actual = $service->findMostSuitableDefinitionId($sentence, $corpusDto, 0);
         $this->assertNull($actual);
 
     }

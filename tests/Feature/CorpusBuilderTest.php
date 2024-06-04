@@ -74,4 +74,24 @@ class CorpusBuilderTest extends TestCase
         $this->assertSame($corpusWithoutDefinition->id, $actual->first()->id);
 
     }
+
+    public function test_filteredWordArrayToModels_method(): void
+    {
+        $wordOne = 'a';
+        $definitionOne = 'definition_one';
+        $wordTwo = 'b';
+
+        $filteredWordsArray = [$wordOne, $wordTwo];
+        $corpusOne = Corpus::factory()->create(['word' => $wordOne]);
+        Definition::factory()->create(['corpus_id' => $corpusOne->id, 'definition' => $definitionOne]);
+        $corpusTwo = Corpus::factory()->create(['word' => $wordTwo]);
+
+        $actual = Corpus::query()->filteredWordArrayToModels($filteredWordsArray);
+        $this->assertSame($wordOne, $actual->get(0)->word);
+        $this->assertSame($wordTwo, $actual->get(1)->word);
+        $this->assertSame(2, $actual->count());
+        $this->assertSame($definitionOne, $actual->get(0)->definitions->get(0)->definition);
+        $this->assertSame(0, $actual->get(1)->definitions->count());
+
+    }
 }
