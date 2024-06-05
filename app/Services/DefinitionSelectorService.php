@@ -26,7 +26,7 @@ class DefinitionSelectorService implements DefinitionSelectorServiceInterface
         }
 
         if ($definitions->count() === 1) {
-            return $definitions->get(0);
+            return $definitions->get(0)->id;
         }
         $definitionString = $this->definitionSelectorApi->pickADefinitionBasedOnContext(
             $sentence->getSentence(),
