@@ -55,7 +55,7 @@ class CorpusBuilder extends Builder
                         new CorpusDto(
                             id: $corpus->id,
                             word: $corpus->word,
-                            definitions: (new DefinitionDtoCollection())->loadByDefinitions($corpus->definitions()->get())
+                            definitions: (new DefinitionDtoCollection())->loadByDefinitions($corpus->definitions)
 
                         )
                     );
