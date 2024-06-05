@@ -27,6 +27,7 @@ return new class extends Migration
                 VocabularyEnum::HAVE_NOT_SPECIFIED->name,
             ])->default(VocabularyEnum::HAVE_NOT_SPECIFIED->name);
             $table->timestamps();
+            $table->unique(['user_id', 'definition_id']);
         });
     }
 
