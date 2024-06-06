@@ -30,10 +30,10 @@ class DurationDto implements DtoInterface
 
     public function load(Duration|Model $duration): DurationDto
     {
-        $this->id = $duration->getAttribute('id');
-        $this->endTime = $duration->getAttribute('end_time_in_millis');
-        $this->startTime = $duration->getAttribute('start_time_in_millis');
-        $this->sourceId = $duration->getAttribute('source_id');
+        $this->id = $duration->getAttributeOrNull('id');
+        $this->endTime = $duration->getAttributeOrNull('end_time_in_millis');
+        $this->startTime = $duration->getAttributeOrNull('start_time_in_millis');
+        $this->sourceId = $duration->getAttributeOrNull('source_id');
 
         return $this;
     }
