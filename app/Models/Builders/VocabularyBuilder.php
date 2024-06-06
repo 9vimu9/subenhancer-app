@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
+use App\Core\Database\CustomBuilder;
 use App\Models\Vocabulary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-class VocabularyBuilder extends Builder
+class VocabularyBuilder extends CustomBuilder
 {
     public function getUserVocabularyBySource(int $sourceId, int $userId): Collection
     {

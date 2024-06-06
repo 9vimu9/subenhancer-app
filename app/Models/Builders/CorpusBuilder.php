@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
+use App\Core\Database\CustomBuilder;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
 use App\Dtos\CorpusDtoCollection;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-class CorpusBuilder extends Builder
+class CorpusBuilder extends CustomBuilder
 {
     public function storeByCollection(FilteredWordCollection $filteredWordCollection): void
     {

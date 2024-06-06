@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Core\Database\CustomBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
-class EnhancementBuilder extends Builder
+class EnhancementBuilder extends CustomBuilder
 {
     public function createByUserId(int $userId, int $sourceId): Model
     {

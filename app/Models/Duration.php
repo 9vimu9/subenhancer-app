@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Core\Database\CustomBuilder;
 use App\Core\Traits\Dtos\AttributeOrNullTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,5 +20,12 @@ class Duration extends Model
     public function sentences(): HasMany
     {
         return $this->hasMany(Sentence::class);
+    }
+
+    public function newEloquentBuilder($query): Builder
+    {
+        return new class($query) extends CustomBuilder
+        {
+        };
     }
 }

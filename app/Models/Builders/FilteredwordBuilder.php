@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
+use App\Core\Database\CustomBuilder;
 use App\Models\Captionword;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-class FilteredwordBuilder extends Builder
+class FilteredwordBuilder extends CustomBuilder
 {
     public function getWordsBySourceId(int $sourceId, array $columns = ['*']): Collection
     {
