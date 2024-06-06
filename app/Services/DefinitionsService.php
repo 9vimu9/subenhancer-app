@@ -8,6 +8,8 @@ use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
+use App\Dtos\DefinitionDto;
+use App\Dtos\DefinitionDtoCollection;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\InvalidDefinitionResponseFormatException;
 use App\Models\Corpus;
@@ -38,31 +40,33 @@ class DefinitionsService implements DefinitionsServiceInterface
     public function processDefinitionsByCollection(FilteredWordCollection $collection): FilteredWordCollection
     {
         Definition::query()->insertOrIgnore(
-            $this->findDefinitionsForWordsWhichHasNot($collection)
+            $this->findDefinitionsForWordsWhichDoesNotHave($collection)->toArray()
         );
 
         return $this->removeWordsHasNoDefinitionsFromCollection($collection);
     }
 
-    public function findDefinitionsForWordsWhichHasNot(FilteredWordCollection $collection): array
+    public function findDefinitionsForWordsWhichDoesNotHave(FilteredWordCollection $collection): DefinitionDtoCollection
     {
-        $definitionsDataArray = [];
+        $definitionDtoCollection = new DefinitionDtoCollection();
         Corpus::query()->wordsWithoutDefinitionsByFilteredWordCollection($collection, ['id', 'word'])
-            ->each(function (Corpus $corpus) use (&$definitionsDataArray) {
+            ->each(function (Corpus $corpus) use (&$definitionDtoCollection) {
                 try {
                     $definitions = $this->definitionsApi->getDefinitions($corpus->word);
                 } catch (InvalidDefinitionResponseFormatException|CantFindDefinitionException $exception) {
                     return true;
                 }
                 foreach ($definitions as $definition) {
-                    $definitionsDataArray[] = [
-                        'corpus_id' => $corpus->id,
-                        'definition' => $definition->getDefinition(),
-                        'word_class' => $definition->getWordClass()->name,
-                    ];
+                    $definitionDtoCollection->add(
+                        new DefinitionDto(
+                            corpusId: $corpus->id,
+                            definition: $definition->getDefinition(),
+                            wordClass: $definition->getWordClass()->name
+                        )
+                    );
                 }
             });
 
-        return $definitionsDataArray;
+        return $definitionDtoCollection;
     }
 }
