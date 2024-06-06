@@ -61,7 +61,7 @@ class DefinitionsService implements DefinitionsServiceInterface
                         new DefinitionDto(
                             corpusId: $corpus->id,
                             definition: $definition->getDefinition(),
-                            wordClass: $definition->getWordClass()->name
+                            wordClass: $definition->getWordClass()
                         )
                     );
                 }
