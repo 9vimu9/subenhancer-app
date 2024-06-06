@@ -6,6 +6,8 @@ namespace App\Core\Contracts\Dtos;
 
 use App\Core\Contracts\DataObjects\AbstractCollection;
 use App\Exceptions\NotADtoItemIncludedToTheCollectionException;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class AbstractDtoCollection extends AbstractCollection implements DtoCollectionInterface
 {
@@ -21,5 +23,13 @@ abstract class AbstractDtoCollection extends AbstractCollection implements DtoCo
         }
 
         return $items;
+    }
+
+    public function load(Collection $collection): AbstractDtoCollection
+    {
+        $this->items = [];
+        $collection->each(fn (Model $model) => $this->add($this->itemDto()->load($model)));
+
+        return $this;
     }
 }

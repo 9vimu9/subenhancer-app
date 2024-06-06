@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\AbstractDtoCollection;
-use App\Models\Vocabulary;
-use Illuminate\Database\Eloquent\Collection;
+use App\Core\Contracts\Dtos\DtoInterface;
 use IteratorAggregate;
 
 /**
@@ -14,11 +13,8 @@ use IteratorAggregate;
  */
 class VocabularyDtoCollection extends AbstractDtoCollection
 {
-    public function load(Collection $collection): AbstractDtoCollection
+    public function itemDto(): DtoInterface
     {
-        $this->items = [];
-        $collection->each(fn (Vocabulary $vocabulary) => $this->add((new VocabularydDto())->load($vocabulary)));
-
-        return $this;
+        return new VocabularydDto();
     }
 }

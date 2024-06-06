@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\AbstractDtoCollection;
-use App\Models\Definition;
-use Illuminate\Database\Eloquent\Collection;
+use App\Core\Contracts\Dtos\DtoInterface;
 use IteratorAggregate;
 
 /**
@@ -29,11 +28,8 @@ class DefinitionDtoCollection extends AbstractDtoCollection
         throw new \InvalidArgumentException();
     }
 
-    public function load(Collection $definitions): self
+    public function itemDto(): DtoInterface
     {
-        $this->items = [];
-        $definitions->each(fn (Definition $definition) => $this->add((new DefinitionDto())->load($definition)));
-
-        return $this;
+        return new DefinitionDto();
     }
 }

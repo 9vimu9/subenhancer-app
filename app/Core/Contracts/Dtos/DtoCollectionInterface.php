@@ -6,4 +6,5 @@ namespace App\Core\Contracts\Dtos;
 
 interface DtoCollectionInterface extends ArrayableInterface, LoadByCollectionInterface
 {
+    public function itemDto(): DtoInterface;
 }
