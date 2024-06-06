@@ -10,4 +10,9 @@ enum VocabularyEnum: int
     case MARKED_AS_KNOWN = 2;
     case MARKED_AS_UNKNOWN = 3;
     case HAVE_NOT_SPECIFIED = 4;
+
+    public static function fromName(string $name)
+    {
+        return constant("self::$name");
+    }
 }
