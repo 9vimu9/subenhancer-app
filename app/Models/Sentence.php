@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Core\Traits\Dtos\AttributeOrNullTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,7 @@ class Sentence extends Model
 {
     protected $fillable = ['order', 'sentence', 'duration_id'];
 
-    use HasFactory;
+    use AttributeOrNullTrait,HasFactory;
 
     public function filteredwords(): HasMany
     {
