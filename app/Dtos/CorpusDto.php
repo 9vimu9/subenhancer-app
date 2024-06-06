@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\DtoInterface;
+use App\Models\Corpus;
+use Illuminate\Database\Eloquent\Model;
 
 class CorpusDto implements DtoInterface
 {
@@ -26,5 +28,14 @@ class CorpusDto implements DtoInterface
         }
 
         return $data;
+    }
+
+    public function load(Corpus|Model $model): DtoInterface
+    {
+        $this->id = $model->getAttributeOrNull('id');
+        $this->word = $model->getAttributeOrNull('word');
+        $this->definitions = $model->getAttributeOrNull('definitions');
+
+        return $this;
     }
 }

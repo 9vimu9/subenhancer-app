@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\AbstractDtoCollection;
-use App\Enums\WordClassEnum;
 use App\Models\Definition;
 use Illuminate\Database\Eloquent\Collection;
 use IteratorAggregate;
@@ -30,19 +29,10 @@ class DefinitionDtoCollection extends AbstractDtoCollection
         throw new \InvalidArgumentException();
     }
 
-    public function loadByDefinitions(Collection $definitions): DefinitionDtoCollection
+    public function load(Collection $definitions): self
     {
         $this->items = [];
-        $definitions->each(function (Definition $definition) {
-            $this->add(
-                new DefinitionDto(
-                    id: $definition->hasAttribute('id') ? $definition->id : null,
-                    corpusId: $definition->hasAttribute('corpus_id') ? $definition->corpus_id : null,
-                    definition: $definition->hasAttribute('definition') ? $definition->definition : null,
-                    wordClass: $definition->hasAttribute('word_class') ? WordClassEnum::fromName($definition->word_class) : null,
-                )
-            );
-        });
+        $definitions->each(fn (Definition $definition) => $this->add((new DefinitionDto())->load($definition)));
 
         return $this;
     }

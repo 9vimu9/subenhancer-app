@@ -6,6 +6,8 @@ namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\DtoInterface;
 use App\Enums\WordClassEnum;
+use App\Models\Definition;
+use Illuminate\Database\Eloquent\Model;
 
 class DefinitionDto implements DtoInterface
 {
@@ -29,5 +31,16 @@ class DefinitionDto implements DtoInterface
         }
 
         return $data;
+    }
+
+    public function load(Definition|Model $definition): DtoInterface
+    {
+        $this->id = $definition->getAttributeOrNull('id');
+        $this->definition = $definition->getAttributeOrNull('definition');
+        $this->corpusId = $definition->getAttributeOrNull('corpus_id');
+        $this->wordClass = ($wordClass = $definition->getAttributeOrNull('word_class'))
+            ? WordClassEnum::fromName($wordClass) : null;
+
+        return $this;
     }
 }

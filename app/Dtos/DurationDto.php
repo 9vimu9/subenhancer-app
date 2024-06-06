@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\DtoInterface;
+use App\Models\Duration;
+use Illuminate\Database\Eloquent\Model;
 
 class DurationDto implements DtoInterface
 {
@@ -24,5 +26,15 @@ class DurationDto implements DtoInterface
             'end_time_in_millis' => $this->endTime,
             'source_id' => $this->sourceId,
         ];
+    }
+
+    public function load(Duration|Model $duration): DurationDto
+    {
+        $this->id = $duration->getAttribute('id');
+        $this->endTime = $duration->getAttribute('end_time_in_millis');
+        $this->startTime = $duration->getAttribute('start_time_in_millis');
+        $this->sourceId = $duration->getAttribute('source_id');
+
+        return $this;
     }
 }
