@@ -19,15 +19,11 @@ class CorpusDto implements DtoInterface
 
     public function toArray(): array
     {
-        $data = [
+        return [
+            'id' => $this->id,
             'word' => $this->word,
             'definitions' => $this->definitions->toArray(),
         ];
-        if (! is_null($this->id)) {
-            $data['id'] = $this->id;
-        }
-
-        return $data;
     }
 
     public function load(Corpus|Model $model): DtoInterface
