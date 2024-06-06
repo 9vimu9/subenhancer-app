@@ -50,7 +50,7 @@ class DefinitionDtoCollectionTest extends TestCase
         $definitionCount = 3;
         $definitionDtoCollection = new DefinitionDtoCollection();
         $definitions = Definition::factory()->count($definitionCount)->create();
-        $definitionDtoCollection->loadByDefinitions($definitions);
+        $definitionDtoCollection->load($definitions);
 
         $this->assertEquals($definitionCount, $definitionDtoCollection->count());
         foreach (range(0, $definitionCount - 1) as $i) {
@@ -67,7 +67,7 @@ class DefinitionDtoCollectionTest extends TestCase
         $definitions = Definition::factory()->count($definitionCount)->create(['corpus_id' => $corpus->id]);
         $corpus = Corpus::with('definitions:definition,corpus_id')->find($corpus->id);
 
-        $definitionDtoCollection->loadByDefinitions($corpus->definitions);
+        $definitionDtoCollection->load($corpus->definitions);
         $this->assertEquals($definitionCount, $definitionDtoCollection->count());
         foreach (range(0, $definitionCount - 1) as $i) {
             $this->assertEquals($definitions->get($i)->definition, $definitionDtoCollection->get($i)->definition);
