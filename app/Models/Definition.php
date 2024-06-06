@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Definition extends Model
 {
@@ -17,5 +18,11 @@ class Definition extends Model
     public function corpus(): BelongsTo
     {
         return $this->belongsTo(Corpus::class);
+    }
+
+    public function captionwords(): HasMany
+    {
+        return $this->hasMany(Captionword::class);
+
     }
 }

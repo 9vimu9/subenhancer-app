@@ -8,7 +8,7 @@ use App\Models\Builders\VocabularyBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Vocabulary extends Model
 {
@@ -16,13 +16,13 @@ class Vocabulary extends Model
 
     protected $fillable = ['user_id', 'definition_id', 'vocabulary_type'];
 
-    public function Enhancements(): BelongsToMany
-    {
-        return $this->belongsToMany(Enhancement::class);
-    }
-
     public function newEloquentBuilder($query): Builder
     {
         return new VocabularyBuilder($query);
+    }
+
+    public function definition(): BelongsTo
+    {
+        return $this->belongsTo(Definition::class);
     }
 }

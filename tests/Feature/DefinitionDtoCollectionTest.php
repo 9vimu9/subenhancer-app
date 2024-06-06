@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Dtos\DefinitionDto;
 use App\Dtos\DefinitionDtoCollection;
+use App\Models\Corpus;
 use App\Models\Definition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -46,13 +47,30 @@ class DefinitionDtoCollectionTest extends TestCase
 
     public function test_loadByDefinitions(): void
     {
+        $definitionCount = 3;
         $definitionDtoCollection = new DefinitionDtoCollection();
-        $definitions = Definition::factory()->count(3)->create();
+        $definitions = Definition::factory()->count($definitionCount)->create();
         $definitionDtoCollection->loadByDefinitions($definitions);
-        $this->assertEquals(3, $definitionDtoCollection->count());
-        $this->assertEquals($definitions->get(0)->definition, $definitionDtoCollection->get(0)->definition);
-        $this->assertEquals($definitions->get(1)->definition, $definitionDtoCollection->get(1)->definition);
-        $this->assertEquals($definitions->get(2)->definition, $definitionDtoCollection->get(2)->definition);
 
+        $this->assertEquals($definitionCount, $definitionDtoCollection->count());
+        foreach (range(0, $definitionCount - 1) as $i) {
+            $this->assertEquals($definitions->get($i)->definition, $definitionDtoCollection->get($i)->definition);
+        }
+
+    }
+
+    public function test_when_definition_columns_are_restricted_in_loadByDefinitions_method_input_collection(): void
+    {
+        $definitionCount = 3;
+        $definitionDtoCollection = new DefinitionDtoCollection();
+        $corpus = Corpus::factory()->create();
+        $definitions = Definition::factory()->count($definitionCount)->create(['corpus_id' => $corpus->id]);
+        $corpus = Corpus::with('definitions:definition,corpus_id')->find($corpus->id);
+
+        $definitionDtoCollection->loadByDefinitions($corpus->definitions);
+        $this->assertEquals($definitionCount, $definitionDtoCollection->count());
+        foreach (range(0, $definitionCount - 1) as $i) {
+            $this->assertEquals($definitions->get($i)->definition, $definitionDtoCollection->get($i)->definition);
+        }
     }
 }

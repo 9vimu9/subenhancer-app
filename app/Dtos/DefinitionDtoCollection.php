@@ -36,11 +36,10 @@ class DefinitionDtoCollection extends AbstractDtoCollection
         $definitions->each(function (Definition $definition) {
             $this->add(
                 new DefinitionDto(
-                    id: $definition->id,
-                    corpusId: $definition->corpus_id,
-                    definition: $definition->definition,
-                    wordClass: WordClassEnum::fromName($definition->word_class)
-
+                    id: $definition->hasAttribute('id') ? $definition->id : null,
+                    corpusId: $definition->hasAttribute('corpus_id') ? $definition->corpus_id : null,
+                    definition: $definition->hasAttribute('definition') ? $definition->definition : null,
+                    wordClass: $definition->hasAttribute('word_class') ? WordClassEnum::fromName($definition->word_class) : null,
                 )
             );
         });

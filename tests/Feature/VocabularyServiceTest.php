@@ -20,6 +20,16 @@ class VocabularyServiceTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_vocabularies_table_has_composite_key_with_definitions_id_and_user_id(): void
+    {
+        $user = User::factory()->create();
+        $definition = Definition::factory()->create();
+        Vocabulary::query()->insertOrIgnore(['user_id' => $user->id, 'definition_id' => $definition->id]);
+        Vocabulary::query()->insertOrIgnore(['user_id' => $user->id, 'definition_id' => $definition->id]);
+        $this->assertDatabaseCount('vocabularies', 1);
+
+    }
+
     public function test_updateVocabularyBySource_method(): void
     {
         $source = Source::factory()->create();
@@ -74,48 +84,6 @@ class VocabularyServiceTest extends TestCase
         $this->assertDatabaseHas('vocabularies', [
             'vocabulary_type' => VocabularyEnum::HAVE_NOT_SPECIFIED->name,
         ]);
-
-    }
-
-    public function test_getVocabularyBySource_method(): void
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $source = Source::factory()->create();
-        $source->durations()
-            ->saveMany(
-                Duration::factory()
-                    ->count(1)
-                    ->create(['source_id' => $source])
-                    ->each(function (Duration $duration) {
-                        $duration->sentences()
-                            ->saveMany(
-                                Sentence::factory()
-                                    ->count(1)
-                                    ->create(['duration_id' => $duration->id])
-                                    ->each(function (Sentence $sentence) {
-                                        $sentence
-                                            ->filteredwords()
-                                            ->saveMany(
-                                                Captionword::factory()
-                                                    ->count(1)
-                                                    ->create([
-                                                        'sentence_id' => $sentence->id,
-                                                    ])
-                                            );
-                                    })
-                            );
-
-                    })
-            );
-
-        Definition::all()->each(function (Definition $definition) use ($user) {
-            Vocabulary::factory()->create(['definition_id' => $definition->id, 'user_id' => $user->id]);
-        });
-        $this->assertEquals(
-            Vocabulary::all()->count(),
-            (new VocabularyService())->getVocabularyBySource($source->id)->count()
-        );
 
     }
 }

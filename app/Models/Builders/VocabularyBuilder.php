@@ -4,42 +4,28 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
-use App\Enums\VocabularyEnum;
-use App\Exceptions\UserHasNotBeenAuthenticatedException;
-use App\Exceptions\VocabularyNotFoundWithDefinitionForUserException;
+use App\Models\Vocabulary;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class VocabularyBuilder extends Builder
 {
-    public function store(VocabularyEnum $type, int $definitionId, ?int $userId = null): void
+    public function getUserVocabularyBySource(int $sourceId, int $userId): Collection
     {
-        $this->create([
-            'definition_id' => $definitionId,
-            'user_id' => $userId ?? auth()->id() ?? throw new UserHasNotBeenAuthenticatedException(),
-            'vocabulary_type' => $type->name,
-        ]);
+        return Vocabulary::query()
+            ->where('user_id', $userId)->whereHas('definition',
+                function (Builder $definition) use ($sourceId) {
+                    $definition->whereHas('captionwords',
+                        function (Builder $captionwords) use ($sourceId) {
+                            $captionwords->whereHas('sentence',
+                                function (Builder $sentence) use ($sourceId) {
+                                    $sentence->whereHas('duration',
+                                        function (Builder $duration) use ($sourceId) {
+                                            $duration->where('source_id', $sourceId);
+                                        });
+                                });
+                        });
+                })->get();
 
-    }
-
-    public function alreadyIncludedForTheUser(int $definitionId, ?int $userId = null): bool
-    {
-        try {
-            $this->findOrFailByDefinitionIdForUser($definitionId, $userId);
-
-            return true;
-        } catch (VocabularyNotFoundWithDefinitionForUserException $exception) {
-            return false;
-        }
-    }
-
-    public function findOrFailByDefinitionIdForUser(int $definitionId, ?int $userId = null, $columns = ['id']): Model
-    {
-        return $this->where('definition_id', $definitionId)
-            ->where('user_id',
-                $userId ?? auth()->id() ?? throw new UserHasNotBeenAuthenticatedException()
-            )->first($columns)
-            ??
-            throw new VocabularyNotFoundWithDefinitionForUserException();
     }
 }

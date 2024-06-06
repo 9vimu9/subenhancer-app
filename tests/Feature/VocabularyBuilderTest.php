@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Enums\VocabularyEnum;
-use App\Exceptions\UserHasNotBeenAuthenticatedException;
-use App\Exceptions\VocabularyNotFoundWithDefinitionForUserException;
+use App\Models\Captionword;
+use App\Models\Corpus;
 use App\Models\Definition;
+use App\Models\Duration;
+use App\Models\Sentence;
+use App\Models\Source;
 use App\Models\User;
 use App\Models\Vocabulary;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,87 +19,24 @@ class VocabularyBuilderTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_store_method(): void
+    public function test_getUserVocabularyBySource_method(): void
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $definition = Definition::factory()->create();
-        Vocabulary::query()->store(
-            VocabularyEnum::HAVE_NOT_SPECIFIED,
-            $definition->getAttribute('id'),
+        $source = Source::factory()->create();
+        $duration = Duration::factory()->create(['source_id' => $source->id]);
+        $sentence = Sentence::factory()->create(['duration_id' => $duration->id]);
+
+        $corpus = Corpus::factory()->create();
+        $definition = Definition::factory()->create(['corpus_id' => $corpus->id]);
+
+        $captionword = Captionword::factory()->create(['definition_id' => $definition->id, 'sentence_id' => $sentence->id]);
+        $vocabulary = Vocabulary::factory()->create(['definition_id' => $definition->id, 'user_id' => $user->id]);
+
+        $this->assertEquals(
+            Vocabulary::all(),
+            Vocabulary::query()->getUserVocabularyBySource($source->id, $user->id)
         );
-        $this->assertDatabaseHas('vocabularies', [
-            'definition_id' => $definition->id,
-            'user_id' => $user->id]);
 
-    }
-
-    public function test_throw_exception_when_user_is_not_leogged_in(): void
-    {
-        $user = User::factory()->create();
-        $definition = Definition::factory()->create();
-        $this->expectException(UserHasNotBeenAuthenticatedException::class);
-        Vocabulary::query()->store(
-            VocabularyEnum::HAVE_NOT_SPECIFIED,
-            $definition->getAttribute('id'),
-        );
-    }
-
-    public function test_alreadyIncludedForTheUser_returns_true_when_word_is_added_for_the_user_to_vocabularies_table(): void
-    {
-
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $definition = Definition::factory()->create();
-        $vocabulary = Vocabulary::factory()->create([
-            'user_id' => $user->id,
-            'definition_id' => $definition->id,
-        ]);
-        $this->assertTrue(Vocabulary::query()->alreadyIncludedForTheUser(
-            $definition->getAttribute('id')
-        ));
-    }
-
-    public function test_alreadyIncludedForTheUser_returns_false_when_word_is_not_added_for_the_user_to_vocabularies_table(): void
-    {
-
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $definition = Definition::factory()->create();
-        $this->assertFalse(Vocabulary::query()->alreadyIncludedForTheUser(
-            $definition->getAttribute('id')
-        ));
-    }
-
-    public function test_findOrFailByDefinitionIdForUser_returns_model_when_word_is_added_for_the_user_to_vocabularies_table(): void
-    {
-
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $definition = Definition::factory()->create();
-        $vocabulary = Vocabulary::factory()->create([
-            'user_id' => $user->id,
-            'definition_id' => $definition->id,
-        ]);
-        $this->assertEqualsCanonicalizing($vocabulary->id,
-            Vocabulary::query()->findOrFailByDefinitionIdForUser($definition->id)->id
-        );
-    }
-
-    public function test_findOrFailByDefinitionIdForUser_throws_exception_when_word_is_not_added_for_the_user_to_vocabularies_table(): void
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $definition = Definition::factory()->create();
-        $this->expectException(VocabularyNotFoundWithDefinitionForUserException::class);
-        Vocabulary::query()->findOrFailByDefinitionIdForUser($definition->id);
-    }
-
-    public function test_findOrFailByDefinitionIdForUser_throws_exception_when_no_user_loggedin(): void
-    {
-        $user = User::factory()->create();
-        $definition = Definition::factory()->create();
-        $this->expectException(UserHasNotBeenAuthenticatedException::class);
-        Vocabulary::query()->findOrFailByDefinitionIdForUser($definition->id);
     }
 }
