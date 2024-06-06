@@ -34,7 +34,7 @@ class CorpusDto implements DtoInterface
     {
         $this->id = $model->getAttributeOrNull('id');
         $this->word = $model->getAttributeOrNull('word');
-        $this->definitions = $model->getAttributeOrNull('definitions');
+        $this->definitions = (new DefinitionDtoCollection())->load($model->definitions ?? $model->definitions()->get());
 
         return $this;
     }
