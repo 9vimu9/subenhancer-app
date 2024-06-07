@@ -34,6 +34,7 @@ class EnhanceSubmissionController extends Controller
             $youtubeCaptionsGrabberApi,
         );
         $enhancementService->submitEnhancement(
+            $request->get('name'),
             $resource,
             $definitionsService,
             $wordService,

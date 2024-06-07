@@ -10,6 +10,7 @@ use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\Core\Contracts\Services\EnhancementServiceInterface;
 use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
+use App\Dtos\EnhancementCreateDto;
 use App\Models\Corpus;
 use App\Models\Enhancement;
 use App\Models\Source;
@@ -17,6 +18,7 @@ use App\Models\Source;
 class EnhancementService implements EnhancementServiceInterface
 {
     public function submitEnhancement(
+        string $name,
         ResourceInterface $resource,
         DefinitionsServiceInterface $definitionsService,
         WordServiceInterface $wordService,
@@ -27,7 +29,9 @@ class EnhancementService implements EnhancementServiceInterface
         $sourceId = $resource->resourceModel()->resourceExists()
             ? $resource->resourceModel()->getSource()->getAttribute('id')
             : $this->createSource($resource, $wordService, $definitionsService, $captionService)->getAttribute('id');
-        $enhancement = Enhancement::query()->createByUserId(auth()->id(), $sourceId);
+        $enhancement = Enhancement::query()->createByUserId(
+            new EnhancementCreateDto(name: $name, userId: auth()->id(), sourceId: $sourceId)
+        );
         $vocabularyService->updateVocabularyBySource($sourceId);
         $definedWordsCollection = $vocabularyService->getVocabularyBySource($sourceId);
     }

@@ -26,6 +26,8 @@ class EnhancementFactory extends Factory
 
         return [
             'uuid' => $this->faker->uuid(),
+            'name' => $this->faker->name(),
+            'description' => $this->faker->text(),
             'user_id' => User::factory(),
             'source_id' => Source::factory(),
             'status' => $status,
