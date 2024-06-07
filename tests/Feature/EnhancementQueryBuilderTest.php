@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Dtos\EnhancementCreateDto;
 use App\Models\Enhancement;
 use App\Models\Source;
 use App\Models\User;
@@ -33,7 +34,9 @@ class EnhancementQueryBuilderTest extends TestCase
             })
         );
 
-        Enhancement::query()->createByUserId($user->id, $source->id);
+        Enhancement::query()->createByUserId(new EnhancementCreateDto(
+            name: 'random name', userId: $user->id, sourceId: $source->id
+        ));
         $this->assertDatabaseHas('enhancements', [
             'user_id' => $user->id,
             'uuid' => $uuid,

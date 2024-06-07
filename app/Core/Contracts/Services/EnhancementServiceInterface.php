@@ -12,6 +12,7 @@ use App\Services\WordService;
 interface EnhancementServiceInterface
 {
     public function submitEnhancement(
+        string $name,
         ResourceInterface $resource,
         DefinitionsService $definitionsService,
         WordService $wordService,
