@@ -13,6 +13,7 @@ use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\Factories\ResourceFactory;
 use App\Http\Requests\SubmitEnhanceRequest;
+use App\Jobs\ProcessEnhanceSubmissionJob;
 use Illuminate\Http\RedirectResponse;
 
 class EnhanceSubmissionController extends Controller
@@ -33,14 +34,15 @@ class EnhanceSubmissionController extends Controller
             $srtParser,
             $youtubeCaptionsGrabberApi,
         );
-        $enhancementService->submitEnhancement(
+        ProcessEnhanceSubmissionJob::dispatch(
+            auth()->user(),
             $request->get('name'),
-            $resource,
+            $enhancementService,
             $definitionsService,
             $wordService,
             $captionService,
-            $vocabularyService
-
+            $vocabularyService,
+            $resource,
         );
         if ($request->hasFile('subtitle_file')) {
             return redirect()->back()->with(['toast' => ['type' => 'success', 'message' => 'File has been added successfully for the enhancement. You will receive a notification shortly']]);

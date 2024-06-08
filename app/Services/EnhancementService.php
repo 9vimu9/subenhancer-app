@@ -11,13 +11,16 @@ use App\Core\Contracts\Services\EnhancementServiceInterface;
 use App\Core\Contracts\Services\VocabularyServiceInterface;
 use App\Core\Contracts\Services\WordServiceInterface;
 use App\Dtos\EnhancementCreateDto;
+use App\Events\ResourceProcessedEvent;
 use App\Models\Corpus;
 use App\Models\Enhancement;
 use App\Models\Source;
+use App\Models\User;
 
 class EnhancementService implements EnhancementServiceInterface
 {
     public function submitEnhancement(
+        User $user,
         string $name,
         ResourceInterface $resource,
         DefinitionsServiceInterface $definitionsService,
@@ -30,10 +33,14 @@ class EnhancementService implements EnhancementServiceInterface
             ? $resource->resourceModel()->getSource()->getAttribute('id')
             : $this->createSource($resource, $wordService, $definitionsService, $captionService)->getAttribute('id');
         $enhancement = Enhancement::query()->createByUserId(
-            new EnhancementCreateDto(name: $name, userId: auth()->id(), sourceId: $sourceId)
+            new EnhancementCreateDto(name: $name, userId: $user->id, sourceId: $sourceId)
         );
-        $vocabularyService->updateVocabularyBySource($sourceId);
-        $definedWordsCollection = $vocabularyService->getVocabularyBySource($sourceId);
+        ResourceProcessedEvent::dispatch(
+            $user->uuid,
+            route('enhancement.create', [$enhancement->uuid]),
+            $enhancement->name);
+        $vocabularyService->updateVocabularyBySource($sourceId, $user->id);
+        $definedWordsCollection = $vocabularyService->getVocabularyBySource($sourceId, $user->id);
     }
 
     private function createSource(

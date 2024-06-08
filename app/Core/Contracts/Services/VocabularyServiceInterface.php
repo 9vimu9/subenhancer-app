@@ -8,7 +8,7 @@ use App\Dtos\VocabularyDtoCollection;
 
 interface VocabularyServiceInterface
 {
-    public function updateVocabularyBySource(int $sourceId);
+    public function updateVocabularyBySource(int $sourceId, int $userId);
 
-    public function getVocabularyBySource(int $sourceId): VocabularyDtoCollection;
+    public function getVocabularyBySource(int $sourceId, int $userId): VocabularyDtoCollection;
 }

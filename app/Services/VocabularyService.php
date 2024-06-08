@@ -10,14 +10,13 @@ use App\Models\Vocabulary;
 
 class VocabularyService implements VocabularyServiceInterface
 {
-    public function updateVocabularyBySource(int $sourceId): void
+    public function updateVocabularyBySource(int $sourceId, int $userId): void
     {
-        $userId = auth()->id();
         Vocabulary::query()->updateVocabularyBySource($sourceId, $userId);
     }
 
-    public function getVocabularyBySource(int $sourceId): VocabularyDtoCollection
+    public function getVocabularyBySource(int $sourceId, int $userId): VocabularyDtoCollection
     {
-        return Vocabulary::query()->getUserVocabularyBySource($sourceId, auth()->id());
+        return Vocabulary::query()->getUserVocabularyBySource($sourceId, $userId);
     }
 }
