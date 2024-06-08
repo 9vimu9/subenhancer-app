@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserVocabularyEstimationMethodsEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
+            $table->enum('vocabulary_estimation_method', [
+                UserVocabularyEstimationMethodsEnum::VOCABULARY_TEST->name,
+                UserVocabularyEstimationMethodsEnum::SHOW_EACH_AND_EVERY_WORD->name])
+                ->default(UserVocabularyEstimationMethodsEnum::SHOW_EACH_AND_EVERY_WORD->name);
+
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
