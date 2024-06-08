@@ -11,4 +11,6 @@ interface VocabularyServiceInterface
     public function updateVocabularyBySource(int $sourceId, int $userId);
 
     public function getVocabularyBySource(int $sourceId, int $userId): VocabularyDtoCollection;
+
+    public function getUserVocabularyByEnhancement(string $enhancementUuid, int $userId): VocabularyDtoCollection;
 }

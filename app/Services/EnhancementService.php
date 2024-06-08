@@ -40,7 +40,6 @@ class EnhancementService implements EnhancementServiceInterface
             route('enhancement.create', [$enhancement->uuid]),
             $enhancement->name);
         $vocabularyService->updateVocabularyBySource($sourceId, $user->id);
-        $definedWordsCollection = $vocabularyService->getVocabularyBySource($sourceId, $user->id);
     }
 
     private function createSource(
