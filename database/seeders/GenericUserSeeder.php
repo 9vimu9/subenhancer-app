@@ -14,6 +14,7 @@ class GenericUserSeeder extends Seeder
     {
         User::query()->create([
             'name' => fake()->name(),
+            'uuid' => Str::uuid()->toString(),
             'email' => config('app.demo.generic_user_email'),
             'email_verified_at' => now(),
             'password' => config('app.demo.generic_user_password'),
