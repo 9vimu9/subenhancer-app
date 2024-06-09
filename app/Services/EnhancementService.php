@@ -38,6 +38,7 @@ class EnhancementService implements EnhancementServiceInterface
         ResourceProcessedEvent::dispatch(
             $user->uuid,
             route('enhancement.create', [$enhancement->uuid]),
+            $enhancement->created_at->diffForHumans(),
             $enhancement->name);
         $vocabularyService->updateVocabularyBySource($sourceId, $user->id);
     }
