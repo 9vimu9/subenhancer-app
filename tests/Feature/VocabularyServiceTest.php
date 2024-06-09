@@ -80,7 +80,7 @@ class VocabularyServiceTest extends TestCase
         $this->assertDatabaseMissing('vocabularies', [
             'vocabulary_type' => VocabularyEnum::HAVE_NOT_SPECIFIED->name,
         ]);
-        (new VocabularyService())->updateVocabularyBySource($source->id);
+        (new VocabularyService())->updateVocabularyBySource($source->id, $user->id);
         $this->assertDatabaseHas('vocabularies', [
             'vocabulary_type' => VocabularyEnum::HAVE_NOT_SPECIFIED->name,
         ]);
