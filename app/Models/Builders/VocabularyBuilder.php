@@ -51,7 +51,8 @@ class VocabularyBuilder extends CustomBuilder
 
     public function getVocabularyWithDefinitionByEnhancementUuid(string $uuid, int $userId): AbstractDtoCollection
     {
-        $vocabularies = Vocabulary::query()->where('user_id', $userId)->with('definition:id,definition,corpus_id,word_class')
+        $vocabularies = Vocabulary::query()->where('user_id', $userId)
+            ->with(['definition:id,definition,corpus_id,word_class', 'definition.corpus:word,id'])
             ->whereHas('definition', function (Builder $definition) use ($uuid) {
                 $definition->whereHas('captionwords', function (Builder $captionwords) use ($uuid) {
                     $captionwords->whereHas('sentence', function (Builder $sentence) use ($uuid) {
@@ -64,12 +65,13 @@ class VocabularyBuilder extends CustomBuilder
                         });
                     });
                 });
-            })->get();
+            })->get(['id', 'user_id', 'definition_id', 'vocabulary_type']);
 
         return (new DtoCollection())->loadFromEloquentCollection($vocabularies, function (Vocabulary $vocabulary) {
             return new VocabularyWithSelectedDefinitiondDto(
                 id: $vocabulary->id,
                 userId: $vocabulary->user_id,
+                word: $vocabulary->definition->corpus->word,
                 vocabularyType: VocabularyEnum::fromName($vocabulary->vocabulary_type),
                 definition: $vocabulary->definition->toDto()
             );

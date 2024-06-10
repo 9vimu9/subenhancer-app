@@ -13,6 +13,7 @@ readonly class VocabularyWithSelectedDefinitiondDto implements Arrayable, Dto
     public function __construct(
         public int $id,
         public int $userId,
+        public string $word,
         public VocabularyEnum $vocabularyType,
         public DefinitionDto $definition,
     ) {
@@ -24,6 +25,7 @@ readonly class VocabularyWithSelectedDefinitiondDto implements Arrayable, Dto
             [
                 'id' => $this->id,
                 'user_id' => $this->userId,
+                'word' => $this->word,
                 'vocabulary_type' => $this->vocabularyType->name,
                 'definition' => $this->definition->toArray(),
             ];
