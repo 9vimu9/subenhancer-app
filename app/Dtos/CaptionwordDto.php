@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\Arrayable;
+use App\Core\Contracts\Dtos\Dto;
 
-readonly class CaptionwordDto implements Arrayable
+readonly class CaptionwordDto implements Arrayable, Dto
 {
     public function __construct(
         public int $id,

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Dtos;
 
-readonly class EnhancementCreateDto
+use App\Core\Contracts\Dtos\Dto;
+
+readonly class EnhancementCreateDto implements Dto
 {
     public function __construct(
         public string $name,

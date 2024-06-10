@@ -6,8 +6,9 @@ namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Core\Contracts\Dtos\Arrayable;
+use App\Core\Contracts\Dtos\Dto;
 
-readonly class CorpusDto implements Arrayable
+readonly class CorpusDto implements Arrayable, Dto
 {
     public function __construct(
         public int $id,

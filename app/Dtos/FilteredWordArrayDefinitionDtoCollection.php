@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FilteredWordArrayDefinitionDtoCollection extends DefinitionDtoCollection
 {
-    public function loadFromEloquentCollection(Collection $collection): AbstractDtoCollection
+    public function loadFromEloquentCollection(Collection $collection, ?callable $callback = null): AbstractDtoCollection
     {
         $this->items = [];
         $collection->each(fn (Definition $model) => $this->add(
