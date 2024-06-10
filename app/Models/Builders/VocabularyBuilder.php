@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
+use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Core\Database\CustomBuilder;
-use App\Dtos\VocabularydDto;
-use App\Dtos\VocabularyDtoCollection;
+use App\Dtos\CreateVocabularydDto;
+use App\Dtos\DtoCollection;
 use App\Enums\VocabularyEnum;
 use App\Models\Captionword;
 use App\Models\Vocabulary;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class VocabularyBuilder extends CustomBuilder
 {
-    public function getUserVocabularyBySource(int $sourceId, int $userId): VocabularyDtoCollection
+    public function getUserVocabularyBySource(int $sourceId, int $userId): AbstractDtoCollection
     {
         $vocabularies = Vocabulary::query()
             ->where('user_id', $userId)->whereHas('definition',
@@ -31,17 +32,17 @@ class VocabularyBuilder extends CustomBuilder
                         });
                 })->get();
 
-        return (new VocabularyDtoCollection())->load($vocabularies);
+        return (new DtoCollection())->loadFromEloquentCollection($vocabularies);
 
     }
 
     public function updateVocabularyBySource(int $sourceId, int $userId): void
     {
 
-        $vocabularyDtoCollection = new VocabularyDtoCollection();
+        $vocabularyDtoCollection = new DtoCollection();
         Captionword::query()->getWordsBySourceId($sourceId, ['definition_id'])->each(function (Captionword $word) use ($userId, &$vocabularyDtoCollection) {
             $vocabularyDtoCollection->add(
-                new VocabularydDto(userId: $userId, definitionId: $word->definition_id, vocabularyType: VocabularyEnum::HAVE_NOT_SPECIFIED)
+                new CreateVocabularydDto(userId: $userId, definitionId: $word->definition_id, vocabularyType: VocabularyEnum::HAVE_NOT_SPECIFIED)
             );
         });
         Vocabulary::query()->insertOrIgnore($vocabularyDtoCollection->toArray());

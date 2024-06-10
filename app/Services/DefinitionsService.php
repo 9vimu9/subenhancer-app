@@ -8,7 +8,7 @@ use App\Core\Contracts\Apis\DefinitionsApiInterface;
 use App\Core\Contracts\Services\DefinitionsServiceInterface;
 use App\DataObjects\FilteredWords\FilteredWord;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
-use App\Dtos\DefinitionDto;
+use App\Dtos\CreateDefinitionDto;
 use App\Dtos\DefinitionDtoCollection;
 use App\Exceptions\CantFindDefinitionException;
 use App\Exceptions\InvalidDefinitionResponseFormatException;
@@ -58,7 +58,7 @@ class DefinitionsService implements DefinitionsServiceInterface
                 }
                 foreach ($definitions as $definition) {
                     $definitionDtoCollection->add(
-                        new DefinitionDto(
+                        new CreateDefinitionDto(
                             corpusId: $corpus->id,
                             definition: $definition->getDefinition(),
                             wordClass: $definition->getWordClass()

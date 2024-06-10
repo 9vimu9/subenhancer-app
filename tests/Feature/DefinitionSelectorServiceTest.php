@@ -9,6 +9,7 @@ use App\DataObjects\Sentences\Sentence;
 use App\Dtos\CorpusDto;
 use App\Dtos\DefinitionDto;
 use App\Dtos\DefinitionDtoCollection;
+use App\Enums\WordClassEnum;
 use App\Models\Corpus;
 use App\Models\Definition;
 use App\Services\DefinitionSelectorService;
@@ -27,7 +28,7 @@ class DefinitionSelectorServiceTest extends TestCase
         $definitions = Definition::factory()->count(3)->create(['corpus_id' => $corpus->id]);
         $definitionDtoCollection = new DefinitionDtoCollection();
         $corpus->definitions->each(function (Definition $definition) use (&$definitionDtoCollection) {
-            $definitionDtoCollection->add(new DefinitionDto($definition->id, $definition->corpus_id, $definition->definition));
+            $definitionDtoCollection->add(new DefinitionDto($definition->id, $definition->corpus_id, $definition->definition, WordClassEnum::fromName($definition->word_class)));
         });
         $corpusDto = new CorpusDto($corpus->id, $corpus->word, $definitionDtoCollection);
         $actual = $service->findMostSuitableDefinitionId($sentence, $corpusDto, 0);

@@ -7,10 +7,9 @@ namespace App\Dtos;
 use App\Core\Contracts\Dtos\Arrayable;
 use App\Enums\VocabularyEnum;
 
-readonly class VocabularydDto implements Arrayable
+readonly class CreateVocabularydDto implements Arrayable
 {
     public function __construct(
-        public int $id,
         public int $userId,
         public int $definitionId,
         public VocabularyEnum $vocabularyType,
@@ -21,7 +20,6 @@ readonly class VocabularydDto implements Arrayable
     {
         return
             [
-                'id' => $this->id,
                 'user_id' => $this->userId,
                 'definition_id' => $this->definitionId,
                 'vocabulary_type' => $this->vocabularyType->name,

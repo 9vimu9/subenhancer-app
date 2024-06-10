@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Dtos\VocabularydDto;
-use App\Dtos\VocabularyDtoCollection;
+use App\Dtos\DtoCollection;
 use App\Models\Captionword;
 use App\Models\Corpus;
 use App\Models\Definition;
@@ -35,8 +34,8 @@ class VocabularyBuilderTest extends TestCase
         $captionword = Captionword::factory()->create(['definition_id' => $definition->id, 'sentence_id' => $sentence->id]);
         $vocabulary = Vocabulary::factory()->create(['definition_id' => $definition->id, 'user_id' => $user->id]);
 
-        $expected = new VocabularyDtoCollection(
-            (new VocabularydDto())->load($vocabulary)
+        $expected = new DtoCollection(
+            $vocabulary->toDto(),
         );
         $this->assertEquals(
             $expected,

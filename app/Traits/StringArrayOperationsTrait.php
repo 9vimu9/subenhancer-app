@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Dtos\CorpusDto;
-use App\Dtos\CorpusDtoCollection;
+use App\Dtos\DtoCollection;
 
 trait StringArrayOperationsTrait
 {
     public function getIncludedFilteredWordsInTheSentence(
         string $text,
-        CorpusDtoCollection $filteredWordsDtoCollection): CorpusDtoCollection
+        AbstractDtoCollection $filteredWordsDtoCollection): AbstractDtoCollection
     {
         $text = $this->processText($text);
 
-        return new CorpusDtoCollection(...array_filter($filteredWordsDtoCollection->items(),
+        return new DtoCollection(...array_filter($filteredWordsDtoCollection->items(),
             static function (CorpusDto $dto) use ($text) {
                 return str_contains($text, strtolower($dto->word));
             }));

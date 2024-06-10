@@ -11,9 +11,10 @@ use App\DataObjects\Captions\CaptionsCollection;
 use App\DataObjects\Sentences\Sentence;
 use App\DataObjects\Sentences\SentenceCollection;
 use App\Dtos\CorpusDto;
-use App\Dtos\CorpusDtoCollection;
 use App\Dtos\DefinitionDto;
 use App\Dtos\DefinitionDtoCollection;
+use App\Dtos\DtoCollection;
+use App\Enums\WordClassEnum;
 use App\Models\Corpus;
 use App\Models\Definition;
 use App\Models\Source;
@@ -124,14 +125,14 @@ class CaptionServiceTest extends TestCase
         };
         $mock = Mockery::mock(CaptionService::class, [$definitionSelectorService, $sentenceService])->makePartial();
 
-        $returningCorpusDtoCollection = new CorpusDtoCollection(
+        $returningCorpusDtoCollection = new DtoCollection(
             new CorpusDto(id: self::ID_FOR_WORD_1, word: self::WORD_1, definitions: (
             new DefinitionDtoCollection(
-                new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1),
+                new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1, wordClass: WordClassEnum::INTERJECTION),
             )
             )),
             new CorpusDto(id: self::ID_FOR_WORD_2, word: self::WORD_2, definitions: (new DefinitionDtoCollection(
-                new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::SELECTED_DEFINITION_FOR_WORD_2),
+                new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::SELECTED_DEFINITION_FOR_WORD_2, wordClass: WordClassEnum::INTERJECTION),
             )
             )),
         );
@@ -143,21 +144,21 @@ class CaptionServiceTest extends TestCase
         $mock->processResource(
             captionsCollection: $captionCollection,
             sourceId: self::SOURCE_ID,
-            filteredWordsCorpusDtoCollection: new CorpusDtoCollection(
+            filteredWordsCorpusDtoCollection: new DtoCollection(
                 new CorpusDto(id: self::ID_FOR_WORD_1, word: self::WORD_1, definitions: (
                 new DefinitionDtoCollection(
-                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1),
-                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_1),
+                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::SELECTED_DEFINITION_FOR_WORD_1, wordClass: WordClassEnum::VERB),
+                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_1, corpusId: self::ID_FOR_WORD_1, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_1, wordClass: WordClassEnum::VERB),
                 )
                 )),
                 new CorpusDto(id: self::ID_FOR_WORD_2, word: self::WORD_2, definitions: (new DefinitionDtoCollection(
-                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::SELECTED_DEFINITION_FOR_WORD_2),
-                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_2),
+                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::SELECTED_DEFINITION_FOR_WORD_2, wordClass: WordClassEnum::VERB),
+                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_2, corpusId: self::ID_FOR_WORD_2, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_2, wordClass: WordClassEnum::VERB),
                 )
                 )),
                 new CorpusDto(id: self::ID_FOR_WORD_3, word: self::WORD_3, definitions: (new DefinitionDtoCollection(
-                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_3, corpusId: self::ID_FOR_WORD_3, definition: self::SELECTED_DEFINITION_FOR_WORD_3),
-                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_3, corpusId: self::ID_FOR_WORD_3, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_3),
+                    new DefinitionDto(id: self::SELECTED_DEFINITION_ID_FOR_WORD_3, corpusId: self::ID_FOR_WORD_3, definition: self::SELECTED_DEFINITION_FOR_WORD_3, wordClass: WordClassEnum::VERB),
+                    new DefinitionDto(id: self::UN_SELECTED_DEFINITION_ID_FOR_WORD_3, corpusId: self::ID_FOR_WORD_3, definition: self::UN_SELECTED_DEFINITION_FOR_WORD_3, wordClass: WordClassEnum::VERB),
                 )
                 )),
 

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Builders;
 
+use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Core\Database\CustomBuilder;
 use App\DataObjects\FilteredWords\FilteredWordCollection;
-use App\Dtos\CorpusDtoCollection;
+use App\Dtos\DtoCollection;
 use Illuminate\Database\Eloquent\Collection;
 
 class CorpusBuilder extends CustomBuilder
@@ -41,9 +42,9 @@ class CorpusBuilder extends CustomBuilder
         )->get($columns);
     }
 
-    public function filteredWordArrayToModels(array $filteredWords): CorpusDtoCollection
+    public function filteredWordArrayToModels(array $filteredWords): AbstractDtoCollection
     {
-        return (new CorpusDtoCollection())->load(
+        return (new DtoCollection())->loadFromEloquentCollection(
             $this->with('definitions:id,definition,corpus_id')
                 ->whereIn('word', $filteredWords)
                 ->select(['word', 'id'])->get()

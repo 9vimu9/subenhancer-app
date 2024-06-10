@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Dtos\CorpusDto;
-use App\Dtos\CorpusDtoCollection;
+use App\Dtos\DefinitionDtoCollection;
+use App\Dtos\DtoCollection;
 use App\Traits\StringArrayOperationsTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -14,8 +16,8 @@ class StringArrayOperationsTraitTest extends TestCase
 {
     public static function sampleSentences(): array
     {
-        $filteredWords = new CorpusDtoCollection(new CorpusDto(word: 'aa'), new CorpusDto(word: 'dd'));
-        $expected = new CorpusDtoCollection(new CorpusDto(word: 'aa'));
+        $filteredWords = new DtoCollection(new CorpusDto(id: 1, word: 'aa', definitions: new DefinitionDtoCollection()), new CorpusDto(id: 1, word: 'dd', definitions: new DefinitionDtoCollection()));
+        $expected = new DtoCollection(new CorpusDto(id: 1, word: 'aa', definitions: new DefinitionDtoCollection()));
 
         return [
             'Happy path' => ['aa bb cc', $filteredWords, $expected],
@@ -26,7 +28,7 @@ class StringArrayOperationsTraitTest extends TestCase
     }
 
     #[DataProvider('sampleSentences')]
-    public function test_getIncludedFilteredWordsInTheSentence(string $sentence, CorpusDtoCollection $filteredWords, CorpusDtoCollection $expected): void
+    public function test_getIncludedFilteredWordsInTheSentence(string $sentence, DtoCollection $filteredWords, AbstractDtoCollection $expected): void
     {
         $objectWithTrait = new class
         {

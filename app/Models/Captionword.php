@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Core\Traits\Dtos\AttributeOrNullTrait;
 use App\Models\Builders\FilteredwordBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +16,7 @@ class Captionword extends Model
 
     protected $with = ['definition'];
 
-    use AttributeOrNullTrait, HasFactory;
+    use HasFactory;
 
     public function newEloquentBuilder($query): Builder
     {

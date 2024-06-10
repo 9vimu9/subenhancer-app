@@ -1,10 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Core\Contracts\Dtos;
 
-interface ArrayableInterface
+interface Dtoable
 {
-    public function toArray(): array;
+    public function toDto();
+
 }

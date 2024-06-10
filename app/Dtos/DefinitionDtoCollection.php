@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Dtos;
 
 use App\Core\Contracts\Dtos\AbstractDtoCollection;
-use App\Core\Contracts\Dtos\DtoInterface;
 use IteratorAggregate;
 
 /**
@@ -18,7 +17,7 @@ class DefinitionDtoCollection extends AbstractDtoCollection
         return array_map(static fn (DefinitionDto $dto) => $dto->definition, $this->items);
     }
 
-    public function findDefinitionDtoByDefinition(string $definition): ?DefinitionDto
+    public function findDefinitionDtoByDefinition(string $definition): DefinitionDto
     {
         foreach ($this->items as $dto) {
             if ($dto->definition === $definition) {
@@ -26,10 +25,5 @@ class DefinitionDtoCollection extends AbstractDtoCollection
             }
         }
         throw new \InvalidArgumentException();
-    }
-
-    public function itemDto(): DtoInterface
-    {
-        return new DefinitionDto();
     }
 }

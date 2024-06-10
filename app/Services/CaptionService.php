@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Core\Contracts\Services\CaptionServiceInterface;
 use App\Core\Contracts\Services\DefinitionSelectorServiceInterface;
 use App\Core\Contracts\Services\SentenceServiceInterface;
@@ -11,12 +12,9 @@ use App\Core\Database\LastInsertedIdTrait;
 use App\DataObjects\Captions\Caption;
 use App\DataObjects\Captions\CaptionsCollection;
 use App\Dtos\CaptionwordDto;
-use App\Dtos\CaptionwordDtoCollection;
-use App\Dtos\CorpusDtoCollection;
+use App\Dtos\DtoCollection;
 use App\Dtos\DurationDto;
-use App\Dtos\DurationDtoCollection;
 use App\Dtos\SentenceDto;
-use App\Dtos\SentenceDtoCollection;
 use App\Models\Captionword;
 use App\Models\Duration;
 use App\Models\Sentence;
@@ -35,17 +33,17 @@ class CaptionService implements CaptionServiceInterface
     public function processResource(
         CaptionsCollection $captionsCollection,
         int $sourceId,
-        CorpusDtoCollection $filteredWordsCorpusDtoCollection,
+        AbstractDtoCollection $filteredWordsCorpusDtoCollection,
     ): void {
         /*
-                make sure these processes are queued. one resource at a time. this is FUCKING important
+                make sure these processes are queued. one resource at a time. this is important.
                 Becasue we are going to assign PK manually.
                 EVENTS ARE CANCELLED. no more freaking events.
          * */
 
-        $durations = new DurationDtoCollection();
-        $sentences = new SentenceDtoCollection();
-        $captionWords = new CaptionwordDtoCollection();
+        $durations = new DtoCollection();
+        $sentences = new DtoCollection();
+        $captionWords = new DtoCollection();
         $currentDurationId = $this->getLastInsertedId('durations');
         $currentSentenceId = $this->getLastInsertedId('sentences');
         $currentFilteredWordId = $this->getLastInsertedId('captionwords');
@@ -70,11 +68,11 @@ class CaptionService implements CaptionServiceInterface
     private function processSentences(
         Caption $caption,
         int &$currentSentenceId,
-        SentenceDtoCollection $sentences,
+        AbstractDtoCollection $sentences,
         int $currentDurationId,
-        CorpusDtoCollection $filteredWordsCorpusDtoCollection,
+        AbstractDtoCollection $filteredWordsCorpusDtoCollection,
         int &$currentFilteredWordId,
-        CaptionwordDtoCollection $captionWords): void
+        AbstractDtoCollection $captionWords): void
     {
         foreach ($this->sentenceService->captionToSentences($caption) as $sentence) {
             $currentSentenceId++;
@@ -85,9 +83,9 @@ class CaptionService implements CaptionServiceInterface
 
     private function processFilteredWords(
         \App\DataObjects\Sentences\Sentence $sentence,
-        CorpusDtoCollection $filteredWordsCorpusDtoCollection,
+        AbstractDtoCollection $filteredWordsCorpusDtoCollection,
         int &$currentFilteredWordId,
-        CaptionwordDtoCollection $captionWords,
+        AbstractDtoCollection $captionWords,
         int $currentSentenceId): void
     {
         $filteredWordsInSentence = $this->getIncludedFilteredWordsInTheSentence($sentence->getSentence(), $filteredWordsCorpusDtoCollection);

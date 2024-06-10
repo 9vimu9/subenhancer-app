@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Dtos;
 
-use App\Core\Contracts\Dtos\DtoInterface;
-use App\Models\Corpus;
-use Illuminate\Database\Eloquent\Model;
+use App\Core\Contracts\Dtos\Arrayable;
 
-class CorpusDto implements DtoInterface
+readonly class CorpusDto implements Arrayable
 {
     public function __construct(
-        public ?int $id = null,
-        public ?string $word = null,
-        public ?DefinitionDtoCollection $definitions = null,
+        public int $id,
+        public string $word,
+        public DefinitionDtoCollection $definitions,
     ) {
     }
 
@@ -24,14 +22,5 @@ class CorpusDto implements DtoInterface
             'word' => $this->word,
             'definitions' => $this->definitions->toArray(),
         ];
-    }
-
-    public function load(Corpus|Model $model): DtoInterface
-    {
-        $this->id = $model->getAttributeOrNull('id');
-        $this->word = $model->getAttributeOrNull('word');
-        $this->definitions = (new DefinitionDtoCollection())->load($model->definitions ?? $model->definitions()->get());
-
-        return $this;
     }
 }
