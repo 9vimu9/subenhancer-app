@@ -14,10 +14,10 @@ class DefinitionDtoCollection extends AbstractDtoCollection
 {
     public function definitionsArrray(): array
     {
-        return array_map(static fn (DefinitionDto $dto) => $dto->definition, $this->items);
+        return array_map(static fn (mixed $dto) => $dto->definition, $this->items);
     }
 
-    public function findDefinitionDtoByDefinition(string $definition): DefinitionDto
+    public function findDefinitionDtoByDefinition(string $definition): mixed
     {
         foreach ($this->items as $dto) {
             if ($dto->definition === $definition) {
