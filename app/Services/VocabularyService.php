@@ -6,7 +6,6 @@ namespace App\Services;
 
 use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Core\Contracts\Services\VocabularyServiceInterface;
-use App\Models\Enhancement;
 use App\Models\Vocabulary;
 
 class VocabularyService implements VocabularyServiceInterface
@@ -23,8 +22,6 @@ class VocabularyService implements VocabularyServiceInterface
 
     public function getUserVocabularyByEnhancement(string $enhancementUuid, int $userId): AbstractDtoCollection
     {
-        return $this->getVocabularyBySource(
-            Enhancement::query()->where('uuid', $enhancementUuid)->firstOrFail()->source_id,
-            $userId);
+        return Vocabulary::query()->getVocabularyWithDefinitionByEnhancementUuid($enhancementUuid, $userId);
     }
 }

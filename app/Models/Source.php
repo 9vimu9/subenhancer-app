@@ -22,4 +22,9 @@ class Source extends Model
     {
         return $this->hasMany(Duration::class);
     }
+
+    public function enhancements(): HasMany
+    {
+        return $this->hasMany(Enhancement::class);
+    }
 }

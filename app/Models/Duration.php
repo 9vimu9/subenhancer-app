@@ -8,6 +8,7 @@ use App\Core\Database\CustomBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Duration extends Model
@@ -19,6 +20,11 @@ class Duration extends Model
     public function sentences(): HasMany
     {
         return $this->hasMany(Sentence::class);
+    }
+
+    public function source(): BelongsTo
+    {
+        return $this->belongsTo(Source::class);
     }
 
     public function newEloquentBuilder($query): Builder

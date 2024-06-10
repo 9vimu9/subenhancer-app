@@ -24,10 +24,13 @@ abstract class AbstractDtoCollection extends AbstractCollection implements Array
         return $items;
     }
 
-    public function loadFromEloquentCollection(Collection $collection): AbstractDtoCollection
+    public function loadFromEloquentCollection(Collection $collection, ?callable $callback = null): AbstractDtoCollection
     {
+        $callback = $callback ?? static fn (Dtoable $model) => $model;
         $this->items = [];
-        $collection->each(fn (Dtoable $model) => $this->add($model->toDto()));
+        $collection->each(function (Dtoable $model) use ($callback) {
+            $this->add($callback($model));
+        });
 
         return $this;
     }
