@@ -35,7 +35,7 @@ class Corpus extends Model implements Dtoable
         return new CorpusDto(
             $this->id,
             $this->word,
-            (new DefinitionDtoCollection())->loadFromEloquentCollection($corpus->definitions ?? $this->definitions()->get())
+            (new DefinitionDtoCollection())->loadFromEloquentCollection($this->definitions ?? $this->definitions()->get())
         );
     }
 }
