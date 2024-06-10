@@ -15,7 +15,7 @@ readonly class VocabularyWithSelectedDefinitiondDto implements Arrayable, Dto
         public int $userId,
         public string $word,
         public VocabularyEnum $vocabularyType,
-        public DefinitionDto $definition,
+        public Arrayable $definition,
     ) {
     }
 
