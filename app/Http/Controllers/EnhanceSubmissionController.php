@@ -28,15 +28,16 @@ class EnhanceSubmissionController extends Controller
         CaptionServiceInterface $captionService,
         VocabularyServiceInterface $vocabularyService,
     ): RedirectResponse {
+        $dto = $request->toDto();
         $resource = (new ResourceFactory())->generate(
-            $request->file('subtitle_file'),
-            $request->get('video_url'),
+            $dto->subtitleFile,
+            $dto->videoUrl,
             $srtParser,
             $youtubeCaptionsGrabberApi,
         );
         ProcessEnhanceSubmissionJob::dispatch(
             auth()->user(),
-            $request->get('name'),
+            $dto->name,
             $enhancementService,
             $definitionsService,
             $wordService,

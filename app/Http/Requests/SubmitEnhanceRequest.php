@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Core\Contracts\Dtos\Dtoable;
+use App\Dtos\SubmitEnhanceRequestDto;
 use App\Rules\YouTubeURLRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubmitEnhanceRequest extends FormRequest
+class SubmitEnhanceRequest extends FormRequest implements Dtoable
 {
     public function authorize(): bool
     {
@@ -26,5 +28,14 @@ class SubmitEnhanceRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    public function toDto(): SubmitEnhanceRequestDto
+    {
+        return new SubmitEnhanceRequestDto(
+            name: $this->input('name'),
+            subtitleFile: $this->file('subtitle_file'),
+            videoUrl: $this->input('video_url'),
+        );
     }
 }
