@@ -4,14 +4,23 @@ declare(strict_types=1);
 
 namespace App\Core\Contracts\Dtos;
 
-use App\Core\Contracts\DataObjects\AbstractCollection;
+use App\Core\Contracts\Collections\Collection;
+use App\Core\Contracts\Collections\GenericCollection;
 use App\Exceptions\NonArrayableDtoFoundException;
-use App\Exceptions\NotADtoException;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class AbstractDtoCollection extends AbstractCollection implements Arrayable
+abstract class AbstractDtoCollection implements AddableDto, Arrayable, Collection
 {
+    protected array $items = [];
+
+    use GenericCollection;
+
+    public function __construct(...$items)
+    {
+        $this->addItems($items);
+    }
+
     public function toArray(): array
     {
         $items = [];
@@ -26,19 +35,19 @@ abstract class AbstractDtoCollection extends AbstractCollection implements Array
         return $items;
     }
 
-    public function loadFromEloquentCollection(Collection $collection, ?callable $callback = null): AbstractDtoCollection
+    public function loadFromEloquentCollection(EloquentCollection $collection, ?callable $callback = null): AbstractDtoCollection
     {
         $this->items = [];
-        $callback = is_null($callback) ? fn (Dtoable $model) => $this->add($model->toDto())
-            : function (Model $model) use ($callback) {
-                $dto = $callback($model);
-                if (! $dto instanceof Dto) {
-                    throw new NotADtoException($dto);
-                }
-                $this->add($dto);
-            };
-        $collection->each($callback);
+        $collection->each(
+            is_null($callback) ? fn (Dtoable $model) => $this->add($model->toDto())
+                : fn (Model $model) => $this->add($callback($model))
+        );
 
         return $this;
+    }
+
+    public function add(Dto $dto): void
+    {
+        $this->items[] = $dto;
     }
 }

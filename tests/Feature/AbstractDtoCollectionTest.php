@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Core\Contracts\Dtos\AbstractDtoCollection;
 use App\Core\Contracts\Dtos\Arrayable;
+use App\Core\Contracts\Dtos\Dto;
 use App\Dtos\CorpusDto;
 use App\Dtos\DefinitionDtoCollection;
 use App\Dtos\DtoCollection;
@@ -42,7 +43,7 @@ class AbstractDtoCollectionTest extends TestCase
     }
 }
 
-readonly class MockDto implements Arrayable
+readonly class MockDto implements Arrayable, Dto
 {
     public function __construct(
         public int $id
